@@ -1,3 +1,4 @@
+import sys
 import json
 import click
 import numpy as np
@@ -225,14 +226,40 @@ def compare(lemma_name):
     compare_graph_lex(lemma_name)
 
 
+def graph_lang_clust(synsets, lemma_sets):
+    labels = [synset.name() for synset in synsets]
+    dists, affinities = lemma_measures_of_sets(lemma_sets)
+    clust_labels = graph_clust(affinities)
+    return group_clust(labels, clust_labels)
+
+
 @senseclust.command("dump")
 def dump():
     for lemma_name, synsets, lemma_sets in iter_all():
-        labels = [synset.name() for synset in synsets]
-        dists, affinities = lemma_measures_of_sets(lemma_sets)
-        clust_labels = graph_clust(affinities)
-        clus = group_clust(labels, clust_labels)
+        clus = graph_lang_clust(synsets, lemma_sets)
         print(json.dumps([lemma_name, list(clus.values())]))
+
+
+@senseclust.command("run-graph-lang")
+@click.argument("lemmas", type=click.File('r'))
+def run_graph_lang(lemmas):
+    langs = get_langs()
+    for lemma_name in lemmas:
+        lemma_name = lemma_name.strip()
+        try:
+            lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
+            synsets, lemma_sets = get_sense_sets(lemma_name.strip(), langs)
+            synset_map = {synset.name(): synset for synset in synsets}
+        except NoSuchLemmaException:
+            print(f"No such lemma: {lemma_name}", file=sys.stderr)
+        else:
+            clus = graph_lang_clust(synsets, lemma_sets)
+            clus_obj = {k: [synset_map[sn] for sn in v] for k, v in clus.items()}
+            for k, v in sorted(clus_obj.items()):
+                num = k + 1
+                for ss in v:
+                    off = wordnet.ss2of(ss)
+                    print(f"{lemma_name}.{num:02},{off}")
 
 
 if __name__ == "__main__":
