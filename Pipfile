@@ -10,7 +10,7 @@ numpy = "*"
 scipy = "*"
 matplotlib = "*"
 click = "*"
-finntk = "*"
+finntk = ">=0.0.14"
 fastcluster = "*"
 
 [dev-packages]
