@@ -10,3 +10,9 @@ def gen_groupings(inf):
             cur_map = {}
         prev_lemma = lemma
     yield prev_lemma, cur_map
+
+
+def write_grouping(lemma, cur_map, outf):
+    for frame_no, lemma_ids in cur_map.items():
+        for lemma_id in lemma_ids:
+            outf.write(f"{lemma}.{frame_no},{lemma_id}\n")

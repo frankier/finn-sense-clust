@@ -1,5 +1,5 @@
 import fileinput
-from groupings import gen_groupings
+from senseclust.groupings import gen_groupings
 
 
 def main():

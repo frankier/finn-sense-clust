@@ -1,5 +1,5 @@
 import click
-from groupings import gen_groupings
+from senseclust.groupings import gen_groupings
 
 
 def calc_pr(tp, fp, fn):
