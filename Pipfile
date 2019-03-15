@@ -9,7 +9,7 @@ sklearn = "*"
 numpy = "*"
 scipy = "*"
 matplotlib = "*"
-click = "*"
+click = ">=7"
 finntk = ">=0.0.14"
 fastcluster = "*"
 
