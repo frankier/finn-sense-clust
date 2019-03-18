@@ -1,6 +1,7 @@
 import csv
 import sys
-from finntk.wordnet.utils import fi2en_post
+from finntk.wordnet.utils import fi2en_post, en2fi_post
+from finntk.wordnet.reader import fiwn
 import fileinput
 from nltk.corpus import wordnet
 import click
@@ -8,6 +9,7 @@ import csv
 import re
 from nltk.corpus import wordnet
 from more_itertools import peekable
+from senseclust.groupings import gen_groupings, write_grouping, clus_key_clus, synset_key_clus, gen_groupings_outer_join
 
 
 PRED_MAT = 'data/PredicateMatrix.v1.3/PredicateMatrix.v1.3.txt'
@@ -30,7 +32,7 @@ def get_reader(propbank):
     return csv.DictReader(propbank, delimiter='\t')
 
 
-def get_eng_pb_wn_map(matrix):
+def get_eng_pb_wn_map(matrix, reject_non_english):
     mapping = {}
     matrix = get_reader(matrix)
     for row in matrix:
@@ -50,15 +52,37 @@ def link():
 
 @link.command(short_help="Write out lemmas in synset")
 @click.argument("csvin", type=click.File('r'))
-def dump(csvin):
+@click.option('--wn', type=click.Choice(['fin', 'qf2', 'qwf']), default=['fin'], multiple=True,
+              help='Which WordNet (multiple allowed) to use: OMW FiWN, '
+                   'FiWN2 or OMW FiWN wikitionary based extensions')
+def dump(csvin, wn):
     """
     Write out the lemmas in each synset from a CSVIN (frame, synset) relation.
     """
+    import stiff.wordnet.fin
     next(csvin)
+    self_mapping = 0
+    total = 0
     for line in csvin:
+        wn_proc = list(wn)
         frame, ssof = line.strip().split(",", 1)
-        ss = wordnet.of2ss(ssof)
-        print(frame, " ".join((l.name() for l in ss.lemmas(lang="fin"))))
+        lemma_names = set()
+        lemmas = []
+        if "qf2" in wn_proc:
+            fi_ssof = en2fi_post(ssof)
+            ss = fiwn.of2ss(fi_ssof)
+            lemmas.extend(ss.lemmas())
+            wn_proc.remove("qf2")
+        for wnref in wn_proc:
+            ss = wordnet.of2ss(ssof)
+            lemmas.extend(ss.lemmas(lang=wnref))
+        lemma_names = {l.name() for l in lemmas}
+        orig_lemma = frame.split(".", 1)[0]
+        if orig_lemma in lemma_names:
+            self_mapping += 1
+        print(frame, " ".join(sorted(lemma_names)))
+        total += 1
+    print(f"Total: {total}; Self mapping: {self_mapping}; Prop: {self_mapping/total}", file=sys.stderr)
 
 
 @link.command(short_help="Get (frame, synset) rel from FinnPropBank")
@@ -109,7 +133,7 @@ def join_synset(pred_matrix, pb_defns, csvout, reject_non_english, use_model, sy
     Dumps a (frame, synset) relation to CSVOUT by joining predicate matrix with FinnPropBank.
     """
     # Load mapping from English PropBank senses to English WordNet senses
-    mapping = get_eng_pb_wn_map(matrix)
+    mapping = get_eng_pb_wn_map(pred_matrix, reject_non_english)
 
     # Join with mapping from Finnish to English PropBank
     propbank = get_reader(pb_defns)
@@ -132,6 +156,39 @@ def join_synset(pred_matrix, pb_defns, csvout, reject_non_english, use_model, sy
                     csvout.writerow((pb_finn, wordnet.ss2of(wordnet.lemma_from_key(wn + "::").synset())))
                 else:
                     csvout.writerow((pb_finn, wn))
+
+
+@link.command(short_help="Perform a priority union on (frame, synset) rels")
+@click.argument("main_csvin", type=click.File('r'))
+@click.argument("secondary_csvin", type=click.File('r'))
+@click.argument("csvout", type=click.File('w'))
+def priority_union(main_csvin, secondary_csvin, csvout):
+    """
+    Perform a priority union on (frame, synset) rels. MAIN_CSV gets priority
+    """
+    disagreements = agreements = 0
+    csvout.write("pb,wn\n")
+    next(main_csvin)
+    next(secondary_csvin)
+    for lemma, main_clus, sec_clus in gen_groupings_outer_join(main_csvin, secondary_csvin):
+        if sec_clus is None:
+            write_grouping(lemma, main_clus, csvout)
+        elif main_clus is None:
+            write_grouping(lemma, sec_clus, csvout)
+        else:
+            sk_main_clus = synset_key_clus(main_clus)
+            sk_sec_clus = synset_key_clus(sec_clus)
+            for synset, clus_idx in sk_sec_clus.items():
+                if synset in sk_main_clus:
+                    if sk_main_clus[synset] == clus_idx:
+                        agreements += 1
+                    else:
+                        disagreements += 1
+                        print(f"{lemma}: Main says {synset} goes in frame {sk_main_clus[synset]}, but secondary says {clus_idx}", file=sys.stderr)
+                else:
+                    sk_main_clus[synset] = clus_idx
+            write_grouping(lemma, sec_clus, csvout)
+    print(f"Agreements: {agreements}; Disagreements: {disagreements}", file=sys.stderr)
 
 
 if __name__ == "__main__":

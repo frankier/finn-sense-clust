@@ -246,13 +246,14 @@ def run_graph_lang(lemmas):
     langs = get_langs()
     for lemma_name in lemmas:
         lemma_name = lemma_name.strip()
+        print(repr(lemma_name), file=sys.stderr)
+        lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
         try:
-            lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
-            synsets, lemma_sets = get_sense_sets(lemma_name.strip(), langs)
-            synset_map = {synset.name(): synset for synset in synsets}
+            synsets, lemma_sets = get_sense_sets(lemma_name, langs)
         except NoSuchLemmaException:
-            print(f"No such lemma: {lemma_name}", file=sys.stderr)
+            print(f"No such lemma: {lemma_name}; {lemmas}", file=sys.stderr)
         else:
+            synset_map = {synset.name(): synset for synset in synsets}
             clus = graph_lang_clust(synsets, lemma_sets)
             clus_obj = {k: [synset_map[sn] for sn in v] for k, v in clus.items()}
             for k, v in sorted(clus_obj.items()):
