@@ -1,5 +1,8 @@
+from collections import Counter
 import click
-from senseclust.groupings import gen_groupings_inner_join, synset_key_clus
+from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join, synset_key_clus
+from senseclust.utils import self_xtab
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 def calc_pr(tp, fp, fn):
@@ -11,40 +14,47 @@ def calc_pr(tp, fp, fn):
     return (p, r, 2 * p * r / (p + r))
 
 
+def eval_clus(gold_clus, test_clus, cnt):
+    gold = synset_key_clus(gold_clus)
+    test = synset_key_clus(test_clus)
+    pairs = [(gold[gss], test[gss]) for gss in gold if gss in test]
+    for (g1, t1), (g2, t2) in self_xtab(pairs):
+        if g1 == g2:
+            if t1 == t2:
+                cnt['tp'] += 1
+            else:
+                cnt['fn'] += 1
+        else:
+            if t1 == t2:
+                cnt['fp'] += 1
+            else:
+                cnt['tn'] += 1
+
 @click.command()
 @click.argument("gold", type=click.File('r'))
 @click.argument("test", type=click.File('r'))
-def eval(gold, test):
+@click.option('--multi-group/--single-group')
+def eval(gold, test, multi_group):
     lemmas = 0
-    tp = fp = fn = tn = 0
-    next(gold)
-    for lemma, gold_clus, test_clus in gen_groupings_inner_join(gold, test):
+    cnt = Counter()
+    line = next(gold)
+    assert line.strip() == "pb,wn"
+    if multi_group:
+        gold_gen = gen_multi_groupings(gold)
+    else:
+        gold_gen = gen_groupings(gold)
+    for lemma, gold_clus, test_clus in inner_join(gold_gen, gen_groupings(test)):
         lemmas += 1
-        gold = synset_key_clus(gold_clus)
-        test = synset_key_clus(test_clus)
-        pairs = [(gold[gss], test[gss]) for gss in gold if gss in test]
-        if len(pairs) >= 2:
-            print("# " + lemma)
-            print(gold)
-            print(test)
-            print(pairs)
-        for idx, (g1, t1) in enumerate(pairs):
-            for g2, t2 in pairs[:idx]:
-                if g1 == g2:
-                    if t1 == t2:
-                        tp += 1
-                    else:
-                        fn += 1
-                else:
-                    if t1 == t2:
-                        fp += 1
-                    else:
-                        fn += 1
+        if multi_group:
+            for gc in gold_clus[0]:
+                eval_clus(gc, test_clus[0], cnt)
+        else:
+            eval_clus(gold_clus[0], test_clus[0], cnt)
     
     print(f"lemmas: {lemmas}")
-    print(f"tp: {tp}; fp: {fp}; fn: {fn}; tn: {tn}")
-    p, r, f1 = calc_pr(tp, fp, fn)
-    print(f"p: {p}; r: {r}; f1: {f1}")
+    print(f"tp: {cnt['tp']}  fp: {cnt['fp']}  fn: {cnt['fn']}  tn: {cnt['tn']}")
+    p, r, f1 = calc_pr(cnt['tp'], cnt['fp'], cnt['fn'])
+    print(f"p: {p*100:.2f}%  r: {r*100:.2f}%  f1: {f1*100:.2f}%")
 
 
 if __name__ == "__main__":

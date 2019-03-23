@@ -3,13 +3,12 @@ import json
 import click
 import numpy as np
 from nltk.corpus import wordnet
-from sklearn.feature_extraction.text import CountVectorizer
-from scipy.spatial.distance import pdist, squareform
 from scipy.cluster import hierarchy
-import matplotlib.pyplot as plt
 from sklearn.cluster import AffinityPropagation
 from sklearn import metrics
-from vec_clust import clust_lemma as vec_clust_lemma
+from senseclust.methods.vec_clust import clust_lemma as vec_clust_lemma
+from senseclust.exceptions import NoSuchLemmaException
+from senseclust.methods import METHODS
 
 
 @click.group()
@@ -17,50 +16,7 @@ def senseclust():
     pass
 
 
-def get_langs():
-    langs = []
-
-    for lang in wordnet.langs():
-        if len(list(wordnet.all_lemma_names(lang=lang))) > 1000:
-            langs.append(lang)
-    return langs
-
-
-CLUS_LANG = "fin"
 CLUS_LEMMAS = ["pitää", "saada", "antaa", "olla", "rakastaa", "kypsyä", "kysyä", "muuttaa"]
-
-
-def lemma_mat_of_lemma_sets(lemma_set):
-    vectorizer = CountVectorizer(analyzer=lambda x: x)
-    return vectorizer.fit_transform(lemma_set)
-
-
-def graph_of_mat(mat):
-    pass
-
-
-class NoSuchLemmaException(Exception):
-    pass
-
-
-def get_sense_sets(lemma_name, langs):
-    synsets = []
-    lemma_sets = []
-    lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
-    if len(lemmas) == 0:
-        raise NoSuchLemmaException()
-    for lemma in lemmas:
-        synset = lemma.synset()
-        lemma_set = set()
-        for lang in langs:
-            other_lemmas = synset.lemmas(lang=lang)
-            for lemma in other_lemmas:
-                if lemma.name() == lemma_name:
-                    continue
-                lemma_set.add(lemma.name())
-        synsets.append(synset)
-        lemma_sets.append(lemma_set)
-    return synsets, lemma_sets
 
 
 def print_clust(clus):
@@ -68,13 +24,6 @@ def print_clust(clus):
         print("# {}".format(lexname))
         for synset_name in synset_names:
             print(synset_name)
-
-
-def group_by(it):
-    clus = {}
-    for k, v in it:
-        clus.setdefault(k, []).append(v)
-    return clus
 
 
 def print_lexname_clusters(synsets):
@@ -89,33 +38,9 @@ def print_defns(synsets):
         print(synset.name(), en2fi_post(wordnet.ss2of(synset)), synset.definition())
 
 
-def group_clust(labels, clust_labels):
-    return group_by(((clust_num, labels[idx]) for idx, clust_num in enumerate(clust_labels)))
-
-
 def print_graph_clust(labels, clust_labels):
     clus = group_clust(labels, clust_labels)
     print_clust(clus)
-
-
-def lemma_measures_of_sets(lemma_sets):
-    mat = lemma_mat_of_lemma_sets(lemma_sets)
-    vocab_size = mat.shape[1]
-    dists = pdist(mat.todense(), metric='russellrao')
-    affinities = squareform((1 - dists) * vocab_size)
-    return dists, affinities
-
-
-def graph_clust(affinities):
-    if affinities.shape == (1, 1):
-        return [0]
-    (n, n) = affinities.shape
-    for damping in [0.5, 0.7, 0.9]:
-        af = AffinityPropagation(affinity='precomputed', damping=damping).fit(affinities)
-        labels = af.labels_
-        if not np.any(np.isnan(labels)):
-            return labels
-    return [0] * n
 
 
 def dist_clust(dists, labels):
@@ -127,6 +52,7 @@ def dist_clust(dists, labels):
 
 
 def print_all(lemma_name):
+    import matplotlib.pyplot as plt
     langs = get_langs()
     print("# {}".format(lemma_name))
     res = get_sense_sets(lemma_name, langs)
@@ -226,13 +152,6 @@ def compare(lemma_name):
     compare_graph_lex(lemma_name)
 
 
-def graph_lang_clust(synsets, lemma_sets):
-    labels = [synset.name() for synset in synsets]
-    dists, affinities = lemma_measures_of_sets(lemma_sets)
-    clust_labels = graph_clust(affinities)
-    return group_clust(labels, clust_labels)
-
-
 @senseclust.command("dump")
 def dump():
     for lemma_name, synsets, lemma_sets in iter_all():
@@ -247,7 +166,6 @@ def run_graph_lang(lemmas):
     for lemma_name in lemmas:
         lemma_name = lemma_name.strip()
         print(repr(lemma_name), file=sys.stderr)
-        lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
         try:
             synsets, lemma_sets = get_sense_sets(lemma_name, langs)
         except NoSuchLemmaException:
@@ -256,6 +174,24 @@ def run_graph_lang(lemmas):
             synset_map = {synset.name(): synset for synset in synsets}
             clus = graph_lang_clust(synsets, lemma_sets)
             clus_obj = {k: [synset_map[sn] for sn in v] for k, v in clus.items()}
+            for k, v in sorted(clus_obj.items()):
+                num = k + 1
+                for ss in v:
+                    off = wordnet.ss2of(ss)
+                    print(f"{lemma_name}.{num:02},{off}")
+
+
+@senseclust.command("run")
+@click.argument("method", type=click.Choice(METHODS.keys()))
+@click.argument("lemmas", type=click.File('r'))
+def run(method, lemmas):
+    for lemma_name in lemmas:
+        lemma_name = lemma_name.strip()
+        try:
+            clus_obj = METHODS[method](lemma_name)
+        except NoSuchLemmaException:
+            print(f"No such lemma: {lemma_name}", file=sys.stderr)
+        else:
             for k, v in sorted(clus_obj.items()):
                 num = k + 1
                 for ss in v:

@@ -1,0 +1,2 @@
+class NoSuchLemmaException(Exception):
+    pass
