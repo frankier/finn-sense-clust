@@ -9,6 +9,7 @@ import csv
 import re
 from more_itertools import peekable
 from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join
+from senseclust.wordnet import get_lemma_names, WORDNETS
 from functools import reduce
 
 
@@ -21,7 +22,7 @@ csvout_arg = click.argument("csvout", type=click.File('w'))
 pb_defns_arg = click.option('--pb-defns', default=PROPBANK_DEFNS,
                             help='Path to Finnish PropBank pb-defs.tsv file',
                             type=click.File('r'))
-wns_arg = click.option('--wn', type=click.Choice(['fin', 'qf2', 'qwf']),
+wns_arg = click.option('--wn', type=click.Choice(WORDNETS),
                        default=['fin'], multiple=True,
                        help='Which WordNet (multiple allowed) to use: OMW FiWN, '
                        'FiWN2 or OMW FiWN wikitionary based extensions')
@@ -53,21 +54,6 @@ def get_eng_pb_wn_map(matrix, reject_non_english):
 @click.group()
 def link():
     pass
-
-
-def get_lemma_names(ssof, wns):
-    wns = list(wns)
-    lemma_names = set()
-    lemmas = []
-    if "qf2" in wns:
-        fi_ssof = en2fi_post(ssof)
-        ss = fiwn.of2ss(fi_ssof)
-        lemmas.extend(ss.lemmas())
-        wns.remove("qf2")
-    for wnref in wns:
-        ss = wordnet.of2ss(ssof)
-        lemmas.extend(ss.lemmas(lang=wnref))
-    return {l.name() for l in lemmas}
 
 
 def include_grouping(filter, wn, lemma, groupings):
