@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "senseclust"
+version = "0.0.1"
+description = "Clustering of Finnish word senses"
+authors = ["Frankie Robertson <frankie@robertson.name>"]
+license = "Apache-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+nltk = "*"
+sklearn = "*"
+numpy = "*"
+scipy = "*"
+matplotlib = "*"
+click = ">=7"
+finntk = ">=0.0.14"
+fastcluster = "*"
+networkx = "*"
+wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
+stiff = {git = "https://github.com/frankier/stiff.git"}
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
