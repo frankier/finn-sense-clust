@@ -1,0 +1,12 @@
+Etymology1.Noun.1 # [[danger]], [[risk]], [[peril]], [[hazard]], [[jeopardy]].
+00802238-n # [qf2, fin, qwf] danger, peril, risk, riski, uhka, vaara: a venture undertaken without regard to possible loss or injury (hyp: venture.n.01; root: entity.n.01; lexname: noun.act)
+05093293-n # [qf2, fin] altistumisvaara, risk, risk_of_exposure, vaara: the probability of being exposed to an infectious agent (hyp: probability.n.01; root: entity.n.01; lexname: noun.attribute)
+05093418-n # [qf2, fin] infektioriski, risk, risk_of_infection, vaara: the probability of becoming infected given that exposure to an infectious agent has occurred (hyp: probability.n.01; root: entity.n.01; lexname: noun.attribute)
+08644213-n # [qf2, fin] danger, vaara: a dangerous place (hyp: area.n.01; root: entity.n.01; lexname: noun.location)
+14540765-n # [qf2, fin, qwf] danger, vaara: the condition of being susceptible to harm or injury (hyp: condition.n.01; root: entity.n.01; lexname: noun.state)
+14541044-n # [qf2, fin] danger, vaara: a cause of pain or injury or loss (hyp: causal_agent.n.01; root: entity.n.01; lexname: noun.state)
+14541852-n # [qf2, fin, qwf] endangerment, hazard, jeopardy, peril, risk, vaara: a source of danger; a possibility of incurring loss or misfortune (hyp: danger.n.03; root: entity.n.01; lexname: noun.state)
+14543552-n # [qf2, fin] peril, riskialttius, riskiness, vaara: a state of danger involving risk (hyp: danger.n.01; root: entity.n.01; lexname: noun.state)
+05688990-n # [qf2] booby_trap, kari, piilevä_vaara, pitfall, sudenkuoppa, vaara: an unforeseen or unexpected or surprising difficulty (hyp: vaikeus.n.07; root: entiteetti.n.01; lexname: noun.cognition)
+
+Etymology2.Noun.1 # A large, forested [[hill]] (as opposed to [[fell]]).

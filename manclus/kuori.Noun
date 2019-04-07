@@ -1,0 +1,53 @@
+Etymology1.Noun.1 # [[shale]]
+Etymology1.Noun.9 # [[crust]] (of the Earth; of bread)
+
+Etymology1.Noun.2 # [[skin]] (of an onion, potato, sausage, cooked milk etc.)
+Etymology1.Noun.3 # [[peel]] (of a fruit)
+Etymology1.Noun.4 # [[shell]] (of an egg, snail, nut etc.)
+Etymology1.Noun.5 # [[test]] (of a marine invertebrate, e.g. sea urchin)
+Etymology1.Noun.6 # [[husk]], [[hull]], [[cod]] (of a seed, corn ear etc.)
+Etymology1.Noun.7 # [[pod]], [[cod]] (of pea etc.)
+Etymology1.Noun.13 # {{lb|fi|physics|chemistry}} [[shell]] (such as electron shell)
+01458616-n # [qf2, fin] investment, kuori, pintakerros: outer layer or covering of an organ or part or organism (hyp: skin.n.01; root: entity.n.01; lexname: noun.animal)
+01903756-n # [qf2, fin, qwf] carapace, cuticle, kilpi, kuori, marraskesi, orvaskesi, panssari, selkäkilpi, shell, shield: hard outer covering or case of certain organisms such as arthropods and turtles (hyp: scute.n.01; root: entity.n.01; lexname: noun.animal)
+01904182-n # [qf2, fin, qwf] kuori, shell: the hard largely calcareous covering of a mollusc or a brachiopod (hyp: covering.n.01; root: entity.n.01; lexname: noun.animal)
+01904583-n # [qf2, fin] kuori, valve: the entire one-piece shell of a snail and certain other molluscs (hyp: shell.n.10; root: entity.n.01; lexname: noun.animal)
+01904699-n # [qf2, fin, qwf] kuori, test: a hard outer covering as of some amoebas and sea urchins (hyp: covering.n.01; root: entity.n.01; lexname: noun.animal)
+05239243-n # [qf2, fin] iho, integument, integumentti, kuori, ruumiinpeite: an outer protective covering such as the skin of an animal or a cuticle or seed coat or rind or shell (hyp: covering.n.01; root: entity.n.01; lexname: noun.body)
+05244045-n # [qf2, fin] kuori, mantle, pallium: (zoology) a protective layer of epidermis in mollusks or brachiopods that secretes a substance forming the shell (hyp: epidermis.n.01; root: entity.n.01; lexname: noun.body)
+07670731-n # [qf2, fin] kuori, nahka, rind: the natural outer covering of food (usually removed before eating) (hyp: material.n.01; root: entity.n.01; lexname: noun.food)
+07711471-n # [qf2, fin] jacket, kuori: the outer skin of a potato (hyp: peel.n.02; root: entity.n.01; lexname: noun.food)
+07738353-n # [qf2, fin, qwf] kuori, peel, skin: the rind of a fruit or vegetable (hyp: rind.n.01; root: entity.n.01; lexname: noun.food)
+07851054-n # [qf2, fin] kuori, paring: (usually plural) a part of a fruit or vegetable that is pared or cut off; especially the skin or peel (hyp: object.n.01; root: entity.n.01; lexname: noun.food)
+09260218-n # [qf2, fin, qwf] crust, encrustation, incrustation, kuori: a hard outer layer that covers something (hyp: covering.n.01; root: entity.n.01; lexname: noun.object)
+09385137-n # [qf2, fin] kuori, lastu, paring, shaving, sliver, säle: a thin fragment or slice (especially of wood) that has been shaved from something (hyp: fragment.n.01; root: entity.n.01; lexname: noun.object)
+09432430-n # [qf2, fin, qwf] eggshell, kuori, munankuori, shell: the exterior covering of a bird's egg (hyp: covering.n.01; root: entity.n.01; lexname: noun.object)
+09436531-n # [qf2, fin] kalvo, kuori, ohut_kerros, skim: a thin layer covering the surface of a liquid (hyp: covering.n.01; root: entity.n.01; lexname: noun.object)
+11682349-n # [qf2, fin] episperm, kuori, seed_coat, siemenkuori, testa: protective outer layer of seeds of flowering plants (hyp: reproductive_structure.n.01; root: entity.n.01; lexname: noun.plant)
+11683556-n # [qf2, fin] kuori, shell: the hard usually fibrous outer layer of some fruits especially nuts (hyp: hull.n.01; root: entity.n.01; lexname: noun.plant)
+13139647-n # [qf2, fin] husk, kuori: outer membranous covering of some fruits or seeds (hyp: sheath.n.02; root: entity.n.01; lexname: noun.plant)
+13139837-n # [qf2, fin] akana, cornhusk, kuori: the husk of an ear of corn (hyp: husk.n.02; root: entity.n.01; lexname: noun.plant)
+13139918-n # [qf2, fin] hull, kuori: dry outer covering of a fruit or seed or nut (hyp: husk.n.02; root: entity.n.01; lexname: noun.plant)
+14758536-n # [qf2, fin, qwf] kuori, shell: the material that forms the hard outer covering of many animals (hyp: animal_material.n.01; root: entity.n.01; lexname: noun.substance)
+
+Etymology1.Noun.8 # [[bark]] (of a tree)
+13162297-n # [qf2, qwf] bark, kaarna, kuori, tuohi: tough protective covering of the woody stems and roots of trees and other woody plants (hyp: peite.n.03; root: entiteetti.n.01; lexname: noun.plant)
+12664710-n # [qwf] Jesuit's_bark, Peruvian_bark, cinchona, cinchona_bark: medicinal bark of cinchona trees; source of quinine and quinidine (hyp: bark.n.01; root: entity.n.01; lexname: noun.plant)
+
+Etymology1.Noun.10 # [[envelope]]
+Etymology1.Noun.11 # [[case]], [[casing]], [[cover]] (of a lock or some-such)
+03291741-n # [qf2, fin] envelope, kuori, päällys: any wrapper or covering (hyp: wrapping.n.01; root: entity.n.01; lexname: noun.artifact)
+03566860-n # [qf2, fin] encrustation, incrustation, kuori, päällyskerros: a decorative coating of contrasting material that is applied to a surface as an inlay or overlay (hyp: decoration.n.01; root: entity.n.01; lexname: noun.artifact)
+03959701-n # [qf2, fin] kuori, laatta, levy, plate, scale, shell: a metal sheathing of uniform thickness (such as the shield attached to an artillery piece to protect the gunners) (hyp: shield.n.01; root: entity.n.01; lexname: noun.artifact)
+04190747-n # [qf2, qwf] case, casing, kotelo, kuori, päällys, ranko, rasia, runko, shell, suojus, vaippa: the housing or outer covering of something (hyp: kotelo.n.04; root: entiteetti.n.01; lexname: noun.artifact)
+
+Etymology1.Noun.12 # (mental) [[shell]]
+
+Etymology1.Noun.14 # {{lb|fi|anatomy}} [[cortex]]
+05490578-n # [qf2, fin] cortex, kuori: the tissue forming the outer layer of an organ or structure in plant or animal (hyp: animal_tissue.n.01, plant_tissue.n.01; root: entity.n.01; lexname: noun.body)
+
+Etymology2.Noun.1 # [[apse]], [[chancel]]
+03004824-n # [qf2, fin, qwf] alttariosa, bema, chancel, kuori, pääkuori, sanctuary: area around the altar of a church for the clergy and choir; often enclosed by a lattice or railing (hyp: area.n.05; root: entity.n.01; lexname: noun.artifact)
+03024064-n # [qf2, fin, qwf] choir, kuori: the area occupied by singers; the part of the chancel between sanctuary and nave (hyp: area.n.05; root: entity.n.01; lexname: noun.artifact)
+02731398-n # [qwf] apse, apsis: a domed or vaulted recess or projection on a building especially the east end of a church; usually contains the altar (hyp: recess.n.04; root: entity.n.01; lexname: noun.artifact)
+04481255-n # [qwf] tribune: the apse of a Christian church that contains the bishop's throne (hyp: apse.n.01; root: entity.n.01; lexname: noun.artifact)

@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # [[moon]], [[satellite]] (''of a planet'')
+09358226-n # [qf2, fin, qwf] kuu, moon: any natural satellite of a planet (hyp: satellite.n.03; root: entity.n.01; lexname: noun.object)
+09358358-n # [qf2, fin, qwf] Moon, kuu, moon: the natural satellite of the Earth (root: entity.n.01; lexname: noun.object)
+09358550-n # [qf2, fin] kuu, moon: any object resembling a moon (hyp: object.n.01; root: entity.n.01; lexname: noun.object)
+09424270-n # [qf2] kiertolainen, kuu, satellite: any celestial body orbiting around a planet or star (hyp: taivaankappale.n.01; root: entiteetti.n.01; lexname: noun.object)
+
+Etymology1.Noun.2 # [[month]]
+15209413-n # [qwf] calendar_month, month: one of the twelve divisions of the calendar year (hyp: time_period.n.01; root: entity.n.01; lexname: noun.time)
+
+Etymology2.Noun.1 # {{lb|fi|dialectal}} [[animal fat]], [[fat]], [[tallow]], ''especially in'' [[reindeer]]

@@ -1,0 +1,15 @@
+Etymology1.Noun.1 # The [[Polish]] language
+06944720-n # [qf2, fin, qwf] Polish, puola: the Slavic language of Poland (hyp: slavic.n.01; root: entity.n.01; lexname: noun.communication)
+08982587-n # [qf2, fin, qwf] Poland, Polska, Puola, Puolan_tasavalta, Republic_of_Poland: a republic in central Europe; the invasion of Poland by Germany in 1939 started World War II (root: entity.n.01; lexname: noun.location)
+
+Etymology2.Noun.1 # thick (wooden) [[spoke]]; [[stave]] (in a wheel)
+Etymology2.Noun.2 # [[rung]], [[stave]] (horizontal bar in a ladder)
+Etymology2.Noun.3 # [[bobbin]] (small spool)
+02783994-n # [qf2, fin] baluster, balusteri, kaidepuu, puola: one of a number of closely spaced supports for a railing (hyp: support.n.10; root: entity.n.01; lexname: noun.artifact)
+03066232-n # [qf2, fin] coil, puola: a transformer that supplies high voltage to spark plugs in a gasoline engine (hyp: transformer.n.01; root: entity.n.01; lexname: noun.artifact)
+04119751-n # [qf2, fin, qwf] piena, pinna, puola, rundle, rung, spoke: one of the crosspieces that form the steps of a ladder (hyp: crosspiece.n.02; root: entity.n.01; lexname: noun.artifact)
+04119892-n # [qf2, fin] piena, puola, round, rung, stave: a crosspiece between the legs of a chair (hyp: crosspiece.n.02; root: entity.n.01; lexname: noun.artifact)
+04283378-n # [qf2, fin, qwf] pinna, puola, pyörän_puola, radius, spoke, wheel_spoke: support consisting of a radial member of a wheel joining the hub to the rim (hyp: support.n.10; root: entity.n.01; lexname: noun.artifact)
+02860415-n # [qf2, qwf] bobbin, kela, puola, reel, rulla, spool: a winder around which thread or tape or film or other flexible materials can be wound (hyp: vetonuppi.n.02; root: entiteetti.n.01; lexname: noun.artifact)
+
+Etymology3.Noun.1 # [[cowberry]]

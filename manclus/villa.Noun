@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # [[wool]]
+01899593-n # [qf2, fin, qwf] fleece, turkki, villa, wool: outer coat of especially sheep and yaks (hyp: coat.n.03; root: entity.n.01; lexname: noun.animal)
+04599235-n # [qf2, fin, qwf] villa, wool, woolen, woollen: a fabric made from the hair of sheep (hyp: fabric.n.01; root: entity.n.01; lexname: noun.artifact)
+15104217-n # [qf2, fin] villa, wool: fiber sheared from animals (such as sheep) and twisted into yarn for weaving (hyp: animal_fiber.n.01; root: entity.n.01; lexname: noun.substance)
+15104752-n # [qf2, fin] fleece, villa: the wool of a sheep or similar animal (hyp: wool.n.02; root: entity.n.01; lexname: noun.substance)
+
+Etymology2.Noun.1 # {{lb|fi|rare}} [[#English|villa]]
+04535252-n # [qf2, fin] huvila, villa: pretentious and luxurious country residence with extensive grounds (hyp: country_house.n.01; root: entity.n.01; lexname: noun.artifact)
+
+11366405-n # [qf2, fin] Doroteo_Arango, Francisco_Villa, Pancho_Villa, Villa: Mexican revolutionary leader (1877-1923) (root: entity.n.01; lexname: noun.person)

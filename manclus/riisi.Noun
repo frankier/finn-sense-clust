@@ -1,0 +1,13 @@
+Etymology1.Noun.1 # [[rice]] (plant and seeds)
+07804323-n # [qf2, fin, qwf] rice, riisi: grains used as food either unpolished or more often polished (hyp: grain.n.02, starches.n.01; root: entity.n.01; lexname: noun.food)
+07804900-n # [qf2, fin] paddy, riisi: rice in the husk either gathered or still in the field (hyp: rice.n.01; root: entity.n.01; lexname: noun.food)
+12125890-n # [qf2, fin] rice, riisi: annual or perennial rhizomatous marsh grasses; seed used for food; straw used for paper (hyp: cereal.n.01; root: entity.n.01; lexname: noun.plant)
+12126084-n # [qf2, fin] Oryza_sativa, cultivated_rice, riisi: yields the staple food of 50 percent of world's population (hyp: rice.n.02; root: entity.n.01; lexname: noun.plant)
+07868340-n # [qwf] Chinese_fried_rice, fried_rice: boiled rice mixed with scallions and minced pork or shrimp and quickly scrambled with eggs (hyp: dish.n.02; root: entity.n.01; lexname: noun.food)
+
+Etymology2.Noun.1 # [[ream]] (quantity of 500 sheets of paper)
+13583137-n # [qf2, fin, qwf] ream, riisi: a quantity of paper; 480 or 500 sheets; one ream equals 20 quires (hyp: definite_quantity.n.01; root: entity.n.01; lexname: noun.quantity)
+
+Etymology3.Noun.1 # {{lb|fi|dated|pathology}} [[rachitis]]
+Etymology3.Noun.2 # {{lb|fi|obsolete|pathology}} of almost any ([[childhood]]) [[disease]]
+Etymology3.Noun.3 # {{lb|fi|obsolete|pathology}} [[animal]] [[disease]]

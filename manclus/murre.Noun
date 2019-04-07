@@ -1,0 +1,7 @@
+Etymology1.Noun.1 # [[dialect]]
+07155661-n # [qf2, fin, qwf] accent, dialect, idiom, korostus, murre, puhetapa: the usage or vocabulary that is characteristic of a specific group of people (hyp: non-standard_speech.n.01; root: entity.n.01; lexname: noun.communication)
+07157273-n # [qf2, fin] ammattikieli, ammattislangi, argot, cant, erikoiskieli, jargon, lingo, murre, patois, slang, slangi, vernacular: a characteristic language of a particular group (as among thieves) (hyp: non-standard_speech.n.01; root: entity.n.01; lexname: noun.communication)
+06978068-n # [qwf] Doric, Doric_dialect: the dialect of Ancient Greek spoken in Doris (hyp: ancient_greek.n.01; root: entity.n.01; lexname: noun.communication)
+
+Etymology2.Noun.1 # {{lb|fi|dialectal}} [[dog]], [[pooch]]
+02084732-n # [qf2] barker, bow-wow, doggie, doggy, hauva, hurtta, murre, piski, pooch, rakki: informal terms for dogs (hyp: koira.n.02; root: entiteetti.n.01; lexname: noun.animal)

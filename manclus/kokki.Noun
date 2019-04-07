@@ -1,0 +1,7 @@
+Etymology1.Noun.1 # [[cook]]
+09963320-n # [qf2, fin] cook, keittäjä, kokki: someone who cooks food (hyp: skilled_worker.n.01; root: entity.n.01; lexname: noun.person)
+09963574-n # [qf2, fin, qwf] chef, keittiömestari, kokki: a professional cook (hyp: cook.n.01; root: entity.n.01; lexname: noun.person)
+09963680-n # [qf2, fin] cookie, cooky, kokki: the cook on a ranch or at a camp (hyp: cook.n.01; root: entity.n.01; lexname: noun.person)
+
+Etymology2.Noun.1 # {{lb|fi|microbiology}} [[coccus]]
+01350855-n # [qf2, fin] cocci, coccus, kokki: any spherical or nearly spherical bacteria (hyp: eubacteria.n.01; root: entity.n.01; lexname: noun.animal)

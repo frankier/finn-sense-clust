@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # [[link]]
+Etymology1.Noun.2 # {{lb|fi|computing}} [[hyperlink]]
+03674270-n # [qf2, fin] data_link, link, linkki, tietoyhteys, yhteys: an interconnecting circuit between two or more locations for the purpose of transmitting and receiving data (hyp: circuit.n.01; root: entity.n.01; lexname: noun.artifact)
+04042795-n # [qf2, fin] link, linkki, radio_link, radiolinkki: a two-way radio communication system (usually microwave); part of a more extensive telecommunication network (hyp: communication_system.n.01; root: entity.n.01; lexname: noun.artifact)
+06261260-n # [qf2, fin] contact, inter-group_communication, keskinäinen_kommunikointi, kontakti, liaison, link, linkki, yhteys: a channel for communication between groups (hyp: channel.n.05; root: entity.n.01; lexname: noun.communication)
+06586471-n # [qwf] link: (computing) an instruction that connects one part of a program or an element on a list to another program or list (hyp: instruction.n.04; root: entity.n.01; lexname: noun.communication)
+
+Etymology2.Noun.1 # {{lb|fi|colloquial}} [[bus]], [[coach]]
+
+13654777-n # [qf2, fin, qwf] link, linkki: a unit of length equal to 1/100 of a chain (hyp: linear_unit.n.01; root: entity.n.01; lexname: noun.quantity)

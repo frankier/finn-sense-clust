@@ -1,0 +1,13 @@
+Etymology1.Noun.1 # [[fur]] (hairy coat of various mammal species)
+01898731-n # [qf2, fin] coat, karvapeite, pelage, turkki: growth of hair or wool or fur covering the body of an animal (hyp: hair.n.01; root: entity.n.01; lexname: noun.animal)
+01899062-n # [qf2, fin, qwf] fur, karva, turkki: dense coat of fine silky hairs on mammals (e.g., cat or seal or weasel) (hyp: coat.n.03; root: entity.n.01; lexname: noun.animal)
+01899593-n # [qf2, fin] fleece, turkki, villa, wool: outer coat of especially sheep and yaks (hyp: coat.n.03; root: entity.n.01; lexname: noun.animal)
+14764061-n # [qf2, fin] fur, nahka, pelt, turkki: the dressed hairy coat of a mammal (hyp: animal_skin.n.01; root: entity.n.01; lexname: noun.substance)
+14765324-n # [qf2, fin] kani, kaniturkis, lapin, rabbit, turkki: the fur of a rabbit (hyp: fur.n.01; root: entity.n.01; lexname: noun.substance)
+
+Etymology1.Noun.2 # [[fur coat]]
+03404251-n # [qf2, fin, qwf] fur_coat, turkki: a coat made of fur (hyp: coat.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # The [[Turkish]] language.
+06926798-n # [qf2, fin, qwf] Turkish, turkki: a Turkic language spoken by the Turks (hyp: turki.n.02; root: entity.n.01; lexname: noun.communication)
+09039411-n # [qf2, fin, qwf] Republic_of_Turkey, Turkey, Turkin_tasavalta, Turkki: a Eurasian republic in Asia Minor and the Balkans; on the collapse of the Ottoman Empire in 1918, the Young Turks, led by Kemal Ataturk, established a republic in 1923 (root: entity.n.01; lexname: noun.location)

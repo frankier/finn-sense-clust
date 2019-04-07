@@ -1,0 +1,26 @@
+Etymology1.Noun.1 # [[paint]]
+03875218-n # [qf2, fin, qwf] maali, paint, pigment, pigmentti: a substance used as a coating to protect or decorate a surface (especially a mixture of pigment suspended in a liquid); dries to form a hard coating (hyp: coating.n.01, coloring_material.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # [[target]]
+08660934-n # [qf2, fin] kohdealue, maali, maalialue, pilkka, target, target_area: the location of the target that is to be hit (hyp: topographic_point.n.01; root: entity.n.01; lexname: noun.location)
+04394261-n # [qf2, fin] butt, maali, maalitaulu, pilkka, target: sports equipment consisting of an object set up for a marksman or archer to aim at (hyp: sports_equipment.n.01; root: entity.n.01; lexname: noun.artifact)
+07262108-n # [qf2, fin, qwf] maali, maalitaulu, mark, pilkka, target: a reference point to shoot at (hyp: reference_point.n.01; root: entity.n.01; lexname: noun.communication)
+
+Etymology2.Noun.2 # {{lb|fi|American football}} [[touchdown]]
+00186634-n # [qf2, fin] maali, piste, score: the act of scoring in a game or sport (hyp: success.n.02; root: entity.n.01; lexname: noun.act)
+00187337-n # [qf2, fin, qwf] goal, maali: a successful attempt at scoring (hyp: score.n.10; root: entity.n.01; lexname: noun.act)
+00188766-n # [qf2, fin] maali, touchdown: a score in American football; being in possession of the ball across the opponents' goal line (hyp: score.n.10; root: entity.n.01; lexname: noun.act)
+03442756-n # [qf2, fin, qwf] goal, maali: game equipment consisting of the place toward which players of a game try to advance a ball or puck in order to score points (hyp: game_equipment.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.3 # {{lb|fi|sports}} [[finish line]], [[finish]]
+07353376-n # [qf2, fin] finish, loppu, maali: designated event that concludes a contest (especially a race) (hyp: happening.n.01; root: entity.n.01; lexname: noun.event)
+08567877-n # [qf2, fin] destination, finish, goal, maali, määränpää: the place designated as the end (as of a race or journey) (hyp: end.n.01; root: entity.n.01; lexname: noun.location)
+08571459-n # [qf2, qwf] finish_line, finishing_line, maali, maaliviiva: a line indicating the location of the finish of a race (hyp: maali.n.03, rajaviiva.n.02; root: entiteetti.n.01; lexname: noun.location)
+
+Etymology2.Noun.4 # {{lb|fi|military}} [[bogey]] (enemy aircraft)
+
+Etymology2.Noun.5 # {{lb|fi|music}} Different endings of a repeated section
+
+15267536-n # [qwf] close, conclusion, finale, finis, finish, last, stopping_point: the temporal end; the concluding time (hyp: end.n.02; root: entity.n.01; lexname: noun.time)
+05980875-n # [qwf] end, goal: the state of affairs that a plan is intended to achieve and that (when achieved) terminates behavior intended to achieve it (hyp: content.n.05; root: entity.n.01; lexname: noun.cognition)
+05981230-n # [qwf] aim, object, objective, target: the goal intended to be attained (and which is believed to be attainable) (hyp: goal.n.01; root: entity.n.01; lexname: noun.cognition)

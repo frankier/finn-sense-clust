@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # [[cucumber]] (vine and vegetable)
+Etymology1.Noun.2 # [[pickle]] (pickled cucumber)
+07718472-n # [qf2, fin, qwf] cucumber, cuke, kurkku: cylindrical green fruit with thin green rind and white flesh eaten as a vegetable; related to melons (hyp: vegetable.n.01; root: entity.n.01; lexname: noun.food)
+12165384-n # [qf2, fin] Cucumis_sativus, cucumber, cucumber_vine, kurkku, ruokakurkku: a melon vine of the genus Cucumis; cultivated from earliest times for its cylindrical green fruit (hyp: melon.n.02; root: entity.n.01; lexname: noun.plant)
+
+Etymology2.Noun.1 # {{lb|fi|anatomy}} [[throat]] (gullet)
+Etymology2.Noun.2 # throat (front part of the neck)
+Etymology2.Noun.3 # throat (narrow opening)
+05533948-n # [qf2, fin, qwf] esophagus, gorge, gullet, kurkku, nielu, oesophagus, ruokatorvi: the passage between the pharynx and the stomach (hyp: muscular_structure.n.01, passage.n.07; root: entity.n.01; lexname: noun.body)
+05547508-n # [qf2, qwf] kurkku, nielu, pharynx, throat: the passage to the stomach and lungs; in the front part of the neck below the chin and above the collarbone (hyp: reikä.n.06; root: entiteetti.n.01; lexname: noun.body)

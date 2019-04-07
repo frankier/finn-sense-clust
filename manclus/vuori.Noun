@@ -1,0 +1,15 @@
+Etymology1.Noun.1 # {{l|en|mountain}} (large mass of earth and rock)
+Etymology1.Noun.3 # a high {{l|en|hill}} (especially in toponyms)
+09218641-n # [qf2, fin] ben, vuoren_huippu, vuori: a mountain or tall hill (hyp: mountain.n.01; root: entity.n.01; lexname: noun.object)
+09359803-n # [qf2, qwf, fin] mount, mountain, tunturi, vuori: a land mass that projects well above its surroundings; higher than a hill (hyp: natural_elevation.n.01; root: entity.n.01; lexname: noun.object)
+09230202-n # [qf2] butte, kukkula, vuori: a hill that rises abruptly from the surrounding region; has a flat top and sloping sides (hyp: kukkula.n.01; root: entiteetti.n.01; lexname: noun.object)
+
+Etymology1.Noun.2 # {{l|en|mountain}} (large amount)
+13774404-n # [qf2, fin] aikamoisesti, batch, deal, flock, good_deal, great_deal, hatful, hatullinen, heap, huomattavasti, iso, iso_kasa, kasa, kasapäin, kasoittain, keko, koko_joukko, liuta, lot, läjä, läjäpäin, mass, mess, mickle, mint, mountain, muckle, nippu, paljon, parvi, passel, peck, pile, plenty, pot, quite_a_little, raft, roppakaupalla, runsaasti, röykkiö, sight, slew, spate, stack, suuri_määrä, tidy_sum, tukku, vuori, wad: (often followed by `of') a large number or amount or extent (hyp: large_indefinite_quantity.n.01; root: entity.n.01; lexname: noun.quantity)
+
+Etymology2.Noun.1 # {{l|en|lining}} (covering for the inside of a garment)
+02769460-n # [qf2, fin] backing, kehys, mount, tukimateriaali, vahviste, vuori: something forming a back that is added for strengthening (hyp: layer.n.01, strengthener.n.01; root: entity.n.01; lexname: noun.artifact)
+03673270-n # [qf2, fin] irtovuori, liner, lining, vuori, vuorikangas: a piece of cloth that is used as the inside surface of a garment (hyp: piece_of_cloth.n.01; root: entity.n.01; lexname: noun.artifact)
+03673767-n # [qf2, fin] liner, lining, vuori: a protective covering that protects an inside surface (hyp: protective_covering.n.01; root: entity.n.01; lexname: noun.artifact)
+
+08459087-n # [qf2] aalto, blizzard, rash, ryöppy, suma, tulva, vuori, vyöry: a series of unexpected and unpleasant occurrences (hyp: sarja.n.09; root: entiteetti.n.01; lexname: noun.group)

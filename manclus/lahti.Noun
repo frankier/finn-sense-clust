@@ -1,0 +1,11 @@
+Etymology1.Noun.1 # A [[bay]], [[gulf]].
+09215664-n # [qf2, fin, qwf] bay, embayment, lahti, merenlahti, poukama: an indentation of a shoreline larger than a cove but smaller than a gulf (hyp: body_of_water.n.01; root: entity.n.01; lexname: noun.object)
+09313716-n # [qf2, fin] inlet, lahdelma, lahti, recess: an arm off of a larger body of water (often between rocky headlands) (hyp: body_of_water.n.01; root: entity.n.01; lexname: noun.object)
+09343660-n # [qf2, fin] lahti, lough: a long narrow (nearly landlocked) cove in Ireland (hyp: cove.n.01; root: entity.n.01; lexname: noun.object)
+09296121-n # [qf2, qwf] gulf, lahti, merenlahti: an arm of a sea or ocean partly enclosed by land; larger than a bay (hyp: vesialue.n.01; root: entiteetti.n.01; lexname: noun.object)
+09440186-n # [qf2] lahti, merenlahti, salmi, sound: a large ocean inlet or deep bay (hyp: vesialue.n.01; root: entiteetti.n.01; lexname: noun.object)
+09220239-n # [qf2] bight, lahdeke, lahti, merenlahti, poukama: a broad bay formed by an indentation in the shoreline (hyp: lahti.n.06; root: entiteetti.n.01; lexname: noun.object)
+09257761-n # [qwf] cove: a small inlet (hyp: inlet.n.01; root: entity.n.01; lexname: noun.object)
+
+Etymology2.Noun.1 # A [[culling]], [[slaughter]] (killing animals).
+00223854-n # [qf2, qwf] lahti, slaughter, teurastus: the killing of animals (as for food) (hyp: surmaaminen.n.02; root: entiteetti.n.01; lexname: noun.act)

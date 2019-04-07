@@ -1,0 +1,28 @@
+Etymology1.Noun.1 # [[pull]] (act of pulling)
+Etymology1.Noun.2 # pull (attractive force)
+Etymology1.Noun.4 # [[stroke]] of hand, oar etc.
+00114431-n # [qf2, fin] pull, pulling, veto, vetäminen: the act of pulling; applying force to move something toward or with you (hyp: propulsion.n.02; root: entity.n.01; lexname: noun.act)
+00115667-n # [qf2, fin] draft, draught, drawing, veto, vetäminen: the act of moving a load by drawing or pulling (hyp: pull.n.01; root: entity.n.01; lexname: noun.act)
+00565302-n # [qf2, fin, qwf] isku, lyönti, shot, stroke, veto: (sports) the act of swinging or striking at a ball with a club or racket or bat or cue or hand (hyp: maneuver.n.03; root: entity.n.01; lexname: noun.act)
+00116122-n # [qf2, fin, qwf] traction, veto: (orthopedics) the act of pulling on a bone or limb (as in a fracture) to relieve pressure or align parts in a special way during healing (hyp: pull.n.01; root: entity.n.01; lexname: noun.act)
+00569898-n # [qf2, fin] stroke, veto: any one of the repeated movements of the limbs and body used for locomotion in swimming or rowing (hyp: locomotion.n.02; root: entity.n.01; lexname: noun.act)
+00570066-n # [qf2, fin] swimming_stroke, veto: a method of moving the arms and legs to push against the water and propel the swimmer forward (hyp: stroke.n.11; root: entity.n.01; lexname: noun.act)
+00692991-n # [qf2, fin] paikoilleen_palauttaminen, taxis, veto: the surgical procedure of manually restoring a displaced body part (hyp: operation.n.06; root: entity.n.01; lexname: noun.act)
+06799260-n # [qf2, fin, qwf] stroke, veto: a mark made on a surface by a pen, pencil, or paintbrush (hyp: mark.n.04; root: entity.n.01; lexname: noun.communication)
+00115292-n # [qf2] hinaus, tow, towage, veto: the act of hauling something (as a vehicle) by means of a hitch or rope (hyp: vetäminen.n.03; root: entiteetti.n.01; lexname: noun.act)
+00115036-n # [qf2] draw, haul, haulage, hinaus, raahaaminen, veto, vetäminen: the act of drawing or hauling something (hyp: veto.n.16; root: entiteetti.n.01; lexname: noun.act)
+00114871-n # [qf2] drag, veto, vetäminen: the act of dragging (pulling with force) (hyp: veto.n.16; root: entiteetti.n.01; lexname: noun.act)
+
+Etymology1.Noun.3 # [[draught]]/[[draft]] of air
+11522448-n # [qf2, fin, qwf] draft, draught, ilmavirta, veto: a current of air (usually coming into a chimney or room or vehicle) (hyp: wind.n.01; root: entity.n.01; lexname: noun.phenomenon)
+
+Etymology1.Noun.5 # [[bet]], [[wager]] (e.g. in gambling)
+13343526-n # [qf2, fin, qwf] bet, panos, stake, stakes, vedonlyönti, veto, wager: the money risked on a gamble (hyp: gamble.n.01; root: entity.n.01; lexname: noun.possession)
+
+Etymology1.Noun.6 # {{lb|fi|colloquial}} [[move]], as in a debate or game
+00786887-n # [qf2, fin] bid, play, pyrkiminen, pyrkimys, siirto, temppu, veto, yritys: an attempt to get something (hyp: attempt.n.01; root: entity.n.01; lexname: noun.act)
+
+Etymology2.Noun.1 # [[veto#English|veto]]
+00209546-n # [qf2, fin, qwf] veto, veto-oikeus: a vote that blocks a decision (hyp: vote.n.01; root: entity.n.01; lexname: noun.act)
+
+07485281-n # [qf2, fin] kiusaus, temptation, veto, viekoitus, viettymys: the desire to have or do something that you know you should avoid (hyp: desire.n.01; root: entity.n.01; lexname: noun.feeling)

@@ -1,0 +1,11 @@
+Etymology1.Noun.1 # [[bar]] (public house)
+Etymology1.Noun.2 # [[cafeteria]] (restaurant serving simple food and usually having the right to serve medium strength beer, see [[keskiolut|''keskiolut'']])
+02796995-n # [qf2, fin, qwf] anniskelupaikka, baari, bar, barroom, ginmill, kapakka, saloon, saluuna, taproom: a room or establishment where alcoholic drinks are served over a counter (hyp: room.n.01; root: entity.n.01; lexname: noun.artifact)
+02823848-n # [qf2, fin] baari, beer_hall, kapakka, oluttupa: a hall or barroom featuring beer and (usually) entertainment (hyp: hall.n.03; root: entity.n.01; lexname: noun.artifact)
+02976815-n # [qf2, fin] baari, cash_bar: a counter at a large party where you can purchase drinks by the glass (hyp: bar.n.02; root: entity.n.01; lexname: noun.artifact)
+03298089-n # [qf2, fin] baari, estaminet, kuppila: a small (and usually shabby) cafe selling wine and beer and coffee (hyp: cafe.n.01; root: entity.n.01; lexname: noun.artifact)
+04018399-n # [qf2, fin] baari, gin_mill, juottola, kapakka, oluttupa, pothouse, pub, pubi, public_house, saloon, taphouse: tavern consisting of a building with a bar and public rooms; often provides light meals (hyp: tavern.n.01; root: entity.n.01; lexname: noun.artifact)
+02789487-n # [qwf] bar: a counter where you can obtain food or drink (hyp: counter.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # [[bar]] (unit of pressure)
+13711855-n # [qf2, fin, qwf] baari, bar: (meteorology) a unit of pressure equal to a million dynes per square centimeter (hyp: pressure_unit.n.01; root: entity.n.01; lexname: noun.quantity)
