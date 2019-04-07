@@ -4,6 +4,8 @@ from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join,
 from senseclust.utils import self_xtab
 from sklearn.feature_extraction.text import CountVectorizer
 
+HEADERS = ("pb,wn", "manann,ref")
+
 
 def calc_pr(tp, fp, fn):
     # Copypaste from stiff
@@ -38,7 +40,7 @@ def eval(gold, test, multi_group):
     lemmas = 0
     cnt = Counter()
     line = next(gold)
-    assert line.strip() == "pb,wn"
+    assert line.strip() in HEADERS
     if multi_group:
         gold_gen = gen_multi_groupings(gold)
     else:

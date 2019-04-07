@@ -8,7 +8,8 @@ from os.path import basename
 def main(infs, out):
     out.write("manann,ref\n")
     for inf in infs:
-        word = basename(inf)
+        word_pos = basename(inf)
+        word = word_pos.split(".")[0]
         idx = 1
         with open(inf) as f:
             for line in f:
