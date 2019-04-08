@@ -39,10 +39,10 @@ eval/synth-clus.csv: eval/frame-synset-union2.csv
 	poetry run python link.py synth-clus --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-clus.csv
 
 eval/manclus.csv: manclus/*.Noun
-	poetry run python compile_man_clus.py manclus/* eval/manclus.csv
+	poetry run python man_clus.py compile manclus/* eval/manclus.csv
 
 eval/manclus.wn.csv: eval/manclus.csv
-	poetry run python man_clus_filter_wn.py eval/manclus.csv eval/manclus.wn.csv
+	poetry run python man_clus.py filter-wn eval/manclus.csv eval/manclus.wn.csv
 
 words/conc-words: eval/frame-synset-union2.csv | words/
 	poetry run python link.py get-words --wn fin --wn qf2 --wn qwf --filter smap2 eval/frame-synset-union2.csv > words/conc-words
