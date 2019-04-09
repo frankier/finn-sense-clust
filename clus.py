@@ -32,8 +32,6 @@ def run(method, lemmas, db=None):
             for k, v in sorted(clus_obj.items()):
                 num = k + 1
                 for ss in v:
-                    if method not in SUPPORTS_WIKTIONARY:
-                        ss = wordnet.ss2of(ss)
                     print(f"{lemma_name}.{num:02},{ss}")
 
 

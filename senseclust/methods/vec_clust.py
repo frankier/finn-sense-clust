@@ -42,10 +42,6 @@ def vec_clust_autoextend_graph(lemma_name):
         affinities = squareform((1 - dists))
         clust_labels = graph_clust(affinities)
         synsets = [lemma.synset() for lemma in lemmas]
-        labels = [synset.name() for synset in synsets]
+        labels = [fi2en_post(wordnet.ss2of(synset)) for synset in synsets]
         synset_map = {}
-        for synset in synsets:
-            synset_map[synset.name()] = wordnet.of2ss(fi2en_post(wordnet.ss2of(synset)))
-        clus = group_clust(labels, clust_labels)
-        clus_obj = {k: [synset_map[sn] for sn in v] for k, v in clus.items()}
-        return clus_obj
+        return group_clust(labels, clust_labels)

@@ -23,7 +23,7 @@ def lemma_measures_of_sets(lemma_sets):
 
 
 def graph_lang_clust(synsets, lemma_sets):
-    labels = [synset.name() for synset in synsets]
+    labels = [wordnet.ss2of(synset) for synset in synsets]
     dists, affinities = lemma_measures_of_sets(lemma_sets)
     clust_labels = graph_clust(affinities)
     return group_clust(labels, clust_labels)
@@ -52,7 +52,4 @@ def get_sense_sets(lemma_name, langs):
 def label_graph(lemma_name):
     langs = get_langs()
     synsets, lemma_sets = get_sense_sets(lemma_name, langs)
-    synset_map = {synset.name(): synset for synset in synsets}
-    clus = graph_lang_clust(synsets, lemma_sets)
-    clus_obj = {k: [synset_map[sn] for sn in v] for k, v in clus.items()}
-    return clus_obj
+    return graph_lang_clust(synsets, lemma_sets)
