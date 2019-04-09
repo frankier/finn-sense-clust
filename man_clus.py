@@ -16,6 +16,8 @@ from senseclust.utils import split_line
 from os.path import basename
 import re
 import itertools
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet
 
 
 SYNSET_RE = re.compile(r"[0-9]{8}-[anv]")
@@ -96,6 +98,36 @@ def compile(infs, out):
                 else:
                     ref = line.split("#")[0].strip()
                     out.write(f"{word}.{idx:02d},{ref}\n")
+
+
+@man_clus.command()
+@click.argument("inf", type=click.File('r'))
+@click.argument("out_dir")
+def decompile(inf, out_dir):
+    session = get_session()
+    for lemma, grouping in gen_groupings(inf):
+        with open(pjoin(out_dir, lemma), "w") as outf:
+            first = True
+            for group_num, synsets in grouping.items():
+                if not first:
+                    outf.write("\n")
+                else:
+                    first = False
+                for synset in synsets:
+                    outf.write(synset)
+                    outf.write(" # ")
+                    if is_wn_ref(synset):
+                        sense = wordnet.of2ss(synset).definition()
+                    else:
+                        sense = session.execute(select([
+                            word_sense.c.sense,
+                        ]).select_from(joined).where(
+                            (headword.c.name == lemma) &
+                            (word_sense.c.sense_id == synset)
+                        )).fetchone()["sense"]
+                    tokens = word_tokenize(sense)
+                    outf.write(" ".join(tokens))
+                    outf.write("\n")
 
 
 def is_wn_ref(ref):
