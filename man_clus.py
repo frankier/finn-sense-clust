@@ -11,8 +11,11 @@ from finntk.wordnet.utils import pre_id_to_post
 from wikiparse.utils.db import get_session, insert
 import wordfreq
 from senseclust.tables import metadata, freqs
+from senseclust.groupings import gen_groupings
+from senseclust.utils import split_line
 from os.path import basename
 import re
+import itertools
 
 
 SYNSET_RE = re.compile(r"[0-9]{8}-[anv]")
@@ -97,20 +100,47 @@ def compile(infs, out):
                     out.write(f"{word}.{idx:02d},{ref}\n")
 
 
+def is_wn_ref(ref):
+    return SYNSET_RE.match(ref)
+
+
 @man_clus.command()
 @click.argument("inf", type=click.File('r'))
 @click.argument("outf", type=click.File('w'))
-def filter_wn(inf, outf):
+@click.option('--filter', type=click.Choice(['wn', 'wiki', 'link']))
+def filter(inf, outf, filter):
     """
-    Filter a gold CSV to remove non-WordNet rows
+    Filter a gold CSV to filter non-WordNet rows
     """
     assert inf.readline().strip() == "manann,ref"
     outf.write("manann,ref\n")
-    for line in inf:
-        manann, ref = line.strip().split(",")
-        if not SYNSET_RE.match(ref):
-            continue
-        outf.write(line)
+    if filter in ("wn", "wiki"):
+        for line in inf:
+            manann, ref = line.strip().split(",")
+            if ((filter == "wn") and not is_wn_ref(ref)) or \
+                    ((filter == "wiki") and is_wn_ref(ref)):
+                continue
+            outf.write(line)
+    else:
+        groups = itertools.groupby((split_line(line) for line in inf), lambda tpl: tpl[0])
+        for lemma, group in groups:
+            wn_grp = []
+            wiki_grp = []
+            for tpl in group:
+                if is_wn_ref(tpl[2]):
+                    wn_grp.append(tpl)
+                else:
+                    wiki_grp.append(tpl)
+            grp_idx = 1
+            for _, f1, lid1 in wn_grp:
+                for _, f2, lid2 in wiki_grp:
+                    if f1 == f2:
+                        outf.write(f"{lemma}.{grp_idx:02d}.01,{lid1}\n")
+                        outf.write(f"{lemma}.{grp_idx:02d}.01,{lid2}\n")
+                    else:
+                        outf.write(f"{lemma}.{grp_idx:02d}.01,{lid1}\n")
+                        outf.write(f"{lemma}.{grp_idx:02d}.02,{lid2}\n")
+                    grp_idx += 1
 
 
 @man_clus.command()

@@ -8,7 +8,8 @@ from sklearn.cluster import AffinityPropagation
 from sklearn import metrics
 from senseclust.methods.vec_clust import clust_lemma as vec_clust_lemma
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.methods import METHODS
+from senseclust.methods import METHODS, SUPPORTS_WIKTIONARY
+from wikiparse.utils.db import get_session
 
 
 @click.group()
@@ -184,19 +185,27 @@ def run_graph_lang(lemmas):
 @senseclust.command("run")
 @click.argument("method", type=click.Choice(METHODS.keys()))
 @click.argument("lemmas", type=click.File('r'))
-def run(method, lemmas):
+@click.argument("db", required=False)
+def run(method, lemmas, db=None):
+    session = None
     for lemma_name in lemmas:
         lemma_name = lemma_name.strip()
         try:
-            clus_obj = METHODS[method](lemma_name)
+            if method in SUPPORTS_WIKTIONARY:
+                if not session:
+                    session = get_session(db)
+                clus_obj = METHODS[method](lemma_name, include_wiktionary=True, session=session)
+            else:
+                clus_obj = METHODS[method](lemma_name)
         except NoSuchLemmaException:
             print(f"No such lemma: {lemma_name}", file=sys.stderr)
         else:
             for k, v in sorted(clus_obj.items()):
                 num = k + 1
                 for ss in v:
-                    off = wordnet.ss2of(ss)
-                    print(f"{lemma_name}.{num:02},{off}")
+                    if method not in SUPPORTS_WIKTIONARY:
+                        ss = wordnet.ss2of(ss)
+                    print(f"{lemma_name}.{num:02},{ss}")
 
 
 if __name__ == "__main__":

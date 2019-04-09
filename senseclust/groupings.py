@@ -1,3 +1,6 @@
+from .utils import split_line
+
+
 def gen_multi_groupings(inf):
     prev_lemma = None
     prev_clus_no = None
@@ -20,8 +23,7 @@ def gen_groupings(inf):
     prev_lemma = None
     cur_map = {}
     for line in inf:
-        frame_id, lemma_id = line.strip().split(",", 1)
-        lemma, frame_no = frame_id.split(".", 1)
+        lemma, frame_no, lemma_id = split_line(line)
         if prev_lemma is not None and lemma != prev_lemma:
             yield prev_lemma, cur_map
             cur_map = {}

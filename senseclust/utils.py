@@ -42,3 +42,9 @@ def graph_clust(affinities):
 
 def group_clust(labels, clust_labels):
     return group_by(((clust_num, labels[idx]) for idx, clust_num in enumerate(clust_labels)))
+
+
+def split_line(line):
+    frame_id, lemma_id = line.strip().split(",", 1)
+    lemma, frame_no = frame_id.split(".", 1)
+    return lemma, frame_no, lemma_id
