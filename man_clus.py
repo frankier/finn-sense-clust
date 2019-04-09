@@ -27,14 +27,13 @@ def man_clus():
 
 
 @man_clus.command()
-@click.argument("db")
 @click.argument("words", type=click.File('r'))
 @click.argument("out_dir")
-def gen(db, words, out_dir):
+def gen(words, out_dir):
     """
     Generate unclustered words in OUT_DIR from word list WORDS
     """
-    session = get_session(db)
+    session = get_session()
     for word in words:
         word_pos = word.split("#")[0].strip()
         word, pos = word_pos.split(".")
@@ -65,12 +64,11 @@ def gen(db, words, out_dir):
 
 
 @man_clus.command()
-@click.argument("db")
 def add_freq_data(db: str):
     """
     Add table of frequencies to DB
     """
-    session = get_session(db)
+    session = get_session()
     metadata.create_all(session().get_bind().engine)
     with click.progressbar(wordfreq.get_frequency_dict("fi").items(), label="Inserting frequencies") as name_freqs:
         for name, freq in name_freqs:
@@ -165,7 +163,7 @@ def pick_words(db: str, limit=50, verbose=False):
                 distinct(word_sense.c.etymology_index)
             ) > 1
         ).order_by(freqs.c.freq.desc()).limit(limit)
-    session = get_session(db)
+    session = get_session()
     candidates = session.execute(query).fetchall()
     for word, freq in candidates:
         print(word + ".Noun", "#", freq)
