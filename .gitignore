@@ -4,3 +4,5 @@
 /data/
 /attic/
 /eval.txt
+__pycache__/
+*.egg-info/
