@@ -14,15 +14,14 @@ def senseclust():
 @senseclust.command("run")
 @click.argument("method", type=click.Choice(METHODS.keys()))
 @click.argument("lemmas", type=click.File('r'))
-@click.argument("db", required=False)
-def run(method, lemmas, db=None):
+def run(method, lemmas):
     session = None
     for lemma_name in lemmas:
         lemma_name = lemma_name.strip()
         try:
             if method in SUPPORTS_WIKTIONARY:
                 if not session:
-                    session = get_session(db)
+                    session = get_session()
                 clus_obj = METHODS[method](lemma_name, include_wiktionary=True, session=session)
             else:
                 clus_obj = METHODS[method](lemma_name)
