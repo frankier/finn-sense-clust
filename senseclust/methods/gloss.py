@@ -3,6 +3,9 @@ from gensim.similarities import SoftCosineSimilarity
 from finntk.emb.fasttext import vecs
 import numpy as np
 from senseclust.utils import graph_clust, group_clust, get_defns
+from .base import SenseClusExp
+from expcomb.utils import mk_nick
+from wikiparse.utils.db import get_session
 
 
 def softcos(defns):
@@ -20,7 +23,20 @@ def softcos(defns):
     return group_clust(list(defns.keys()), clust_labels)
 
 
-def gloss_graph(lemma_name, include_wiktionary=False, session=None):
-    defns = get_defns(lemma_name, include_wiktionary=include_wiktionary, session=session)
+def gloss_graph(lemma_name):
+    session = get_session()
+    defns = get_defns(lemma_name, include_wiktionary=True, session=session)
     clus = softcos(defns)
     return clus
+
+
+class Gloss(SenseClusExp):
+    def __init__(self):
+        self.clus_func = gloss_graph
+        super().__init__(
+            ("Gloss",),
+            mk_nick("gloss"),
+            "Gloss",
+            None,
+            {},
+        )

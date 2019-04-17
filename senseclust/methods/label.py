@@ -3,6 +3,8 @@ from scipy.spatial.distance import pdist, squareform
 from senseclust.consts import CLUS_LANG
 from senseclust.exceptions import NoSuchLemmaException
 from senseclust.utils import graph_clust, mat_of_sets, group_clust
+from .base import SenseClusExp
+from expcomb.utils import mk_nick
 
 
 def get_langs():
@@ -53,3 +55,15 @@ def label_graph(lemma_name):
     langs = get_langs()
     synsets, lemma_sets = get_sense_sets(lemma_name, langs)
     return graph_lang_clust(synsets, lemma_sets)
+
+
+class Label(SenseClusExp):
+    def __init__(self):
+        self.clus_func = label_graph
+        super().__init__(
+            ("Label",),
+            mk_nick("label"),
+            "Label",
+            None,
+            {},
+        )

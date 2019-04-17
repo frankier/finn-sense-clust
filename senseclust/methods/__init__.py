@@ -1,8 +1,8 @@
-from expcomb.models import Exp, ExpGroup
-from senseclust.methods.label import label_graph
-from senseclust.methods.vec_clust import vec_clust_autoextend_graph
-from senseclust.methods.gloss import gloss_graph
+from senseclust.methods.label import label_graph, Label
+from senseclust.methods.vec_clust import vec_clust_autoextend_graph, Vec
+from senseclust.methods.gloss import gloss_graph, Gloss
 from senseclust.methods.baseline import Baseline
+from senseclust.methods.base import ExpGroup, WiktionaryExpGroup
 
 
 METHODS = {
@@ -15,5 +15,8 @@ SUPPORTS_WIKTIONARY = {"gloss-graph"}
 
 
 EXPERIMENTS = [
-    ExpGroup([Baseline("1"), Baseline("n")]),
+    WiktionaryExpGroup([Baseline("1"), Baseline("n")]),
+    ExpGroup([Label()]),
+    ExpGroup([Vec()]),
+    WiktionaryExpGroup([Gloss()]),
 ]

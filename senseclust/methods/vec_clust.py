@@ -7,6 +7,8 @@ from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist, squareform
 from senseclust.utils import graph_clust, group_clust
 from senseclust.exceptions import NoSuchLemmaException
+from .base import SenseClusExp
+from expcomb.utils import mk_nick
 
 LEMMA_SEP = "-wn-fi-2.0-"
 
@@ -43,5 +45,16 @@ def vec_clust_autoextend_graph(lemma_name):
         clust_labels = graph_clust(affinities)
         synsets = [lemma.synset() for lemma in lemmas]
         labels = [fi2en_post(wordnet.ss2of(synset)) for synset in synsets]
-        synset_map = {}
         return group_clust(labels, clust_labels)
+
+
+class Vec(SenseClusExp):
+    def __init__(self):
+        self.clus_func = vec_clust_autoextend_graph
+        super().__init__(
+            ("Sense vector",),
+            mk_nick("sense-vector"),
+            "Sense vector",
+            None,
+            {},
+        )

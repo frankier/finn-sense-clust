@@ -1,13 +1,15 @@
 from senseclust.utils import group_clust, get_defns
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
+from wikiparse.utils.db import get_session
 
 
 def mk_baseline(mode="1"):
-    def baseline(lemma_name, include_wiktionary=False, session=None):
+    def baseline(lemma_name):
+        session = get_session()
         defns = get_defns(
             lemma_name,
-            include_wiktionary=include_wiktionary,
+            include_wiktionary=True,
             session=session
         )
         keys = list(defns.keys())
@@ -17,8 +19,6 @@ def mk_baseline(mode="1"):
 
 
 class Baseline(SenseClusExp):
-    supports_wiktionary = True
-
     def __init__(self, mode="1"):
         self.clus_func = mk_baseline(mode)
         super().__init__(
@@ -28,6 +28,3 @@ class Baseline(SenseClusExp):
             None,
             {"mode": mode},
         )
-
-    def clus_lemma(self, lemma_name, include_wiktionary=False, session=None):
-        return self.clus_func(lemma_name, include_wiktionary, session)

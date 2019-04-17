@@ -18,6 +18,7 @@ fastcluster = "*"
 networkx = "*"
 wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
 stiff = {git = "https://github.com/frankier/stiff.git"}
+paramiko = "^2.4"
 expcomb = {git = "https://github.com/frankier/expcomb.git"}
 
 [build-system]
