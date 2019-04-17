@@ -7,13 +7,19 @@ from sklearn.feature_extraction.text import CountVectorizer
 HEADERS = ("pb,wn", "manann,ref")
 
 
+def hmean(x, y):
+    if x == 0 or y == 0:
+        return 0
+    return 2 * x * y / (x + y)
+
+
 def calc_pr(tp, fp, fn):
     # Copypaste from stiff
     if tp == 0:
         return 0, 0, 0
     p = tp / (tp + fp)
     r = tp / (tp + fn)
-    return (p, r, 2 * p * r / (p + r))
+    return (p, r, hmean(p, r))
 
 
 def eval_clus(gold_clus, test_clus, cnt):
@@ -33,9 +39,23 @@ def eval_clus(gold_clus, test_clus, cnt):
                 cnt['tn'] += 1
 
 
+def rand(tp, tn, fp, fn):
+    denom = (tp + tn + fp + fn)
+    if denom == 0:
+        return 0
+    return tp + tn / denom
+
+
+def macc(tp, tn, fp, fn):
+    denom = (tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)
+    if denom == 0:
+        return 0
+    return (tp * tn - fp * fn) / denom ** 0.5
+
+
 def eval(gold, test, multi_group):
     lemmas = 0
-    cnt = Counter()
+    cnt = Counter(tp=0, tn=0, fp=0, fn=0)
     line = next(gold)
     assert line.strip() in HEADERS
     if multi_group:
@@ -54,9 +74,18 @@ def eval(gold, test, multi_group):
     res = {}
     res["lemmas"] = lemmas
     res["cnt"] = cnt
+    tnr = 0 if cnt['tn'] == 0 else cnt['tn'] / (cnt['tn'] + cnt['fp'])
     res["pr"] = {
         "p": p,
         "r": r,
         "f1": f1,
+        "tnr": tnr,
+    }
+    rand_val = rand(**cnt)
+    macc_val = macc(**cnt)
+    res["o"] = {
+        "rand": rand_val,
+        "macc": macc_val,
+        "hacc": hmean(r, tnr)
     }
     return res
