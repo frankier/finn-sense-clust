@@ -36,7 +36,7 @@ def test(
 def eval(exp, db, corpus, guess_dir, gold, multi=False):
     from expcomb.score import calc_exp_score, proc_score
     measures = calc_exp_score(exp, corpus, gold, guess_dir, mk_eval(multi))
-    proc_score(exp, db, corpus, measures, gold)
+    proc_score(exp, db, measures, gold)
 
 
 if __name__ == "__main__":
