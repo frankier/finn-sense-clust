@@ -34,7 +34,7 @@ rule test:
     wildcard_constraints:
         corpus=r"[^\.]+"
     shell:
-        "python expc.py --filter 'nick={wildcards.nick}' test words/{wildcards.corpus} " + WORK + "/guess/ eval/manclus.csv"
+        "python expc.py --filter 'nick={wildcards.nick}' test words/{wildcards.corpus} " + WORK + "/guess/"
 
 rule eval:
     input: WORK + "/guess/{corpus}.{nick}"

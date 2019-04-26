@@ -18,13 +18,11 @@ expc, SnakeMake = mk_expcomb(EXPERIMENTS, eval)
 @expc.mk_test
 @click.argument("test_corpus", type=click.Path())
 @click.argument("guess_dir", type=click.Path())
-@click.argument("gold", type=click.Path())
 def test(
     test_corpus,
     guess_dir,
-    gold,
 ):
-    return ExpPathInfo(test_corpus, guess_dir, gold)
+    return ExpPathInfo(test_corpus, guess_dir, None)
 
 
 @expc.exp_apply_cmd
