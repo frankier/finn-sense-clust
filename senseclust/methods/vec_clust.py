@@ -31,8 +31,8 @@ def clust_lemma(lemma_name):
     return hierarchy.dendrogram(Z, labels=[l.synset().name() for l in lemmas])
 
 
-def vec_clust_autoextend_graph(lemma_name):
-    lemmas = fiwn_uniq.lemmas(lemma_name)
+def vec_clust_autoextend_graph(lemma_name, pos):
+    lemmas = fiwn_uniq.lemmas(lemma_name, pos)
     if len(lemmas) == 0:
         raise NoSuchLemmaException
     try:

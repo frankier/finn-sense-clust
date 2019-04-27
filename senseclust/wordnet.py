@@ -20,17 +20,17 @@ def get_lemma_names(ssof, wns):
     return {l.name() for l in lemmas}
 
 
-def lemmas(lemma_name, pos, wn):
+def lemmas(lemma_name, wn, pos=None):
     if wn == "qf2":
         return fiwn_encnt.lemmas(lemma_name, pos=pos)
     else:
         return wordnet.lemmas(lemma_name, pos=pos, lang=wn)
 
 
-def get_lemma_objs(lemma_name, pos, wns):
+def get_lemma_objs(lemma_name, wns, pos=None):
     wn_lemmas = {}
     for wn in wns:
-        for lemma in lemmas(lemma_name, pos, wn):
+        for lemma in lemmas(lemma_name, wn, pos=pos):
             wn_lemmas.setdefault(wn, []).append(lemma)
     return synset_key_lemmas(wn_lemmas, WordnetFin)
 

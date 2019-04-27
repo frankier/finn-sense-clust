@@ -23,9 +23,9 @@ def softcos(defns):
     return group_clust(list(defns.keys()), clust_labels)
 
 
-def gloss_graph(lemma_name):
+def gloss_graph(lemma_name, pos):
     session = get_session()
-    defns = get_defns(lemma_name, include_wiktionary=True, session=session)
+    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session)
     clus = softcos(defns)
     return clus
 

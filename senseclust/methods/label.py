@@ -31,10 +31,10 @@ def graph_lang_clust(synsets, lemma_sets):
     return group_clust(labels, clust_labels)
 
 
-def get_sense_sets(lemma_name, langs):
+def get_sense_sets(lemma_name, langs, pos):
     synsets = []
     lemma_sets = []
-    lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
+    lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG, pos=pos)
     if len(lemmas) == 0:
         raise NoSuchLemmaException()
     for lemma in lemmas:
@@ -51,9 +51,9 @@ def get_sense_sets(lemma_name, langs):
     return synsets, lemma_sets
 
 
-def label_graph(lemma_name):
+def label_graph(lemma_name, pos):
     langs = get_langs()
-    synsets, lemma_sets = get_sense_sets(lemma_name, langs)
+    synsets, lemma_sets = get_sense_sets(lemma_name, langs, pos)
     return graph_lang_clust(synsets, lemma_sets)
 
 

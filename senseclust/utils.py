@@ -3,7 +3,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from sqlalchemy.sql import select
 from senseclust.consts import CLUS_LANG
-from senseclust.queries import joined
+from senseclust.queries import joined, lemma_where
 from wikiparse.tables import headword, word_sense
 from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
@@ -57,7 +57,7 @@ def split_line(line):
     return lemma, frame_no, lemma_id
 
 
-def get_defns(lemma_name, include_wiktionary=False, session=None, skip_empty=True):
+def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True):
     defns = {}
     # Add wiktionary senses
     wiktionary_senses = session.execute(select([
@@ -66,8 +66,7 @@ def get_defns(lemma_name, include_wiktionary=False, session=None, skip_empty=Tru
         word_sense.c.sense,
         word_sense.c.extra,
     ]).select_from(joined).where(
-        (headword.c.name == lemma_name) &
-        (word_sense.c.pos == "Noun")
+        lemma_where(lemma_name, pos)
     )).fetchall()
     for row in wiktionary_senses:
         tokens = word_tokenize(row["sense"])

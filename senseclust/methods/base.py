@@ -22,10 +22,10 @@ class ExpPathInfo:
 class SenseClusExp(Exp):
     def run(self, words_fn, guess_fn):
         with open(words_fn) as inf, open(guess_fn, "w") as outf:
-            for lemma_name in inf:
-                lemma_name = lemma_name.strip()
+            for line in inf:
+                lemma_name, pos = line.strip().split(",")
                 try:
-                    clus_obj = self.clus_lemma(lemma_name)
+                    clus_obj = self.clus_lemma(lemma_name, pos)
                 except NoSuchLemmaException:
                     print(f"No such lemma: {lemma_name}", file=sys.stderr)
                 else:

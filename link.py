@@ -78,18 +78,19 @@ def include_grouping(filter, wn, lemma, groupings):
 @csvin_arg 
 @click.option('--filter', type=click.Choice(['smap-ambg', 'smap2', 'smap', 'ambg', 'none']))
 @click.option('--multi-group/--single-group')
+@click.option('--pos')
 @wns_arg 
-def get_words(csvin, filter, multi_group, wn):
+def get_words(csvin, filter, multi_group, pos, wn):
     import stiff.wordnet.fin
     next(csvin)
     if multi_group:
         for lemma, multi_groupings in gen_multi_groupings(csvin):
             if any((include_grouping(filter, wn, lemma, groupings) for groupings in multi_groupings)):
-                print(lemma)
+                print(f"{lemma},{pos}")
     else:
         for lemma, groupings in gen_groupings(csvin):
             if include_grouping(filter, wn, lemma, groupings):
-                print(lemma)
+                print(f"{lemma},{pos}")
 
 
 def graph_of_clus(clus):

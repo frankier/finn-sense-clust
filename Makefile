@@ -40,10 +40,10 @@ eval/synth-clus.csv: eval/frame-synset-union2.csv
 	poetry run python link.py synth-clus --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-clus.csv
 
 words/conc-words: eval/frame-synset-union2.csv | words/
-	poetry run python link.py get-words --wn fin --wn qf2 --wn qwf --filter smap2 eval/frame-synset-union2.csv > words/conc-words
+	poetry run python link.py get-words --pos v --wn fin --wn qf2 --wn qwf --filter smap2 eval/frame-synset-union2.csv > words/conc-words
 
 words/synth-words: eval/synth-clus.csv | words/
-	poetry run python link.py get-words --wn fin --wn qf2 --wn qwf --filter smap2 --multi-group eval/synth-clus.csv > words/synth-words
+	poetry run python link.py get-words --pos v --wn fin --wn qf2 --wn qwf --filter smap2 --multi-group eval/synth-clus.csv > words/synth-words
 
 words/all-words: words/conc-words words/synth-words
 	LC_ALL=C sort -u words/conc-words words/synth-words > words/all-words
@@ -63,7 +63,7 @@ eval/manclus.link.csv: eval/manclus.csv
 	poetry run python man_clus.py filter --filter link $< $@
 
 words/man-words: eval/manclus.csv | words/
-	poetry run python link.py get-words --filter none eval/manclus.csv > words/man-words
+	poetry run python link.py get-words --pos n --filter none eval/manclus.csv > words/man-words
 
 # Experiments
 

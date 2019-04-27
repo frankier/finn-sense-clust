@@ -1,6 +1,6 @@
 from pprint import pprint
 import click
-from senseclust.queries import joined
+from senseclust.queries import joined, joined_freq
 from wikiparse.tables import headword, word_sense
 from sqlalchemy.sql import distinct, select
 from sqlalchemy.sql.functions import count
@@ -184,7 +184,7 @@ def pick_words(db: str, limit=50, verbose=False):
     query = select([
             headword.c.name,
             freqs.c.freq,
-        ]).select_from(joined).where(
+        ]).select_from(joined_freq).where(
             word_sense.c.etymology_index.isnot(None) &
             (word_sense.c.pos == "Noun") &
             word_sense.c.inflection_of_id.is_(None)
