@@ -1,4 +1,4 @@
-from sklearn.cluster import AffinityPropagation
+from sklearn.cluster import affinity_propagation
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from sqlalchemy.sql import select
@@ -8,6 +8,10 @@ from wikiparse.tables import headword, word_sense
 from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
 import sys
+import re
+
+
+SYNSET_RE = re.compile(r"[0-9]{8}-[anv]")
 
 
 def group_by(it):
@@ -28,23 +32,30 @@ def self_xtab(li):
             yield e1, e2
 
 
-def graph_clust(affinities):
+def graph_clust(affinities, return_centers=False):
+    def default():
+        if return_centers:
+            return list(range(n)), list(range(n))
+        else:
+            return list(range(n))
     (n, n) = affinities.shape
     if n == 1:
-        return [0]
+        return default()
     mask = np.ones(affinities.shape, dtype=bool)
     np.fill_diagonal(mask, 0)
     if np.all(affinities[mask].flat == affinities[mask].flat[0]):
         if affinities[mask].flat[0] == 0:
-            return list(range(n))
+            return default()
         else:
-            return [0] * n
+            return [0] * n, []
     for damping in [0.5, 0.7, 0.9]:
-        af = AffinityPropagation(affinity='precomputed', damping=damping).fit(affinities)
-        labels = af.labels_
+        centers, labels = affinity_propagation(affinities, damping=damping)
         if not np.any(np.isnan(labels)):
-            return labels
-    return [0] * n
+            if return_centers:
+                return labels, centers
+            else:
+                return labels
+    return default()
 
 
 def group_clust(labels, clust_labels):
@@ -79,3 +90,16 @@ def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empt
     for lemma in wordnet_senses:
         defns[wordnet.ss2of(lemma.synset())] = word_tokenize(lemma.synset().definition())
     return defns
+
+
+def unclusterable_default(keys, return_centers=False):
+    labels = list(range(len(keys)))
+    clus = group_clust(keys, labels)
+    if return_centers:
+        return clus, keys
+    else:
+        return clus
+
+
+def is_wn_ref(ref):
+    return SYNSET_RE.match(ref)

@@ -15,14 +15,22 @@ def mk_eval(multi):
 expc, SnakeMake = mk_expcomb(EXPERIMENTS, eval)
 
 
-@expc.mk_test
+@expc.group_apply_cmd
 @click.argument("test_corpus", type=click.Path())
-@click.argument("guess_dir", type=click.Path())
+@click.argument("guess", type=click.Path())
+@click.option("--exemplars/--no-exemplar")
 def test(
+    experiments,
     test_corpus,
-    guess_dir,
+    guess,
+    exemplars=False,
 ):
-    return ExpPathInfo(test_corpus, guess_dir, None)
+    path_info = ExpPathInfo(test_corpus, guess, None)
+    for exp_group in experiments:
+        if exemplars:
+            exp_group.run_all(path_info, exemplars=True)
+        else:
+            exp_group.run_all(path_info)
 
 
 @expc.exp_apply_cmd

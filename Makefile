@@ -48,6 +48,14 @@ words/synth-words: eval/synth-clus.csv | words/
 words/all-words: words/conc-words words/synth-words
 	LC_ALL=C sort -u words/conc-words words/synth-words > words/all-words
 
+words/really-all-words:
+	poetry run python get_all_words.py | sort -u - > words/really-all-words
+
+words/really-all-words-split/.done:
+	mkdir -p words/really-all-words-split
+	split -l100 -a4 words/really-all-words words/really-all-words-split/
+	touch $@
+
 # Manclus stuff
 
 eval/manclus.csv: manclus/*.Noun

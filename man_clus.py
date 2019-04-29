@@ -12,15 +12,11 @@ from wikiparse.utils.db import get_session, insert
 import wordfreq
 from senseclust.tables import metadata, freqs
 from senseclust.groupings import gen_groupings
-from senseclust.utils import split_line
+from senseclust.utils import split_line, is_wn_ref
 from os.path import basename
-import re
 import itertools
 from nltk.tokenize import word_tokenize
 from nltk.corpus import wordnet
-
-
-SYNSET_RE = re.compile(r"[0-9]{8}-[anv]")
 
 
 @click.group()
@@ -128,10 +124,6 @@ def decompile(inf, out_dir):
                     tokens = word_tokenize(sense)
                     outf.write(" ".join(tokens))
                     outf.write("\n")
-
-
-def is_wn_ref(ref):
-    return SYNSET_RE.match(ref)
 
 
 @man_clus.command()

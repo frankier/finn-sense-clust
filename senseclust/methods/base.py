@@ -15,24 +15,32 @@ class ExpPathInfo:
     gold: str
 
     def get_paths(self, iden, exp):
-        guess_path = pjoin(self.guess, iden)
-        return self.corpus, guess_path, None, self.gold
+        return self.corpus, self.guess, None, self.gold
 
 
 class SenseClusExp(Exp):
-    def run(self, words_fn, guess_fn):
+    def run(self, words_fn, guess_fn, **extra):
+        add_exemplars = self.returns_centers and extra.get("exemplars", False)
         with open(words_fn) as inf, open(guess_fn, "w") as outf:
             for line in inf:
-                lemma_name, pos = line.strip().split(",")
+                lemma_name, pos = line.strip().rsplit(",", 1)
                 try:
-                    clus_obj = self.clus_lemma(lemma_name, pos)
+                    if add_exemplars:
+                        clus_obj, centers = self.clus_lemma(lemma_name, pos, True)
+                    else:
+                        clus_obj = self.clus_lemma(lemma_name, pos)
+                        centers = []
                 except NoSuchLemmaException:
                     print(f"No such lemma: {lemma_name}", file=sys.stderr)
                 else:
                     for k, v in sorted(clus_obj.items()):
                         num = k + 1
                         for ss in v:
-                            print(f"{lemma_name}.{num:02},{ss}", file=outf)
+                            if add_exemplars:
+                                exemplar = "1" if ss in centers else "0"
+                                print(f"{lemma_name}.{num:02},{ss},{exemplar}", file=outf)
+                            else:
+                                print(f"{lemma_name}.{num:02},{ss}", file=outf)
 
     def calc_score(self, gold, guess_path):
         return eval(open(gold), open(guess_path), False)

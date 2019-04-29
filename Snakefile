@@ -1,4 +1,4 @@
-##
+## Eval
 from expc import SnakeMake
 
 WORK = "work"
@@ -34,7 +34,7 @@ rule test:
     wildcard_constraints:
         corpus=r"[^\.]+"
     shell:
-        "python expc.py --filter 'nick={wildcards.nick}' test words/{wildcards.corpus} " + WORK + "/guess/"
+        "python expc.py --filter 'nick={wildcards.nick}' test words/{wildcards.corpus} {output}"
 
 rule eval:
     input: WORK + "/guess/{corpus}.{nick}"
@@ -42,4 +42,17 @@ rule eval:
     run:
         clean_eval = wildcards.eval.replace("_", ".")
 	multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
-        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} words/{wildcards.corpus} " + WORK + "/guess/ eval/" + clean_eval + ".csv")
+        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} words/{wildcards.corpus} {input} eval/" + clean_eval + ".csv")
+
+# Final output
+
+rule run_gloss:
+    input: "words/really-all-words-split/{seg}"
+    output: WORK + "/output/{seg}.csv"
+    shell:
+        "python expc.py --filter 'nick=gloss' test --exemplars {input} {output}"
+
+SEGS = glob_wildcards("words/really-all-words-split/{seg}")[0]
+
+rule gloss_all:
+    input: expand(WORK + "/output/{seg}.csv", seg=SEGS)
