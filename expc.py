@@ -3,6 +3,7 @@ from expcomb.cmd import mk_expcomb, TinyDBParam
 from senseclust.methods.base import ExpPathInfo
 from senseclust.methods import EXPERIMENTS
 from senseclust.eval import eval as eval_func
+from senseclust.evaltables import TABLES
 
 
 def mk_eval(multi):
@@ -12,7 +13,7 @@ def mk_eval(multi):
     return eval
 
 
-expc, SnakeMake = mk_expcomb(EXPERIMENTS, eval)
+expc, SnakeMake = mk_expcomb(EXPERIMENTS, eval, tables=TABLES)
 
 
 @expc.group_apply_cmd

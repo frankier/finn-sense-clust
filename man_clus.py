@@ -62,7 +62,7 @@ def gen(words, out_dir):
 
 
 @man_clus.command()
-def add_freq_data(db: str):
+def add_freq_data():
     """
     Add table of frequencies to DB
     """
@@ -166,10 +166,9 @@ def filter(inf, outf, filter):
 
 
 @man_clus.command()
-@click.argument("db")
 @click.argument("limit", required=False, type=int)
 @click.option("--verbose/--no-verbose")
-def pick_words(db: str, limit=50, verbose=False):
+def pick_words(limit=50, verbose=False):
     """
     Pick etymologically ambigious nouns for creating manual clustering.
     """

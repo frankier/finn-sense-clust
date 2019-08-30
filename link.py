@@ -1,3 +1,4 @@
+from collections import Counter
 import csv
 import sys
 from finntk.wordnet.utils import fi2en_post, en2fi_post
@@ -13,6 +14,7 @@ from senseclust.wordnet import get_lemma_names, WORDNETS
 from functools import reduce
 
 
+GROUPING_INCLUSION_CRITERIA = ('smap-ambg', 'smap2', 'smap', 'ambg', 'none')
 PRED_MAT = 'data/PredicateMatrix.v1.3/PredicateMatrix.v1.3.txt'
 PROPBANK_DEFNS = 'data/Finnish_PropBank/gen_lemmas/pb-defs.tsv'
 MODEL_RE = re.compile(r".*\(tags: model:([^, \)]+)\).*")
@@ -64,22 +66,26 @@ def include_grouping(filter, wn, lemma, groupings):
         smap_count = 0
         for group_num, synsets in groupings.items():
             for synset in synsets:
-                if lemma in get_lemma_names(synset, wn):
+                if is_smap(wn, lemma, synset):
                     smap_ambg.add(group_num)
                     smap_count += 1
         if ((filter == 'smap' and smap_count < 1) or
-            (filter == 'smap2' and smap_count < 2) or 
+            (filter == 'smap2' and smap_count < 2) or
             (filter == 'smap-ambg' and len(smap_ambg) < 2)):
             return False
     return True
 
 
+def is_smap(wn, lemma, synset):
+    return lemma in get_lemma_names(synset, wn)
+
+
 @link.command()
-@csvin_arg 
-@click.option('--filter', type=click.Choice(['smap-ambg', 'smap2', 'smap', 'ambg', 'none']))
+@csvin_arg
+@click.option('--filter', type=click.Choice(GROUPING_INCLUSION_CRITERIA))
 @click.option('--multi-group/--single-group')
 @click.option('--pos')
-@wns_arg 
+@wns_arg
 def get_words(csvin, filter, multi_group, pos, wn):
     import stiff.wordnet.fin
     next(csvin)
@@ -93,16 +99,21 @@ def get_words(csvin, filter, multi_group, pos, wn):
                 print(f"{lemma},{pos}")
 
 
-def graph_of_clus(clus):
-    import networkx as nx
+def same_diff_of_clus(clus):
     from senseclust.utils import self_xtab
     syns_clus = list(synset_key_clus(clus).items())
-    graph = nx.Graph()
     for (s1, c1), (s2, c2) in self_xtab(syns_clus):
         if c1 == c2:
-            graph.add_edge(s1, s2, weight=1)
+            yield s1, s2, 1
         else:
-            graph.add_edge(s1, s2, weight=-1)
+            yield s1, s2, -1
+
+
+def graph_of_clus(clus):
+    import networkx as nx
+    graph = nx.Graph()
+    for s1, s2, weight in same_diff_of_clus(clus):
+        graph.add_edge(s1, s2, weight=weight)
     return graph
 
 
@@ -137,9 +148,9 @@ def grouping_len(grouping):
 
 
 @link.command()
-@csvin_arg 
+@csvin_arg
 @csvout_arg
-@wns_arg 
+@wns_arg
 def synth_clus(csvin, csvout, wn):
     csvout.write("pb,wn\n")
     import networkx as nx
@@ -199,8 +210,8 @@ def synth_clus(csvin, csvout, wn):
 
 
 @link.command(short_help="Write out lemmas in synset")
-@csvin_arg 
-@wns_arg 
+@csvin_arg
+@wns_arg
 def dump(csvin, wn):
     """
     Write out the lemmas in each synset from a CSVIN (frame, synset) relation.
@@ -220,8 +231,75 @@ def dump(csvin, wn):
     print(f"Total: {total}; Self mapping: {self_mapping}; Prop: {self_mapping/total}", file=sys.stderr)
 
 
+def tri(x):
+    return x * (x - 1) // 2
+
+
+@link.command(short_help="Write out stats for a csv")
+@csvin_arg
+@wns_arg
+def stats(csvin, wn):
+    """
+    Write out stats for CSVIN
+    """
+    import stiff.wordnet.fin
+    cnt = Counter()
+    csvin = peekable(csvin)
+    first_line = csvin.peek().strip()
+    if first_line in ("pb,wn", "manann,ref"):
+        next(csvin)
+    if first_line == "manann,ref":
+        inclusion_criteria = ('ambg', 'none')
+        has_wiktionary = True
+    else:
+        inclusion_criteria = GROUPING_INCLUSION_CRITERIA
+        has_wiktionary = False
+    #for lemma, multi_groupings in gen_multi_groupings(csvin):
+    for lemma, groupings in gen_groupings(csvin):
+        for inc_crit in inclusion_criteria:
+            if include_grouping(inc_crit, wn, lemma, groupings):
+                cnt['lemmas_' + inc_crit] += 1
+                all_matchings = sum((
+                    len(group) for group in groupings.values()
+                ))
+                cnt['matchings_' + inc_crit] += all_matchings
+                cnt['edges_' + inc_crit] += tri(all_matchings)
+                if not has_wiktionary:
+                    smap_matchings = sum((
+                        1 for synsets in groupings.values()
+                        for synset in synsets
+                        if is_smap(wn, lemma, synset)
+                    ))
+                    cnt['smap_matchings_' + inc_crit] += smap_matchings
+                    cnt['smap_edges_' + inc_crit] += tri(smap_matchings)
+                same_edges = 0
+                diff_edges = 0
+                if not has_wiktionary:
+                    smap_same_edges = 0
+                    smap_diff_edges = 0
+                for s1, s2, weight in same_diff_of_clus(groupings):
+                    if not has_wiktionary:
+                        both_smap = is_smap(wn, lemma, s1) and is_smap(wn, lemma, s2)
+                    if weight == 1:
+                        same_edges += 1
+                        if not has_wiktionary and both_smap:
+                            smap_same_edges += 1
+                    else:
+                        diff_edges += 1
+                        if not has_wiktionary and both_smap:
+                            smap_diff_edges += 1
+                cnt['same_edges_' + inc_crit] += same_edges
+                cnt['diff_edges_' + inc_crit] += diff_edges
+                if not has_wiktionary:
+                    cnt['smap_same_edges_' + inc_crit] += smap_same_edges
+                    cnt['smap_diff_edges_' + inc_crit] += smap_diff_edges
+
+    for k, v in sorted(cnt.items()):
+        print(k, v)
+
+
 @link.command(short_help="Get (frame, synset) rel from FinnPropBank")
-@pb_defns_arg 
+@pb_defns_arg
 @csvout_arg
 def extract_synset_rel(pb_defns, csvout):
     """
@@ -267,7 +345,7 @@ def filter_grouping_repeats(grouping):
 
 
 @link.command(short_help="Remove synsets which are repeated in multiple clusters")
-@csvin_arg 
+@csvin_arg
 @csvout_arg
 def filter_repeats(csvin, csvout):
     csvin = peekable(csvin)
@@ -283,7 +361,7 @@ def filter_repeats(csvin, csvout):
 @click.option('--pred-matrix', default=PRED_MAT,
               help='Path to PredicateMatrix.v?.?.txt TSV file',
               type=click.File('r'))
-@pb_defns_arg 
+@pb_defns_arg
 @click.option('--reject-non-english/--accept-non-english', default=False,
               help='Accept or reject non-English based mappings')
 @click.option('--use-model/--use-link-original', default=True,
