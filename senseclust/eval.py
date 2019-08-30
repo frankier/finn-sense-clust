@@ -1,8 +1,6 @@
 from collections import Counter
-import click
 from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join, synset_key_clus
 from senseclust.utils import self_xtab
-from sklearn.feature_extraction.text import CountVectorizer
 
 HEADERS = ("pb,wn", "manann,ref")
 
