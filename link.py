@@ -235,10 +235,48 @@ def tri(x):
     return x * (x - 1) // 2
 
 
+def count_groupings(cnt, has_wiktionary, inc_crit, wn, lemma, groupings):
+    all_matchings = sum((
+        len(group) for group in groupings.values()
+    ))
+    cnt['matchings_' + inc_crit] += all_matchings
+    cnt['edges_' + inc_crit] += tri(all_matchings)
+    if not has_wiktionary:
+        smap_matchings = sum((
+            1 for synsets in groupings.values()
+            for synset in synsets
+            if is_smap(wn, lemma, synset)
+        ))
+        cnt['smap_matchings_' + inc_crit] += smap_matchings
+        cnt['smap_edges_' + inc_crit] += tri(smap_matchings)
+    same_edges = 0
+    diff_edges = 0
+    if not has_wiktionary:
+        smap_same_edges = 0
+        smap_diff_edges = 0
+    for s1, s2, weight in same_diff_of_clus(groupings):
+        if not has_wiktionary:
+            both_smap = is_smap(wn, lemma, s1) and is_smap(wn, lemma, s2)
+        if weight == 1:
+            same_edges += 1
+            if not has_wiktionary and both_smap:
+                smap_same_edges += 1
+        else:
+            diff_edges += 1
+            if not has_wiktionary and both_smap:
+                smap_diff_edges += 1
+    cnt['same_edges_' + inc_crit] += same_edges
+    cnt['diff_edges_' + inc_crit] += diff_edges
+    if not has_wiktionary:
+        cnt['smap_same_edges_' + inc_crit] += smap_same_edges
+        cnt['smap_diff_edges_' + inc_crit] += smap_diff_edges
+
+
 @link.command(short_help="Write out stats for a csv")
 @csvin_arg
 @wns_arg
-def stats(csvin, wn):
+@click.option("--multi/--single")
+def stats(csvin, wn, multi=False):
     """
     Write out stats for CSVIN
     """
@@ -254,45 +292,20 @@ def stats(csvin, wn):
     else:
         inclusion_criteria = GROUPING_INCLUSION_CRITERIA
         has_wiktionary = False
-    #for lemma, multi_groupings in gen_multi_groupings(csvin):
-    for lemma, groupings in gen_groupings(csvin):
-        for inc_crit in inclusion_criteria:
-            if include_grouping(inc_crit, wn, lemma, groupings):
-                cnt['lemmas_' + inc_crit] += 1
-                all_matchings = sum((
-                    len(group) for group in groupings.values()
-                ))
-                cnt['matchings_' + inc_crit] += all_matchings
-                cnt['edges_' + inc_crit] += tri(all_matchings)
-                if not has_wiktionary:
-                    smap_matchings = sum((
-                        1 for synsets in groupings.values()
-                        for synset in synsets
-                        if is_smap(wn, lemma, synset)
-                    ))
-                    cnt['smap_matchings_' + inc_crit] += smap_matchings
-                    cnt['smap_edges_' + inc_crit] += tri(smap_matchings)
-                same_edges = 0
-                diff_edges = 0
-                if not has_wiktionary:
-                    smap_same_edges = 0
-                    smap_diff_edges = 0
-                for s1, s2, weight in same_diff_of_clus(groupings):
-                    if not has_wiktionary:
-                        both_smap = is_smap(wn, lemma, s1) and is_smap(wn, lemma, s2)
-                    if weight == 1:
-                        same_edges += 1
-                        if not has_wiktionary and both_smap:
-                            smap_same_edges += 1
-                    else:
-                        diff_edges += 1
-                        if not has_wiktionary and both_smap:
-                            smap_diff_edges += 1
-                cnt['same_edges_' + inc_crit] += same_edges
-                cnt['diff_edges_' + inc_crit] += diff_edges
-                if not has_wiktionary:
-                    cnt['smap_same_edges_' + inc_crit] += smap_same_edges
-                    cnt['smap_diff_edges_' + inc_crit] += smap_diff_edges
+
+    if multi:
+        for lemma, multi_groupings in gen_multi_groupings(csvin):
+            for inc_crit in inclusion_criteria:
+                if any((include_grouping(inc_crit, wn, lemma, groupings) for groupings in multi_groupings)):
+                    cnt['lemmas_' + inc_crit] += 1
+                    for groupings in multi_groupings:
+                        count_groupings(cnt, has_wiktionary, inc_crit, wn, lemma, groupings)
+    else:
+        for lemma, groupings in gen_groupings(csvin):
+            for inc_crit in inclusion_criteria:
+                if include_grouping(inc_crit, wn, lemma, groupings):
+                    cnt['lemmas_' + inc_crit] += 1
+                    count_groupings(cnt, has_wiktionary, inc_crit, wn, lemma, groupings)
 
     for k, v in sorted(cnt.items()):
         print(k, v)
