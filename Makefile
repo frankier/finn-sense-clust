@@ -73,16 +73,7 @@ eval/manclus.link.csv: eval/manclus.csv
 words/man-words: eval/manclus.csv | words/
 	poetry run python link.py get-words --pos n --filter none eval/manclus.csv > words/man-words
 
-# Experiments
-
-results/label-graph.csv: results/ words/all-words
-	poetry run python clus.py run label-graph words/all-words > results/label-graph.csv
-
-results/vec-clust-autoextend-graph.csv: results/ words/all-words
-	poetry run python clus.py run vec-clust-autoextend-graph words/all-words > results/vec-clust-autoextend-graph.csv
-
-eval.txt: results/label-graph.csv results/vec-clust-autoextend-graph.csv
-	bash eval.sh > eval.txt
+# Experiments ==> Moved to Snakefile
 
 # Clean
 
