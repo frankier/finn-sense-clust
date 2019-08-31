@@ -20,7 +20,7 @@ class ExpPathInfo:
 
 class SenseClusExp(Exp):
     def run(self, words_fn, guess_fn, **extra):
-        add_exemplars = self.returns_centers and extra.get("exemplars", False)
+        add_exemplars = getattr(self, "returns_centers", False) and extra.get("exemplars", False)
         with open(words_fn) as inf, open(guess_fn, "w") as outf:
             for line in inf:
                 lemma_name, pos = line.strip().rsplit(",", 1)
