@@ -1,10 +1,13 @@
 SHELL := /bin/bash
 
-all: eval/frame-synset-union2.csv eval/synth-clus.csv words/all-words eval.txt
+all: all-words all-eval
+
+all-words: words/man-words words/all-words words/really-all-words-split/.done
+
+all-eval: eval/frame-synset-union2.csv eval/synth-clus.csv eval/manclus.csv eval/manclus.*.csv
 
 eval/:
 	mkdir eval
-
 words/:
 	mkdir words
 
@@ -51,14 +54,14 @@ words/all-words: words/conc-words words/synth-words
 words/really-all-words:
 	poetry run python get_all_words.py | sort -u - > words/really-all-words
 
-words/really-all-words-split/.done:
+words/really-all-words-split/.done: words/really-all-words
 	mkdir -p words/really-all-words-split
 	split -l100 -a4 words/really-all-words words/really-all-words-split/
 	touch $@
 
 # Manclus stuff
 
-eval/manclus.csv: manclus/*.Noun
+eval/manclus.csv: manclus/*.Noun | eval/
 	poetry run python man_clus.py compile manclus/* eval/manclus.csv
 
 eval/manclus.wn.csv: eval/manclus.csv
