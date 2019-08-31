@@ -1,9 +1,10 @@
 ## Eval
+from expcomb.filter import SimpleFilter
 from expc import SnakeMake
 
 WORK = "work"
 WN_ONLY_EVAL = {
-    "all-words": ["synth-clus", "frame-synset-union2"],
+    "all-words": ["synth-clus.filtered", "frame-synset-union2.filtered", "synset-rel.filtered", "joined-link.filtered", "joined-model.filtered"],
     "man-words": ["manclus_wn"],
 }
 WIKI_EXTRA_EVAL = {
@@ -22,7 +23,7 @@ def all_results():
                 yield f"{WORK}/results/{corpus}--{eval}--{nick}.db"
     for nick in SnakeMake.get_nicks():
         yield from eval_paths(nick, WN_ONLY_EVAL)
-    for nick in SnakeMake.get_nicks(opt_dict={"supports_wiktionary": True}):
+    for nick in SnakeMake.get_nicks(SimpleFilter(opt_dict={"supports_wiktionary": True})):
         yield from eval_paths(nick, WIKI_EXTRA_EVAL)
 
 rule all:
@@ -42,7 +43,7 @@ rule eval:
     run:
         clean_eval = wildcards.eval.replace("_", ".")
 	multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
-        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} words/{wildcards.corpus} {input} eval/" + clean_eval + ".csv")
+        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} words/{wildcards.corpus} " + WORK + "/guess eval/" + clean_eval + ".csv")
 
 # Final output
 
