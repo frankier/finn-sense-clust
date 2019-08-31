@@ -49,10 +49,20 @@ TABLES = [
             [
                 LookupGroupDisplay(
                     CatValGroup("gold", [
-                        "eval/frame-synset-union2.csv",
-                        "eval/synth-clus.csv",
-                        "eval/manclus.wn.csv"
-                    ]),
+                        "eval/frame-synset-union2.filtered.csv",
+                        "eval/synset-rel.filtered.csv",
+                        "eval/joined-link.filtered.csv",
+                        "eval/joined-model.filtered.csv",
+                        "eval/synth-clus.filtered.csv",
+                        "eval/manclus.wn.csv",
+                    ]), {
+                        "eval/frame-synset-union2.filtered.csv": "auto",
+                        "eval/synset-rel.filtered.csv": "synset-rel",
+                        "eval/joined-link.filtered.csv": "joined-link",
+                        "eval/joined-model.filtered.csv": "joined-model",
+                        "eval/synth-clus.filtered.csv": "synth",
+                        "eval/manclus.wn.csv": "man-wn",
+                    }
                 ),
             ],
             UnlabelledMeasure("o,macc"),
@@ -66,8 +76,12 @@ TABLES = [
                     CatValGroup("gold", [
                         "eval/manclus.csv",
                         "eval/manclus.wiki.csv",
-                        "eval/manclus.link.csv"
-                    ]),
+                        "eval/manclus.link.csv",
+                    ]), {
+                        "eval/manclus.csv": "man",
+                        "eval/manclus.wiki.csv": "man-wiki",
+                        "eval/manclus.link.csv": "man-link",
+                    }
                 ),
             ],
             UnlabelledMeasure("o,macc"),
