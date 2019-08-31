@@ -47,7 +47,11 @@ def graph_clust(affinities, return_centers=False):
         if affinities[mask].flat[0] == 0:
             return default()
         else:
-            return [0] * n, []
+            result = [0] * n
+            if return_centers:
+                return result, []
+            else:
+                return result
     for damping in [0.5, 0.7, 0.9]:
         centers, labels = affinity_propagation(affinities, damping=damping)
         if not np.any(np.isnan(labels)):
