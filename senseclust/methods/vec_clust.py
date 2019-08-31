@@ -1,6 +1,6 @@
 from finntk.emb.autoextend import mk_lemmas_mat, vecs as fiwn_vecs
 from finntk.wordnet.reader import fiwn_uniq
-from finntk.wordnet.utils import fi2en_post, en2fi_post
+from finntk.wordnet.utils import fi2en_post
 from fastcluster import linkage
 from nltk.corpus import wordnet
 from scipy.cluster import hierarchy
