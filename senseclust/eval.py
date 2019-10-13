@@ -3,6 +3,7 @@ from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join,
 from senseclust.utils import self_xtab
 
 HEADERS = ("pb,wn", "manann,ref")
+ZERO_CONFUSION = dict(tp=0, tn=0, fp=0, fn=0)
 
 
 def hmean(x, y):
@@ -51,26 +52,9 @@ def macc(tp, tn, fp, fn):
     return (tp * tn - fp * fn) / denom ** 0.5
 
 
-def eval(gold, test, multi_group):
-    lemmas = 0
-    cnt = Counter(tp=0, tn=0, fp=0, fn=0)
-    line = next(gold)
-    assert line.strip() in HEADERS
-    if multi_group:
-        gold_gen = gen_multi_groupings(gold)
-    else:
-        gold_gen = gen_groupings(gold)
-    for lemma, gold_clus, test_clus in inner_join(gold_gen, gen_groupings(test)):
-        lemmas += 1
-        if multi_group:
-            for gc in gold_clus[0]:
-                eval_clus(gc, test_clus[0], cnt)
-        else:
-            eval_clus(gold_clus[0], test_clus[0], cnt)
-
+def stats_dict(cnt):
     p, r, f1 = calc_pr(cnt['tp'], cnt['fp'], cnt['fn'])
     res = {}
-    res["lemmas"] = lemmas
     res["cnt"] = cnt
     tnr = 0 if cnt['tn'] == 0 else cnt['tn'] / (cnt['tn'] + cnt['fp'])
     res["pr"] = {
@@ -87,3 +71,59 @@ def eval(gold, test, multi_group):
         "hacc": hmean(r, tnr)
     }
     return res
+
+
+def gen_gold_groupings(gold, multi_group):
+    if multi_group:
+        return gen_multi_groupings(gold)
+    else:
+        return gen_groupings(gold)
+
+
+def eval(gold, test, multi_group):
+    lemmas = 0
+    cnt = Counter(**ZERO_CONFUSION)
+    line = next(gold)
+    assert line.strip() in HEADERS
+    gold_gen = gen_gold_groupings(gold, multi_group)
+    for lemma, gold_clus, test_clus in inner_join(gold_gen, gen_groupings(test)):
+        lemmas += 1
+        if multi_group:
+            for gc in gold_clus[0]:
+                eval_clus(gc, test_clus[0], cnt)
+        else:
+            eval_clus(gold_clus[0], test_clus[0], cnt)
+
+    res = stats_dict(cnt)
+    res["lemmas"] = lemmas
+    return res
+
+
+def pre_cnt_lines(gold, test, multi_group):
+    line = next(gold)
+    assert line.strip() in HEADERS
+    lemma_line_map = {}
+    for idx, (lemma, groups) in enumerate(gen_gold_groupings(gold, multi_group)):
+        lemma_line_map[lemma] = idx
+    cnts = {}
+    gold.seek(0)
+    line = next(gold)
+    assert line.strip() in HEADERS
+    gold_gen = gen_gold_groupings(gold, multi_group)
+    for lemma, gold_clus, test_clus in inner_join(gold_gen, gen_groupings(test)):
+        cnt = Counter(**ZERO_CONFUSION)
+        if multi_group:
+            for gc in gold_clus[0]:
+                eval_clus(gc, test_clus[0], cnt)
+        else:
+            eval_clus(gold_clus[0], test_clus[0], cnt)
+        cnts[lemma_line_map[lemma]] = cnt
+    return cnts
+
+
+def eval_resampled(resample, cnt_map):
+    acc = Counter(**ZERO_CONFUSION)
+    for sample in resample:
+        if sample in cnt_map:
+            acc += cnt_map[sample]
+    return stats_dict({**ZERO_CONFUSION, **acc})

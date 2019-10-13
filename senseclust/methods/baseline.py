@@ -5,10 +5,11 @@ from wikiparse.utils.db import get_session
 
 
 def mk_baseline(mode="1"):
-    def baseline(lemma_name):
+    def baseline(lemma_name, pos):
         session = get_session()
         defns = get_defns(
             lemma_name,
+            pos,
             include_wiktionary=True,
             session=session
         )

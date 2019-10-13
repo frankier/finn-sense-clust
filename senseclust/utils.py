@@ -4,7 +4,7 @@ import numpy as np
 from sqlalchemy.sql import select
 from senseclust.consts import CLUS_LANG
 from senseclust.queries import joined, lemma_where
-from wikiparse.tables import headword, word_sense
+from wikiparse.tables import word_sense
 from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
 import sys
