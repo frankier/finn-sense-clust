@@ -3,7 +3,6 @@ from expcomb.table.spec import (
     CatValGroup,
     LookupGroupDisplay,
     UnlabelledMeasure,
-    MeasuresSplit,
     DimGroups,
 )
 from expcomb.filter import SimpleFilter, OrFilter
@@ -46,7 +45,11 @@ MEANS = LookupGroupDisplay(
 FILTER = OrFilter(
     SimpleFilter("Gloss"),
     SimpleFilter("Label"),
-    SimpleFilter("Sense Vector"),
+    SimpleFilter("Sense vector"),
+)
+
+WIKI_FILTER = OrFilter(
+    SimpleFilter("Gloss"),
 )
 
 
@@ -61,18 +64,18 @@ TABLES = [
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
-                        "eval/frame-synset-union2.filtered.csv",
+                        "eval/frame-synset-union2.csv",
                         "eval/synset-rel.filtered.csv",
                         "eval/joined-link.filtered.csv",
                         "eval/joined-model.filtered.csv",
-                        "eval/synth-clus.filtered.csv",
+                        "eval/synth-clus.csv",
                         "eval/manclus.wn.csv",
                     ]), {
-                        "eval/frame-synset-union2.filtered.csv": "auto",
+                        "eval/frame-synset-union2.csv": "auto",
                         "eval/synset-rel.filtered.csv": "synset-rel",
                         "eval/joined-link.filtered.csv": "joined-link",
                         "eval/joined-model.filtered.csv": "joined-model",
-                        "eval/synth-clus.filtered.csv": "synth",
+                        "eval/synth-clus.csv": "synth",
                         "eval/manclus.wn.csv": "man-wn",
                     }
                 ),
@@ -103,6 +106,6 @@ TABLES = [
             fmt,
             two_levels=False,
         ),
-        FILTER,
+        WIKI_FILTER,
     )
 ]
