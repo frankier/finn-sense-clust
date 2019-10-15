@@ -19,7 +19,7 @@ networkx = "*"
 wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
 stiff = {git = "https://github.com/frankier/stiff.git"}
 paramiko = "^2.4"
-expcomb = {git = "https://github.com/frankier/expcomb.git", commit = "c82dadd911d6a7ef1171a3144001b9b7d0c5ff61"}
+expcomb = {git = "https://github.com/frankier/expcomb.git", commit = "96c999b3aa0356a92dc6132398b7bfc624f02337"}
 snakemake = "^5.5.4"
 
 [build-system]
