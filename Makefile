@@ -4,7 +4,7 @@ all: all-words all-eval
 
 all-words: words/man-words words/all-words words/really-all-words-split/.done
 
-all-eval: eval/frame-synset-union2.csv eval/synth-clus.csv eval/manclus.csv eval/manclus.*.csv
+all-eval: eval/frame-synset-union2.csv eval/synth-clus.csv eval/manclus.csv eval/manclus.wn.csv eval/manclus.wiki.csv eval/manclus.link.csv
 
 eval/:
 	mkdir eval
