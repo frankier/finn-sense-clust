@@ -4,8 +4,9 @@ from expcomb.table.spec import (
     LookupGroupDisplay,
     UnlabelledMeasure,
     MeasuresSplit,
+    DimGroups,
 )
-
+from expcomb.filter import SimpleFilter, OrFilter
 
 VECS = LookupGroupDisplay(
     CatValGroup(
@@ -42,11 +43,22 @@ MEANS = LookupGroupDisplay(
 )
 
 
+FILTER = OrFilter(
+    SimpleFilter("Gloss"),
+    SimpleFilter("Label"),
+    SimpleFilter("Sense Vector"),
+)
+
+
+def fmt(x):
+    return "{:.3f}".format(x)
+
+
 TABLES = [
     (
         "wordnet_table",
         SumTableSpec(
-            [
+            DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
                         "eval/frame-synset-union2.filtered.csv",
@@ -64,14 +76,17 @@ TABLES = [
                         "eval/manclus.wn.csv": "man-wn",
                     }
                 ),
-            ],
+            ]),
             UnlabelledMeasure("o,macc"),
+            fmt,
+            two_levels=False,
         ),
+        FILTER,
     ),
     (
         "wiktionary_table",
         SumTableSpec(
-            [
+            DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
                         "eval/manclus.csv",
@@ -83,8 +98,11 @@ TABLES = [
                         "eval/manclus.link.csv": "man-link",
                     }
                 ),
-            ],
+            ]),
             UnlabelledMeasure("o,macc"),
+            fmt,
+            two_levels=False,
         ),
+        FILTER,
     )
 ]
