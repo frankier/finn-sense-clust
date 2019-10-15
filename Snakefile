@@ -95,7 +95,7 @@ rule resample:
         multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
         shell(
             "python expc.py sigtest resample " + multi +
-	    " {output} {input.eval} {input.guess} {input.result} {input.schedule}"
+	    " {output} {input.eval} {input.guess} {input.result} {input.schedule} o,macc"
         )
 
 rule compare:

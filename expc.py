@@ -1,7 +1,8 @@
 import click
 from expcomb.cmd import mk_expcomb
+from expcomb.table.utils import pick_str
 from expcomb.utils import TinyDBParam
-from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, mk_compare_resampled, simple_create_schedule
+from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, mk_compare_resampled, simple_create_schedule, simple_compare_resampled
 from senseclust.methods.base import ExpPathInfo
 from senseclust.methods import EXPERIMENTS
 from senseclust.eval import eval as eval_func, gen_gold_groupings, pre_cnt_lines, eval_resampled
@@ -29,17 +30,24 @@ def create_sample_maps(multi, gold, guess):
 
 
 class SenseClustBootstrapper(Bootstrapper):
-    def __init__(self, multi):
+    def __init__(self, multi, measure=None):
         self.multi = multi
+        self.measure = measure
 
     def score_one(self, gold, guess):
-        return eval_func(open(gold), open(guess), self.multi)
+        result = eval_func(open(gold), open(guess), self.multi)
+        if self.measure is not None:
+            result = pick_str(result, self.measure)
+        return result
 
     def create_score_dist(self, gold, guess, schedule):
         dist = []
         cnt_map = pre_cnt_lines(open(gold), open(guess), self.multi)
         for resample in schedule:
-            dist.append(eval_resampled(resample, cnt_map))
+            result = eval_resampled(resample, cnt_map)
+            if self.measure is not None:
+                result = pick_str(result, self.measure)
+            dist.append(result)
         return dist
 
 
@@ -49,19 +57,13 @@ class SenseClustBootstrapper(Bootstrapper):
 @click.argument("guess", type=click.Path())
 @click.argument("result", type=TinyDBParam())
 @click.argument("schedule", type=click.File("rb"))
+@click.argument("measure", required=False)
 @click.option("--multi/--single")
-def resample(outf, gold, guess, result, schedule, multi):
-    return SenseClustBootstrapper(multi), outf, gold, guess, result, schedule, None
+def resample(outf, gold, guess, result, schedule, measure=None, multi=False):
+    return SenseClustBootstrapper(multi, measure), outf, gold, guess, result, schedule, None
 
 
-@mk_compare_resampled
-@click.argument("inf", type=click.File("rb"))
-@click.argument("outf", type=click.File("wb"))
-@click.option("--multi/--single")
-def compare_resampled(inf, outf, multi):
-    return SenseClustBootstrapper(multi), inf, outf
-
-
+simple_compare_resampled()
 single_bootstrapper = SenseClustBootstrapper(False)
 simple_create_schedule(single_bootstrapper)
 
