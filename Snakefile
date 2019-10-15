@@ -66,10 +66,10 @@ rule gloss_all:
 
 def cmp_inputs(wildcards):
     if wildcards.corpus in WIKI_EXTRA_EVAL:
-        nicks = SnakeMake.get_nicks(SimpleFilter(opt_dict={"supports_wiktionary": True}))
+        nicks = SnakeMake.get_nicks(SimpleFilter(supports_wiktionary=True))
     else:
         nicks = SnakeMake.get_nicks()
-    yield from expand(WORK + "/bootstrap/resamples/{nick}/" + wildcards.corpus + "/" + wildcards.eval + ".pkl", nick=nicks)
+    return expand(WORK + "/bootstrap/resamples/{nick}/" + wildcards.corpus + "/" + wildcards.eval + ".pkl", nick=nicks)
 
 
 rule bootstrap:
