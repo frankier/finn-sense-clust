@@ -4,6 +4,7 @@ from expcomb.table.spec import (
     LookupGroupDisplay,
     UnlabelledMeasure,
     DimGroups,
+    SumDimGroups,
 )
 from expcomb.filter import SimpleFilter, OrFilter
 
@@ -61,6 +62,7 @@ TABLES = [
     (
         "wordnet_table",
         SumTableSpec(
+            SumDimGroups(two_levels=False),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
@@ -82,13 +84,13 @@ TABLES = [
             ]),
             UnlabelledMeasure("o,macc"),
             fmt,
-            two_levels=False,
         ),
         FILTER,
     ),
     (
         "wiktionary_table",
         SumTableSpec(
+            SumDimGroups(two_levels=False),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
@@ -104,7 +106,6 @@ TABLES = [
             ]),
             UnlabelledMeasure("o,macc"),
             fmt,
-            two_levels=False,
         ),
         WIKI_FILTER,
     )
