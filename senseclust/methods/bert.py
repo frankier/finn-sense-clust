@@ -24,13 +24,16 @@ def defns_to_berts(defns):
     return model.encode(sentences)
 
 
+def bert_affinities(defns):
+    layers = defns_to_berts(defns)
+    return cos_affinities(layers)
+
+
 def bert_clus(defns, return_centers=False):
     keys = list(defns.keys())
     if len(defns) <= 1:
         return unclusterable_default(keys, return_centers=return_centers)
-    layers = defns_to_berts(defns)
-    affinities = cos_affinities(layers)
-    return graph_clust_grouped(affinities, keys, return_centers)
+    return graph_clust_grouped(bert_affinities(defns), keys, return_centers)
 
 
 def bert_graph(lemma_name, pos, return_centers=False):

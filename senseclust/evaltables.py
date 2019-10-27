@@ -49,6 +49,7 @@ FILTER = OrFilter(
     SimpleFilter("Bert"),
     SimpleFilter("Label"),
     SimpleFilter("SenseVec"),
+    SimpleFilter("Comb"),
 )
 
 WIKI_FILTER = OrFilter(
@@ -56,6 +57,7 @@ WIKI_FILTER = OrFilter(
     SimpleFilter("Wmd"),
     SimpleFilter("Bert"),
     SimpleFilter("Ety"),
+    SimpleFilter("Comb"),
 )
 
 

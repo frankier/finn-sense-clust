@@ -84,13 +84,14 @@ def split_line(line):
 
 def cos_affinities(mat):
     dists = pdist(mat, metric='cosine')
-    return squareform((1 - dists))
+    # XXX: Should this sometimes be clipped to above 0
+    sim = squareform(1 - dists)
+    np.fill_diagonal(sim, 1)
+    return sim
 
 
-def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True, tokenize=True):
-    defns = {}
-    # Add wiktionary senses
-    wiktionary_senses = session.execute(select([
+def get_wiktionary(session, lemma_name, pos):
+    return session.execute(select([
         word_sense.c.sense_id,
         word_sense.c.etymology_index,
         word_sense.c.sense,
@@ -98,7 +99,12 @@ def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empt
     ]).select_from(joined).where(
         lemma_where(lemma_name, pos)
     )).fetchall()
-    for row in wiktionary_senses:
+
+
+def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True, tokenize=True):
+    defns = {}
+    # Add wiktionary senses
+    for row in get_wiktionary(session, lemma_name, pos):
         tokens = row["sense"]
         if tokenize:
             tokens = word_tokenize(tokens)

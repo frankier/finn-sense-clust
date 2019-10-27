@@ -6,6 +6,7 @@ from senseclust.methods.base import ExpGroup, WiktionaryExpGroup
 from senseclust.methods.bert import Bert
 from senseclust.methods.wmd import Wmd
 from senseclust.methods.ety import Ety
+from senseclust.methods.comb import CombGroup
 
 
 EXPERIMENTS = [
@@ -16,4 +17,5 @@ EXPERIMENTS = [
     WiktionaryExpGroup([Bert()]),
     WiktionaryExpGroup([Wmd(False), Wmd(True)]),
     WiktionaryExpGroup([Ety()]),
+    CombGroup(),
 ]

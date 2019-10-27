@@ -18,9 +18,9 @@ def get_langs():
 
 def lemma_measures_of_sets(lemma_sets):
     mat = mat_of_sets(lemma_sets)
-    vocab_size = mat.shape[1]
+    #vocab_size = mat.shape[1]
     dists = pdist(mat.todense(), metric='russellrao')
-    affinities = squareform((1 - dists) * vocab_size)
+    affinities = squareform((1 - dists)) #  * vocab_size
     return dists, affinities
 
 
@@ -31,7 +31,8 @@ def graph_lang_clust(synsets, lemma_sets):
     return group_clust(labels, clust_labels)
 
 
-def get_sense_sets(lemma_name, langs, pos):
+def get_sense_sets(lemma_name, pos):
+    langs = get_langs()
     synsets = []
     lemma_sets = []
     lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG, pos=pos)
@@ -52,8 +53,7 @@ def get_sense_sets(lemma_name, langs, pos):
 
 
 def label_graph(lemma_name, pos):
-    langs = get_langs()
-    synsets, lemma_sets = get_sense_sets(lemma_name, langs, pos)
+    synsets, lemma_sets = get_sense_sets(lemma_name, pos)
     return graph_lang_clust(synsets, lemma_sets)
 
 

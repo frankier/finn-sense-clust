@@ -50,9 +50,9 @@ class Vec(SenseClusExp):
     def __init__(self):
         self.clus_func = vec_clust_autoextend_graph
         super().__init__(
-            ("Sense vector",),
-            mk_nick("sense-vector"),
-            "Sense vector",
+            ("SenseVec",),
+            mk_nick("sense-vec"),
+            "Sensevec",
             None,
             {},
         )
