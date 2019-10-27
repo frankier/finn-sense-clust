@@ -4,6 +4,7 @@ from senseclust.methods.gloss import Gloss
 from senseclust.methods.baseline import Baseline
 from senseclust.methods.base import ExpGroup, WiktionaryExpGroup
 from senseclust.methods.bert import Bert
+from senseclust.methods.wmd import Wmd
 
 
 EXPERIMENTS = [
@@ -12,4 +13,5 @@ EXPERIMENTS = [
     ExpGroup([Vec()]),
     WiktionaryExpGroup([Gloss()]),
     WiktionaryExpGroup([Bert()]),
+    WiktionaryExpGroup([Wmd(False), Wmd(True)]),
 ]

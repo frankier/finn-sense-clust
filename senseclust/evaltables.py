@@ -45,6 +45,7 @@ MEANS = LookupGroupDisplay(
 
 FILTER = OrFilter(
     SimpleFilter("Gloss"),
+    SimpleFilter("Wmd"),
     SimpleFilter("Bert"),
     SimpleFilter("Label"),
     SimpleFilter("SenseVec"),
@@ -52,6 +53,7 @@ FILTER = OrFilter(
 
 WIKI_FILTER = OrFilter(
     SimpleFilter("Gloss"),
+    SimpleFilter("Wmd"),
     SimpleFilter("Bert"),
 )
 
