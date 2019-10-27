@@ -55,6 +55,7 @@ WIKI_FILTER = OrFilter(
     SimpleFilter("SoftCos"),
     SimpleFilter("Wmd"),
     SimpleFilter("Bert"),
+    SimpleFilter("Ety"),
 )
 
 
