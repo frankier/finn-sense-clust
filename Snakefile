@@ -27,7 +27,7 @@ def all_results():
                 yield f"{WORK}/results/{corpus}--{eval}--{nick}.db"
     for nick in SnakeMake.get_nicks():
         yield from eval_paths(nick, WN_ONLY_EVAL)
-    for nick in SnakeMake.get_nicks(SimpleFilter(opt_dict={"supports_wiktionary": True})):
+    for nick in SnakeMake.get_nicks(SimpleFilter(supports_wiktionary=True)):
         yield from eval_paths(nick, WIKI_EXTRA_EVAL)
 
 
