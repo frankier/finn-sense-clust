@@ -46,7 +46,7 @@ MEANS = LookupGroupDisplay(
 FILTER = OrFilter(
     SimpleFilter("Gloss"),
     SimpleFilter("Label"),
-    SimpleFilter("Sense vector"),
+    SimpleFilter("SenseVec"),
 )
 
 WIKI_FILTER = OrFilter(
@@ -70,14 +70,14 @@ TABLES = [
                         "eval/synset-rel.filtered.csv",
                         "eval/joined-link.filtered.csv",
                         "eval/joined-model.filtered.csv",
-                        "eval/synth-clus.csv",
+                        #"eval/synth-clus.csv",
                         "eval/manclus.wn.csv",
                     ]), {
-                        "eval/frame-synset-union2.csv": "auto",
-                        "eval/synset-rel.filtered.csv": "synset-rel",
-                        "eval/joined-link.filtered.csv": "joined-link",
-                        "eval/joined-model.filtered.csv": "joined-model",
-                        "eval/synth-clus.csv": "synth",
+                        "eval/frame-synset-union2.csv": "joined",
+                        "eval/synset-rel.filtered.csv": "synset",
+                        "eval/joined-link.filtered.csv": "link",
+                        "eval/joined-model.filtered.csv": "model",
+                        #"eval/synth-clus.csv": "synth",
                         "eval/manclus.wn.csv": "man-wn",
                     }
                 ),
