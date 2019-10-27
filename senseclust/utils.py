@@ -87,7 +87,7 @@ def cos_affinities(mat):
     return squareform((1 - dists))
 
 
-def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True):
+def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True, tokenize=True):
     defns = {}
     # Add wiktionary senses
     wiktionary_senses = session.execute(select([
@@ -99,7 +99,9 @@ def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empt
         lemma_where(lemma_name, pos)
     )).fetchall()
     for row in wiktionary_senses:
-        tokens = word_tokenize(row["sense"])
+        tokens = row["sense"]
+        if tokenize:
+            tokens = word_tokenize(tokens)
         if skip_empty and not tokens:
             sys.stderr.write(f"Empty defn: {row['sense_id']} '{row['sense']}'\n")
             continue
@@ -107,7 +109,10 @@ def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empt
     # Add WordNet senses
     wordnet_senses = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
     for lemma in wordnet_senses:
-        defns[wordnet.ss2of(lemma.synset())] = word_tokenize(lemma.synset().definition())
+        tokens = lemma.synset().definition()
+        if tokenize:
+            tokens = word_tokenize(tokens)
+        defns[wordnet.ss2of(lemma.synset())] = tokens
     return defns
 
 

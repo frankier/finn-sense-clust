@@ -45,12 +45,14 @@ MEANS = LookupGroupDisplay(
 
 FILTER = OrFilter(
     SimpleFilter("Gloss"),
+    SimpleFilter("Bert"),
     SimpleFilter("Label"),
     SimpleFilter("SenseVec"),
 )
 
 WIKI_FILTER = OrFilter(
     SimpleFilter("Gloss"),
+    SimpleFilter("Bert"),
 )
 
 

@@ -3,6 +3,7 @@ from senseclust.methods.vec_clust import Vec
 from senseclust.methods.gloss import Gloss
 from senseclust.methods.baseline import Baseline
 from senseclust.methods.base import ExpGroup, WiktionaryExpGroup
+from senseclust.methods.bert import Bert
 
 
 EXPERIMENTS = [
@@ -10,4 +11,5 @@ EXPERIMENTS = [
     ExpGroup([Label()]),
     ExpGroup([Vec()]),
     WiktionaryExpGroup([Gloss()]),
+    WiktionaryExpGroup([Bert()]),
 ]
