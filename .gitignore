@@ -8,3 +8,5 @@ __pycache__/
 *.egg-info/
 /.snakemake/
 /pip-wheel-metadata/
+*.oldon.????????/
+/default_filepath.pdf
