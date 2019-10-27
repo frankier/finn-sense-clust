@@ -1,8 +1,8 @@
-from gensim.corpora import Dictionary
 from gensim.similarities import SoftCosineSimilarity
+from gensim.models.keyedvectors import SparseTermSimilarityMatrix, WordEmbeddingSimilarityIndex
 from finntk.emb.fasttext import vecs
 import numpy as np
-from senseclust.utils import graph_clust, group_clust, get_defns, unclusterable_default
+from senseclust.utils import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from wikiparse.utils.db import get_session
@@ -12,25 +12,19 @@ def softcos(defns, return_centers=False):
     keys = list(defns.keys())
     if len(defns) == 1:
         return unclusterable_default(keys, return_centers=return_centers)
-    dictionary = Dictionary(defns.values())
+    dictionary, bow_corpus = mk_dictionary_bow_corpus(defns.values())
     if len(dictionary) == 0:
         return unclusterable_default(keys, return_centers=return_centers)
-    bow_corpus = [dictionary.doc2bow(document) for document in defns.values()]
 
-    similarity_matrix = vecs.get_en().similarity_matrix(dictionary)
-    index = SoftCosineSimilarity(bow_corpus, similarity_matrix, num_best=10)
+    similarity_index = WordEmbeddingSimilarityIndex(vecs.get_en())
+    similarity_matrix = SparseTermSimilarityMatrix(similarity_index, dictionary)
+    index = SoftCosineSimilarity(bow_corpus, similarity_matrix)
     affinities = np.zeros((len(defns), len(defns)))
 
     for row, similarities in enumerate(index):
-        for col, similarity in similarities:
-            affinities[col, row] = similarity
+        affinities[row] = similarities
 
-    if return_centers:
-        clust_labels, centers = graph_clust(affinities, return_centers=True)
-        return group_clust(keys, clust_labels), [keys[c] for c in centers]
-    else:
-        clust_labels = graph_clust(affinities)
-        return group_clust(keys, clust_labels)
+    return graph_clust_grouped(affinities, keys, return_centers)
 
 
 def gloss_graph(lemma_name, pos, return_centers=False):

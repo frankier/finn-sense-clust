@@ -66,6 +66,15 @@ def group_clust(labels, clust_labels):
     return group_by(((clust_num, labels[idx]) for idx, clust_num in enumerate(clust_labels)))
 
 
+def graph_clust_grouped(affinities, labels, return_centers=False):
+    if return_centers:
+        clust_labels, centers = graph_clust(affinities, return_centers=True)
+        return group_clust(labels, clust_labels), [labels[c] for c in centers]
+    else:
+        clust_labels = graph_clust(affinities)
+        return group_clust(labels, clust_labels)
+
+
 def split_line(line):
     frame_id, lemma_id = line.strip().split(",", 1)
     lemma, frame_no = frame_id.split(".", 1)
@@ -107,3 +116,12 @@ def unclusterable_default(keys, return_centers=False):
 
 def is_wn_ref(ref):
     return SYNSET_RE.match(ref)
+
+
+def mk_dictionary_bow_corpus(docs):
+    from gensim.corpora import Dictionary
+    dictionary = Dictionary()
+    bow_corpus = []
+    for document in docs:
+        bow_corpus.append(dictionary.doc2bow(document, allow_update=True))
+    return dictionary, bow_corpus
