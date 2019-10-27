@@ -6,6 +6,7 @@ from expcomb.models import Exp, ExpGroup as ExpGroupBase
 from senseclust.exceptions import NoSuchLemmaException
 from senseclust.eval import eval
 from wikiparse.utils.db import get_session
+from click.utils import LazyFile
 
 
 @dataclass(frozen=True)
@@ -21,7 +22,7 @@ class ExpPathInfo:
 class SenseClusExp(Exp):
     def run(self, words_fn, guess_fn, **extra):
         add_exemplars = getattr(self, "returns_centers", False) and extra.get("exemplars", False)
-        with open(words_fn) as inf, open(guess_fn, "w") as outf:
+        with open(words_fn) as inf, LazyFile(guess_fn, "w") as outf:
             for line in inf:
                 lemma_name, pos = line.strip().rsplit(",", 1)
                 try:
