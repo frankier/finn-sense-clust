@@ -1,5 +1,6 @@
 from sklearn.cluster import affinity_propagation
 from sklearn.feature_extraction.text import CountVectorizer
+from scipy.spatial.distance import pdist, squareform
 import numpy as np
 from sqlalchemy.sql import select
 from senseclust.consts import CLUS_LANG
@@ -79,6 +80,11 @@ def split_line(line):
     frame_id, lemma_id = line.strip().split(",", 1)
     lemma, frame_no = frame_id.split(".", 1)
     return lemma, frame_no, lemma_id
+
+
+def cos_affinities(mat):
+    dists = pdist(mat, metric='cosine')
+    return squareform((1 - dists))
 
 
 def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True):

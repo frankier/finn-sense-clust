@@ -4,8 +4,7 @@ from finntk.wordnet.utils import fi2en_post
 from fastcluster import linkage
 from nltk.corpus import wordnet
 from scipy.cluster import hierarchy
-from scipy.spatial.distance import pdist, squareform
-from senseclust.utils import graph_clust, group_clust
+from senseclust.utils import graph_clust, group_clust, cos_affinities
 from senseclust.exceptions import NoSuchLemmaException
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
@@ -40,8 +39,7 @@ def vec_clust_autoextend_graph(lemma_name, pos):
     except KeyError:
         raise NoSuchLemmaException
     else:
-        dists = pdist(mat, metric='cosine')
-        affinities = squareform((1 - dists))
+        affinities = cos_affinities(mat)
         clust_labels = graph_clust(affinities)
         synsets = [lemma.synset() for lemma in lemmas]
         labels = [fi2en_post(wordnet.ss2of(synset)) for synset in synsets]
