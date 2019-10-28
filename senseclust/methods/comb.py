@@ -1,12 +1,12 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
+from senseclust.exceptions import NoSuchLemmaException
 from senseclust.utils import get_defns, unclusterable_default, graph_clust_grouped
 from senseclust.methods.base import WiktionaryExpGroup
 from wikiparse.utils.db import get_session
 from .bert import bert_affinities
 from .label import get_sense_sets, mat_of_sets
 from .ety import ety
-from nltk.corpus import wordnet
 from scipy.spatial.distance import pdist
 import numpy as np
 from itertools import islice
@@ -32,27 +32,31 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
 
     # Overwrite with *Label* when affinity is larger
     if do_label:
-        synsets, lemma_sets = get_sense_sets(lemma_name, pos)
-        mat = mat_of_sets(lemma_sets)
-        sims = 1 - pdist(mat.todense(), metric='russellrao')
-        if len(sims):
-            sims = sims / np.amax(sims)
+        try:
+            labels, lemma_sets = get_sense_sets(lemma_name, pos)
+        except NoSuchLemmaException:
+            pass
+        else:
+            mat = mat_of_sets(lemma_sets)
+            sims = 1 - pdist(mat.todense(), metric='russellrao')
+            if len(sims):
+                sims = sims / np.amax(sims)
 
-            def adjust_idx(idx):
-                return defn_ids[wordnet.ss2of(synsets[idx])]
+                def adjust_idx(idx):
+                    return defn_ids[labels[idx]]
 
-            i = 0
-            j = 1
-            for sim in sims:
-                ai = adjust_idx(i)
-                aj = adjust_idx(j)
-                if sim > affinities[ai, aj]:
-                    affinities[ai, aj] = affinities[aj, ai] = sim
-                j += 1
-                if j >= len(synsets):
-                    i += 1
-                    j = i + 1
-                    assert i < len(synsets)
+                i = 0
+                j = 1
+                for sim in sims:
+                    ai = adjust_idx(i)
+                    aj = adjust_idx(j)
+                    if sim > affinities[ai, aj]:
+                        affinities[ai, aj] = affinities[aj, ai] = sim
+                    j += 1
+                    if j >= len(labels):
+                        i += 1
+                        j = i + 1
+                        assert i < len(labels)
 
     # Take Ety into account by setting links within the same ety to 1 and outside to 0
     if do_ety_same or do_ety_diff:
