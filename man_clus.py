@@ -55,7 +55,7 @@ def gen(words, out_dir):
                 prev_ety = row["etymology_index"]
 
             # Get WordNet results
-            for synset_id, lemma_objs in get_lemma_objs(word, "n", WORDNETS).items():
+            for synset_id, lemma_objs in get_lemma_objs(word, WORDNETS, "n").items():
                 wordnets = {wn for wn, _ in lemma_objs}
                 outf.write("\n")
                 outf.write("{} # [{}] {}\n".format(pre_id_to_post(synset_id), ", ".join(wordnets), annotation_comment(lemma_objs)))
