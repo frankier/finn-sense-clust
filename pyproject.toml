@@ -13,7 +13,7 @@ numpy = "*"
 scipy = "*"
 matplotlib = "*"
 click = ">=7"
-finntk = ">=0.0.14"
+finntk = ">=0.0.62"
 fastcluster = "*"
 networkx = "*"
 wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
