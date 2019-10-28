@@ -16,7 +16,7 @@ from functools import partial
 def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_same=False, do_ety_diff=False):
     # Obtain and give ids to all defns which might be needed
     session = get_session()
-    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session, tokenize=False, skip_empty=False)
+    defns = get_defns(lemma_name, pos, include_wiktionary=True, include_wordnet=True, session=session, tokenize=False, skip_empty=False)
 
     keys = list(defns.keys())
     if len(defns) <= 1:

@@ -1,8 +1,9 @@
+from finntk.wordnet.utils import maybe_fi2en_ss, pre_id_to_post
 from nltk.corpus import wordnet
 from scipy.spatial.distance import pdist, squareform
-from senseclust.consts import CLUS_LANG
 from senseclust.exceptions import NoSuchLemmaException
 from senseclust.utils import graph_clust, mat_of_sets, group_clust
+from senseclust.wordnet import get_lemma_objs, WORDNETS
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 
@@ -18,43 +19,55 @@ def get_langs():
 
 def lemma_measures_of_sets(lemma_sets):
     mat = mat_of_sets(lemma_sets)
-    #vocab_size = mat.shape[1]
     dists = pdist(mat.todense(), metric='russellrao')
-    affinities = squareform((1 - dists)) #  * vocab_size
+    affinities = squareform((1 - dists))
     return dists, affinities
 
 
-def graph_lang_clust(synsets, lemma_sets):
-    labels = [wordnet.ss2of(synset) for synset in synsets]
+def graph_lang_clust(labels, lemma_sets):
     dists, affinities = lemma_measures_of_sets(lemma_sets)
     clust_labels = graph_clust(affinities)
-    return group_clust(labels, clust_labels)
+    return labels, group_clust(labels, clust_labels)
 
 
 def get_sense_sets(lemma_name, pos):
     langs = get_langs()
-    synsets = []
+    labels = []
     lemma_sets = []
-    lemmas = wordnet.lemmas(lemma_name, lang=CLUS_LANG, pos=pos)
-    if len(lemmas) == 0:
+    id_lemmas = get_lemma_objs(lemma_name, WORDNETS, pos)
+    if len(id_lemmas) == 0:
         raise NoSuchLemmaException()
-    for lemma in lemmas:
-        synset = lemma.synset()
+    for synset_id, lemma_objs in id_lemmas.items():
         lemma_set = set()
-        for lang in langs:
-            other_lemmas = synset.lemmas(lang=lang)
+
+        def add_lemmas(other_lemmas):
             for lemma in other_lemmas:
-                if lemma.name() == lemma_name:
+                other_lemma_name = lemma.name()
+                if other_lemma_name == lemma_name:
                     continue
-                lemma_set.add(lemma.name())
-        synsets.append(synset)
+                lemma_set.add(other_lemma_name)
+
+        def add_omw(synset):
+            for lang in langs:
+                add_lemmas(synset.lemmas(lang=lang))
+
+        for wn, lemma in lemma_objs:
+            synset = lemma.synset()
+            if wn == "qf2":
+                add_lemmas(synset.lemmas())
+                en_synset = maybe_fi2en_ss(synset)
+                if en_synset is not None:
+                    add_omw(en_synset)
+            else:
+                add_omw(synset)
+        labels.append(pre_id_to_post(synset_id))
         lemma_sets.append(lemma_set)
-    return synsets, lemma_sets
+    return labels, lemma_sets
 
 
 def label_graph(lemma_name, pos):
-    synsets, lemma_sets = get_sense_sets(lemma_name, pos)
-    return graph_lang_clust(synsets, lemma_sets)
+    labels, lemma_sets = get_sense_sets(lemma_name, pos)
+    return graph_lang_clust(labels, lemma_sets)
 
 
 class Label(SenseClusExp):

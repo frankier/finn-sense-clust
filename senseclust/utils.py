@@ -2,9 +2,10 @@ from sklearn.cluster import affinity_propagation
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.spatial.distance import pdist, squareform
 import numpy as np
-from sqlalchemy.sql import select
+from finntk.wordnet.utils import pre_id_to_post
 from senseclust.consts import CLUS_LANG
-from senseclust.queries import joined, lemma_where
+from senseclust.wordnet import get_lemma_objs, WORDNETS
+from senseclust.queries import wiktionary_query
 from wikiparse.tables import word_sense
 from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
@@ -91,34 +92,41 @@ def cos_affinities(mat):
 
 
 def get_wiktionary(session, lemma_name, pos):
-    return session.execute(select([
-        word_sense.c.sense_id,
-        word_sense.c.etymology_index,
-        word_sense.c.sense,
-        word_sense.c.extra,
-    ]).select_from(joined).where(
-        lemma_where(lemma_name, pos)
-    )).fetchall()
+    return session.execute(wiktionary_query(lemma_name, pos)).fetchall()
 
 
-def get_defns(lemma_name, pos, include_wiktionary=False, session=None, skip_empty=True, tokenize=True):
+def get_defns(
+    lemma_name,
+    pos,
+    include_wiktionary=True,
+    session=None,
+    include_wordnet=True,
+    skip_empty=True,
+    tokenize=True
+):
     defns = {}
     # Add wiktionary senses
-    for row in get_wiktionary(session, lemma_name, pos):
-        tokens = row["sense"]
-        if tokenize:
-            tokens = word_tokenize(tokens)
-        if skip_empty and not tokens:
-            sys.stderr.write(f"Empty defn: {row['sense_id']} '{row['sense']}'\n")
-            continue
-        defns[row["sense_id"]] = tokens
+    if include_wiktionary:
+        assert session is not None
+        for row in get_wiktionary(session, lemma_name, pos):
+            tokens = row["sense"].strip()
+            if tokenize:
+                tokens = word_tokenize(tokens)
+            if skip_empty and not tokens:
+                sys.stderr.write(f"Empty defn: {row['sense_id']} '{row['sense']}'\n")
+                continue
+            defns[row["sense_id"]] = tokens
     # Add WordNet senses
-    wordnet_senses = wordnet.lemmas(lemma_name, lang=CLUS_LANG)
-    for lemma in wordnet_senses:
-        tokens = lemma.synset().definition()
-        if tokenize:
-            tokens = word_tokenize(tokens)
-        defns[wordnet.ss2of(lemma.synset())] = tokens
+    if include_wordnet:
+        for synset_id, lemma_objs in get_lemma_objs(lemma_name, WORDNETS, pos).items():
+            assert len(lemma_objs) >= 1
+            tokens = lemma_objs[0][1].synset().definition().strip()
+            if skip_empty and not tokens:
+                sys.stderr.write(f"Empty defn: {lemma_name}.{pos}: {synset_id}'\n")
+                continue
+            if tokenize:
+                tokens = word_tokenize(tokens)
+            defns[pre_id_to_post(synset_id)] = tokens
     return defns
 
 

@@ -1,3 +1,4 @@
+from sqlalchemy.sql import select
 from senseclust.tables import freqs
 from wikiparse.tables import headword, word_sense
 from .consts import POS_MAP
@@ -20,3 +21,14 @@ def lemma_where(lemma_name, pos):
         (headword.c.name == lemma_name) &
         word_sense.c.pos.in_(POS_MAP[pos]) &
         word_sense.c.inflection_of_id.is_(None))
+
+
+def wiktionary_query(lemma_name, pos):
+    return select([
+        word_sense.c.sense_id,
+        word_sense.c.etymology_index,
+        word_sense.c.sense,
+        word_sense.c.extra,
+    ]).select_from(joined).where(
+        lemma_where(lemma_name, pos)
+    )
