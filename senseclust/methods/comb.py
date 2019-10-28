@@ -10,12 +10,13 @@ from nltk.corpus import wordnet
 from scipy.spatial.distance import pdist
 import numpy as np
 from itertools import islice
+from functools import partial
 
 
 def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_same=False, do_ety_diff=False):
     # Obtain and give ids to all defns which might be needed
     session = get_session()
-    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session, tokenize=False)
+    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session, tokenize=False, skip_empty=False)
 
     keys = list(defns.keys())
     if len(defns) <= 1:
@@ -68,8 +69,8 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
 
     if do_ety_diff:
         # Set different ety links to 0
-        for ety_groups_idx, (ety_idx, sense_ids) in ety_groups.items():
-            for ety_groups_idx2, (ety_idx2, sense_ids2) in islice(ety_groups.items(), ety_groups_idx):
+        for ety_groups_idx, (ety_idx, sense_ids) in enumerate(ety_groups.items()):
+            for ety_groups_idx2, (ety_idx2, sense_ids2) in enumerate(islice(ety_groups.items(), ety_groups_idx)):
                 for s1 in sense_ids:
                     for s2 in sense_ids2:
                         sid1 = defn_ids[s1]
@@ -84,7 +85,12 @@ class Comb(SenseClusExp):
     returns_centers = True
 
     def __init__(self, do_label=False, do_ety_same=False, do_ety_diff=False):
-        self.clus_func = comb_graph
+        self.clus_func = partial(
+            comb_graph,
+            do_label=do_label,
+            do_ety_same=do_ety_same,
+            do_ety_diff=do_ety_diff
+        )
         ety_both = do_ety_same and do_ety_diff
         if ety_both:
             ety_nick = "etyboth"
