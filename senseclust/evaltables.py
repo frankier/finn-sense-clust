@@ -60,9 +60,31 @@ WIKI_FILTER = OrFilter(
     SimpleFilter("Comb"),
 )
 
+ALL_FILTER = OrFilter(
+    SimpleFilter("SoftCos"),
+    SimpleFilter("Wmd"),
+    SimpleFilter("Bert"),
+    SimpleFilter("Label"),
+    SimpleFilter("SenseVec"),
+    SimpleFilter("Comb"),
+    SimpleFilter("Ety"),
+)
+
+PATH_MAP = {
+    "eval/frame-synset-union2.csv": "joined",
+    "eval/synset-rel.filtered.csv": "synset",
+    "eval/joined-link.filtered.csv": "link",
+    "eval/joined-model.filtered.csv": "model",
+    "eval/synth-clus.csv": "synth",
+    "eval/manclus.csv": "man",
+    "eval/manclus.wn.csv": "man-wn",
+    "eval/manclus.wiki.csv": "man-wiki",
+    "eval/manclus.link.csv": "man-link",
+}
+
 
 def fmt(x):
-    return "{:.3f}".format(x)
+    return "{:.1f}".format(x * 100)
 
 
 TABLES = [
@@ -77,16 +99,8 @@ TABLES = [
                         "eval/synset-rel.filtered.csv",
                         "eval/joined-link.filtered.csv",
                         "eval/joined-model.filtered.csv",
-                        #"eval/synth-clus.csv",
                         "eval/manclus.wn.csv",
-                    ]), {
-                        "eval/frame-synset-union2.csv": "joined",
-                        "eval/synset-rel.filtered.csv": "synset",
-                        "eval/joined-link.filtered.csv": "link",
-                        "eval/joined-model.filtered.csv": "model",
-                        #"eval/synth-clus.csv": "synth",
-                        "eval/manclus.wn.csv": "man-wn",
-                    }
+                    ]), PATH_MAP
                 ),
             ]),
             UnlabelledMeasure("o,macc"),
@@ -104,16 +118,58 @@ TABLES = [
                         "eval/manclus.csv",
                         "eval/manclus.wiki.csv",
                         "eval/manclus.link.csv",
-                    ]), {
-                        "eval/manclus.csv": "man",
-                        "eval/manclus.wiki.csv": "man-wiki",
-                        "eval/manclus.link.csv": "man-link",
-                    }
+                    ]), PATH_MAP
                 ),
             ]),
             UnlabelledMeasure("o,macc"),
             fmt,
         ),
         WIKI_FILTER,
-    )
+    ),
+    (
+        "everything_table",
+        SumTableSpec(
+            SumDimGroups(two_levels=False),
+            DimGroups([
+                LookupGroupDisplay(
+                    CatValGroup("gold", [
+                        "eval/frame-synset-union2.csv",
+                        "eval/synset-rel.filtered.csv",
+                        "eval/joined-link.filtered.csv",
+                        "eval/joined-model.filtered.csv",
+                        "eval/manclus.csv",
+                        "eval/manclus.wn.csv",
+                        "eval/manclus.wiki.csv",
+                        "eval/manclus.link.csv",
+                    ]), PATH_MAP
+                ),
+            ]),
+            UnlabelledMeasure("o,macc"),
+            fmt,
+        ),
+        ALL_FILTER,
+    ),
+    (
+        "everything_f1",
+        SumTableSpec(
+            SumDimGroups(two_levels=False),
+            DimGroups([
+                LookupGroupDisplay(
+                    CatValGroup("gold", [
+                        "eval/frame-synset-union2.csv",
+                        "eval/synset-rel.filtered.csv",
+                        "eval/joined-link.filtered.csv",
+                        "eval/joined-model.filtered.csv",
+                        "eval/manclus.csv",
+                        "eval/manclus.wn.csv",
+                        "eval/manclus.wiki.csv",
+                        "eval/manclus.link.csv",
+                    ]), PATH_MAP
+                ),
+            ]),
+            UnlabelledMeasure("pr,f1"),
+            fmt,
+        ),
+        ALL_FILTER ,
+    ),
 ]
