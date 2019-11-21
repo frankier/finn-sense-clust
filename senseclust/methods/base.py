@@ -6,6 +6,7 @@ from expcomb.models import Exp, ExpGroup as ExpGroupBase
 from senseclust.exceptions import NoSuchLemmaException
 from senseclust.eval import eval
 from click.utils import LazyFile
+from os.path import exists
 
 
 @dataclass(frozen=True)
@@ -48,7 +49,8 @@ class SenseClusExp(Exp):
                 # This is probably a partial guess: delete it to avoid getting
                 # incorrect results
                 outf.close()
-                os.unlink(guess_fn)
+                if exists(guess_fn):
+                    os.unlink(guess_fn)
                 raise
 
     def calc_score(self, gold, guess_path):
