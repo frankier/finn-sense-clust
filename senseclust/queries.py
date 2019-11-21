@@ -23,6 +23,16 @@ def lemma_where(lemma_name, pos):
         word_sense.c.inflection_of_id.is_(None))
 
 
+def wiktionary_query_all():
+    return select([
+        headword.c.name,
+        word_sense.c.sense_id,
+        word_sense.c.etymology_index,
+        word_sense.c.sense,
+        word_sense.c.extra,
+    ]).select_from(joined)
+
+
 def wiktionary_query(lemma_name, pos):
     return select([
         word_sense.c.sense_id,
