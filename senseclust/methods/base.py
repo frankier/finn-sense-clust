@@ -58,8 +58,18 @@ class SenseClusExp(Exp):
 
 class ExpGroup(ExpGroupBase):
     supports_wiktionary = False
-    group_attrs = ("supports_wiktionary",)
+    supports_wordnet = False
+    group_attrs = ("supports_wiktionary", "supports_wordnet")
 
 
-class WiktionaryExpGroup(ExpGroup):
+class WiktionaryOnlyExpGroup(ExpGroup):
     supports_wiktionary = True
+
+
+class WordnetOnlyExpGroup(ExpGroup):
+    supports_wordnet = True
+
+
+class BothExpGroup(ExpGroup):
+    supports_wiktionary = True
+    supports_wordnet = True

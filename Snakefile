@@ -2,6 +2,11 @@
 from expcomb.filter import SimpleFilter
 from expc import SnakeMake
 
+def merge(r1, r2):
+    return {
+        k: r1.get(k, []) + r2.get(k, []) for k in {*r1.keys(), *r2.keys()}
+    }
+
 SEED = "42"
 ITERS = "100000"
 
@@ -10,14 +15,18 @@ WN_ONLY_EVAL = {
     "all-words": ["synth-clus", "frame-synset-union2", "synset-rel.filtered", "joined-link.filtered", "joined-model.filtered"],
     "man-words": ["manclus.wn"],
 }
-WIKI_EXTRA_EVAL = {
+WIKI_ONLY_EVAL = {
+    "man-words": [
+        "manclus.wiki",
+    ]
+}
+BOTH_EVAL = {
     "man-words": [
         "manclus",
-        "manclus.wiki",
         "manclus.link",
     ]
 }
-ALL_EVAL = {**WN_ONLY_EVAL, **WIKI_EXTRA_EVAL}
+ALL_EVAL = merge(merge(WN_ONLY_EVAL, WIKI_ONLY_EVAL), BOTH_EVAL)
 MULTI_EVAL = {"synth-clus", "manclus.link"}
 
 def all_results():
@@ -25,10 +34,12 @@ def all_results():
         for corpus, evals in eval_dict.items():
             for eval in evals:
                 yield f"{WORK}/results/{corpus}--{eval}--{nick}.db"
-    for nick in SnakeMake.get_nicks():
+    for nick in SnakeMake.get_nicks(SimpleFilter(supports_wordnet=True)):
         yield from eval_paths(nick, WN_ONLY_EVAL)
     for nick in SnakeMake.get_nicks(SimpleFilter(supports_wiktionary=True)):
-        yield from eval_paths(nick, WIKI_EXTRA_EVAL)
+        yield from eval_paths(nick, WIKI_ONLY_EVAL)
+    for nick in SnakeMake.get_nicks(SimpleFilter(supports_wordnet=True, supports_wiktionary=True)):
+        yield from eval_paths(nick, BOTH_EVAL)
 
 
 rule all:

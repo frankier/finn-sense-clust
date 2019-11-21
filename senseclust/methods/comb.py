@@ -2,7 +2,7 @@ from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
 from senseclust.utils import get_defns, unclusterable_default, graph_clust_grouped
-from senseclust.methods.base import WiktionaryExpGroup
+from senseclust.methods.base import BothExpGroup
 from wikiparse.utils.db import get_session
 from .bert import bert_affinities
 from .label import get_sense_sets, mat_of_sets
@@ -117,7 +117,7 @@ class Comb(SenseClusExp):
         )
 
 
-class CombGroup(WiktionaryExpGroup):
+class CombGroup(BothExpGroup):
     def __init__(self):
         variations = []
         for do_label in [False, True]:
