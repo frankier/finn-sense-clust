@@ -2,7 +2,7 @@ from finntk.wordnet.utils import maybe_fi2en_ss, pre_id_to_post
 from nltk.corpus import wordnet
 from scipy.spatial.distance import pdist, squareform
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import graph_clust, mat_of_sets, group_clust
+from senseclust.utils import graph_clust_grouped, mat_of_sets
 from senseclust.wordnet import get_lemma_objs, WORDNETS
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
@@ -24,10 +24,9 @@ def lemma_measures_of_sets(lemma_sets):
     return dists, affinities
 
 
-def graph_lang_clust(labels, lemma_sets):
+def graph_lang_clust(labels, lemma_sets, return_centers=False):
     dists, affinities = lemma_measures_of_sets(lemma_sets)
-    clust_labels = graph_clust(affinities)
-    return labels, group_clust(labels, clust_labels)
+    return graph_clust_grouped(affinities, labels, return_centers)
 
 
 def get_sense_sets(lemma_name, pos):
@@ -65,12 +64,14 @@ def get_sense_sets(lemma_name, pos):
     return labels, lemma_sets
 
 
-def label_graph(lemma_name, pos):
+def label_graph(lemma_name, pos, return_centers=False):
     labels, lemma_sets = get_sense_sets(lemma_name, pos)
-    return graph_lang_clust(labels, lemma_sets)
+    return graph_lang_clust(labels, lemma_sets, return_centers)
 
 
 class Label(SenseClusExp):
+    returns_centers = True
+
     def __init__(self):
         self.clus_func = label_graph
         super().__init__(

@@ -19,8 +19,10 @@ class ExpPathInfo:
 
 
 class SenseClusExp(Exp):
-    def run(self, words_fn, guess_fn, **extra):
-        add_exemplars = getattr(self, "returns_centers", False) and extra.get("exemplars", False)
+    returns_centers = False
+
+    def run(self, words_fn, guess_fn, exemplars=False):
+        add_exemplars = self.returns_centers and exemplars
         with open(words_fn) as inf, LazyFile(guess_fn, "w") as outf:
             try:
                 for line in inf:
