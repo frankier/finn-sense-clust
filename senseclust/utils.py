@@ -110,11 +110,11 @@ def get_defns(
         assert session is not None
         for row in get_wiktionary(session, lemma_name, pos):
             tokens = row["sense"].strip()
-            if tokenize:
-                tokens = word_tokenize(tokens)
             if skip_empty and not tokens:
                 sys.stderr.write(f"Empty defn: {row['sense_id']} '{row['sense']}'\n")
                 continue
+            if tokenize:
+                tokens = word_tokenize(tokens)
             defns[row["sense_id"]] = tokens
     # Add WordNet senses
     if include_wordnet:
