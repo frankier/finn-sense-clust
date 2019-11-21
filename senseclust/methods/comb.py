@@ -1,10 +1,10 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import get_defns, unclusterable_default, graph_clust_grouped
+from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities
 from senseclust.methods.base import BothExpGroup
 from wikiparse.utils.db import get_session
-from .bert import bert_affinities
+from .bert import get_defns_layers
 from .label import get_sense_sets, mat_of_sets
 from .ety import ety
 from scipy.spatial.distance import pdist
@@ -13,10 +13,24 @@ from itertools import islice
 from functools import partial
 
 
+def cos_affinities_none(layers):
+    defb = []
+    dense_layers = []
+    for idx, layer in enumerate(layers):
+        if layer is None:
+            defb.append(False)
+            continue
+        defb.append(True)
+        dense_layers.append(layer)
+    result = np.eye(len(layers))
+    result[defb] = cos_affinities(dense_layers)
+    return result
+
+
 def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_same=False, do_ety_diff=False):
     # Obtain and give ids to all defns which might be needed
     session = get_session()
-    defns = get_defns(lemma_name, pos, include_wiktionary=True, include_wordnet=True, session=session, tokenize=False, skip_empty=False)
+    defns, layers = get_defns_layers(lemma_name, pos, session, skip_empty=False)
 
     keys = list(defns.keys())
     if len(defns) <= 1:
@@ -27,8 +41,7 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
         defn_ids[defn_key] = idx
 
     # Start with *BERT*
-    # XXX: what about clipping the BERT affinities
-    affinities = bert_affinities(defns)
+    affinities = cos_affinities_none(layers)
 
     # Overwrite with *Label* when affinity is larger
     if do_label:

@@ -2,6 +2,7 @@ import click
 from vecstorenn import VecStorage
 from senseclust.res import get_sent_trans, get_batch_size
 from senseclust.queries import wiktionary_query_all
+from senseclust.pre_embedded_glosses import SENT_BERT_SIZE, wiktionary_sense_id
 from wikiparse.utils.db import get_session
 from nltk.corpus import wordnet
 from itertools import islice
@@ -9,14 +10,8 @@ import logging
 import os
 
 
-SENSE_SEP = "!S&!"
-SENT_BERT_SIZE = 1024
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 logger = logging.getLogger(__name__)
-
-
-def wiktionary_sense_id(row):
-    return row["name"] + SENSE_SEP + row["sense_id"]
 
 
 def wordnet_batcher():

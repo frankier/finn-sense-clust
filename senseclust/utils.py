@@ -95,6 +95,40 @@ def get_wiktionary(session, lemma_name, pos):
     return session.execute(wiktionary_query(lemma_name, pos)).fetchall()
 
 
+def get_wiktionary_defns(
+    lemma_name,
+    pos,
+    session,
+    skip_empty=True,
+    tokenize=True,
+):
+    for row in get_wiktionary(session, lemma_name, pos):
+        tokens = row["sense"].strip()
+        if skip_empty and not tokens:
+            sys.stderr.write(f"Empty defn: {row['sense_id']} '{row['sense']}'\n")
+            continue
+        if tokenize:
+            tokens = word_tokenize(tokens)
+        yield row["sense_id"], tokens
+
+
+def get_wordnet_defns(
+    lemma_name,
+    pos,
+    skip_empty=True,
+    tokenize=True,
+):
+    for synset_id, lemma_objs in get_lemma_objs(lemma_name, WORDNETS, pos).items():
+        assert len(lemma_objs) >= 1
+        tokens = lemma_objs[0][1].synset().definition().strip()
+        if skip_empty and not tokens:
+            sys.stderr.write(f"Empty defn: {lemma_name}.{pos}: {synset_id}'\n")
+            continue
+        if tokenize:
+            tokens = word_tokenize(tokens)
+        yield pre_id_to_post(synset_id), tokens
+
+
 def get_defns(
     lemma_name,
     pos,
@@ -102,31 +136,16 @@ def get_defns(
     session=None,
     include_wordnet=True,
     skip_empty=True,
-    tokenize=True
+    tokenize=True,
 ):
     defns = {}
     # Add wiktionary senses
     if include_wiktionary:
         assert session is not None
-        for row in get_wiktionary(session, lemma_name, pos):
-            tokens = row["sense"].strip()
-            if skip_empty and not tokens:
-                sys.stderr.write(f"Empty defn: {row['sense_id']} '{row['sense']}'\n")
-                continue
-            if tokenize:
-                tokens = word_tokenize(tokens)
-            defns[row["sense_id"]] = tokens
+        defns.update(get_wiktionary_defns(lemma_name, pos, session, skip_empty, tokenize))
     # Add WordNet senses
     if include_wordnet:
-        for synset_id, lemma_objs in get_lemma_objs(lemma_name, WORDNETS, pos).items():
-            assert len(lemma_objs) >= 1
-            tokens = lemma_objs[0][1].synset().definition().strip()
-            if skip_empty and not tokens:
-                sys.stderr.write(f"Empty defn: {lemma_name}.{pos}: {synset_id}'\n")
-                continue
-            if tokenize:
-                tokens = word_tokenize(tokens)
-            defns[pre_id_to_post(synset_id)] = tokens
+        defns.update(get_wordnet_defns(lemma_name, pos, skip_empty, tokenize))
     return defns
 
 

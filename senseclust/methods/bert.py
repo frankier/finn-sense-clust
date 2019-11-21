@@ -1,35 +1,70 @@
+import os
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
-from senseclust.utils import graph_clust_grouped, get_defns, cos_affinities, unclusterable_default
+from senseclust.utils import (
+    graph_clust_grouped, cos_affinities, unclusterable_default,
+    get_wiktionary_defns, get_wordnet_defns
+)
 from senseclust.res import get_sent_trans
+from senseclust.pre_embedded_glosses import get_pre_embed_wn, SENSE_SEP
 from wikiparse.utils.db import get_session
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
 
-def defns_to_berts(defns):
+def encode_non_empty(defns):
     model = get_sent_trans()
-    sentences = list(defns.values())
-    return model.encode(sentences)
+    embedded = [None] * len(defns)
+    idxs = []
+    non_empty = []
+    for idx, defn in enumerate(defns):
+        if not defn:
+            continue
+        idxs.append(idx)
+        non_empty.append(defn)
+    for idx, vec in zip(idxs, model.encode(non_empty)):
+        embedded[idx] = vec
+    return embedded
 
 
-def bert_affinities(defns):
-    layers = defns_to_berts(defns)
-    return cos_affinities(layers)
+def get_defns_layers(lemma_name, pos, session, skip_empty=True):
+    pre_embed_wn = get_pre_embed_wn("PRE_EMBED_WN")
+    pre_embed_wiki = get_pre_embed_wn("PRE_EMBED_WIKI")
+    wiki_defns = {}
+    wn_defns = {}
+    layers = []
+    for k, v in get_wiktionary_defns(lemma_name, pos, session,
+                                     skip_empty=skip_empty, tokenize=False):
+        wiki_defns[k] = v
+        if pre_embed_wiki:
+            layers.append(pre_embed_wiki.get_vec(lemma_name + SENSE_SEP + k))
+    if not pre_embed_wiki and pre_embed_wn:
+        layers.extend(encode_non_empty(wiki_defns.values()))
+    for k, v in get_wordnet_defns(lemma_name, pos,
+                                  skip_empty=skip_empty, tokenize=False):
+        wn_defns[k] = v
+        if pre_embed_wn:
+            layers.append(pre_embed_wn.get_vec(k))
+    if not pre_embed_wn:
+        defns_values = []
+        if not pre_embed_wiki:
+            defns_values.extend(wiki_defns.values())
+        defns_values.extend(wn_defns.values())
+        layers.extend(encode_non_empty(defns_values))
+    return {**wiki_defns, **wn_defns}, layers
 
 
-def bert_clus(defns, return_centers=False):
-    keys = list(defns.keys())
-    if len(defns) <= 1:
+def bert_clus(keys, layers, return_centers=False):
+    if len(keys) <= 1:
         return unclusterable_default(keys, return_centers=return_centers)
-    return graph_clust_grouped(bert_affinities(defns), keys, return_centers)
+    return graph_clust_grouped(cos_affinities(layers), keys, return_centers)
 
 
 def bert_graph(lemma_name, pos, return_centers=False):
     session = get_session()
-    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session, tokenize=False)
-    return bert_clus(defns)
+    defns, layers = get_defns_layers(lemma_name, pos, session)
+    return bert_clus(list(defns.keys()), layers, return_centers)
 
 
 class Bert(SenseClusExp):
