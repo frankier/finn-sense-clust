@@ -1,25 +1,15 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.utils import graph_clust_grouped, get_defns, cos_affinities, unclusterable_default
+from senseclust.res import get_sent_trans
 from wikiparse.utils.db import get_session
-
-from sentence_transformers import SentenceTransformer
 
 import logging
 logging.basicConfig(level=logging.INFO)
 
-_model = None
-
-
-def get_models():
-    global _model
-    if _model is None:
-        _model = SentenceTransformer('bert-large-nli-stsb-mean-tokens')
-    return _model
-
 
 def defns_to_berts(defns):
-    model = get_models()
+    model = get_sent_trans()
     sentences = list(defns.values())
     return model.encode(sentences)
 
