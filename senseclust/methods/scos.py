@@ -8,7 +8,6 @@ import numpy as np
 from senseclust.utils import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
-from wikiparse.utils.db import get_session
 from functools import partial
 
 
@@ -72,8 +71,7 @@ def softcos(stsm_cls, defns, return_centers=False):
 
 
 def scos_graph(stsm_cls, lemma_name, pos, return_centers=False):
-    session = get_session()
-    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session)
+    defns = get_defns(lemma_name, pos)
     return softcos(stsm_cls, defns, return_centers=return_centers)
 
 

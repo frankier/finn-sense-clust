@@ -2,7 +2,6 @@ from finntk.emb.fasttext import vecs
 from senseclust.utils import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
-from wikiparse.utils.db import get_session
 from numpy import int, double, zeros, identity, errstate
 from itertools import islice
 from gensim.corpora.dictionary import Dictionary
@@ -80,8 +79,7 @@ def wmd(wmd_pair, defns, return_centers=False):
 
 
 def wmd_graph(wmd_pair, lemma_name, pos, return_centers=False):
-    session = get_session()
-    defns = get_defns(lemma_name, pos, include_wiktionary=True, session=session)
+    defns = get_defns(lemma_name, pos)
     return wmd(wmd_pair, defns, return_centers=return_centers)
 
 

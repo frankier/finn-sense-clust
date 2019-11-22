@@ -7,7 +7,6 @@ from senseclust.utils import (
 )
 from senseclust.res import get_sent_trans
 from senseclust.pre_embedded_glosses import get_pre_embed_wn, SENSE_SEP
-from wikiparse.utils.db import get_session
 
 import logging
 logging.basicConfig(level=logging.INFO)
@@ -28,13 +27,13 @@ def encode_non_empty(defns):
     return embedded
 
 
-def get_defns_layers(lemma_name, pos, session, skip_empty=True):
+def get_defns_layers(lemma_name, pos, skip_empty=True):
     pre_embed_wn = get_pre_embed_wn("PRE_EMBED_WN")
     pre_embed_wiki = get_pre_embed_wn("PRE_EMBED_WIKI")
     wiki_defns = {}
     wn_defns = {}
     layers = []
-    for k, v in get_wiktionary_defns(lemma_name, pos, session,
+    for k, v in get_wiktionary_defns(lemma_name, pos,
                                      skip_empty=skip_empty, tokenize=False):
         wiki_defns[k] = v
         if pre_embed_wiki:
@@ -62,8 +61,7 @@ def bert_clus(keys, layers, return_centers=False):
 
 
 def bert_graph(lemma_name, pos, return_centers=False):
-    session = get_session()
-    defns, layers = get_defns_layers(lemma_name, pos, session)
+    defns, layers = get_defns_layers(lemma_name, pos)
     return bert_clus(list(defns.keys()), layers, return_centers)
 
 

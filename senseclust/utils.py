@@ -3,11 +3,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from scipy.spatial.distance import pdist, squareform
 import numpy as np
 from finntk.wordnet.utils import pre_id_to_post
-from senseclust.consts import CLUS_LANG
 from senseclust.wordnet import get_lemma_objs, WORDNETS
 from senseclust.queries import wiktionary_query
-from wikiparse.tables import word_sense
-from nltk.corpus import wordnet
 from nltk.tokenize import word_tokenize
 import sys
 import re
@@ -98,10 +95,10 @@ def get_wiktionary(session, lemma_name, pos):
 def get_wiktionary_defns(
     lemma_name,
     pos,
-    session,
     skip_empty=True,
     tokenize=True,
 ):
+    session = get_session()
     for row in get_wiktionary(session, lemma_name, pos):
         tokens = row["sense"].strip()
         if skip_empty and not tokens:
@@ -133,7 +130,6 @@ def get_defns(
     lemma_name,
     pos,
     include_wiktionary=True,
-    session=None,
     include_wordnet=True,
     skip_empty=True,
     tokenize=True,
@@ -141,8 +137,7 @@ def get_defns(
     defns = {}
     # Add wiktionary senses
     if include_wiktionary:
-        assert session is not None
-        defns.update(get_wiktionary_defns(lemma_name, pos, session, skip_empty, tokenize))
+        defns.update(get_wiktionary_defns(lemma_name, pos, skip_empty, tokenize))
     # Add WordNet senses
     if include_wordnet:
         defns.update(get_wordnet_defns(lemma_name, pos, skip_empty, tokenize))
@@ -169,3 +164,15 @@ def mk_dictionary_bow_corpus(docs):
     for document in docs:
         bow_corpus.append(dictionary.doc2bow(document, allow_update=True))
     return dictionary, bow_corpus
+
+
+db_session = None
+
+
+def get_session():
+    global db_session
+    if db_session:
+        return db_session
+    from wikiparse.utils.db import get_session
+    db_session = get_session()
+    return db_session

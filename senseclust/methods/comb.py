@@ -3,7 +3,6 @@ from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
 from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities
 from senseclust.methods.base import BothExpGroup
-from wikiparse.utils.db import get_session
 from .bert import get_defns_layers
 from .label import get_sense_sets, mat_of_sets
 from .ety import ety
@@ -29,8 +28,7 @@ def cos_affinities_none(layers):
 
 def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_same=False, do_ety_diff=False):
     # Obtain and give ids to all defns which might be needed
-    session = get_session()
-    defns, layers = get_defns_layers(lemma_name, pos, session, skip_empty=False)
+    defns, layers = get_defns_layers(lemma_name, pos, skip_empty=False)
 
     keys = list(defns.keys())
     if len(defns) <= 1:

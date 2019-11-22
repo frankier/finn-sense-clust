@@ -1,6 +1,5 @@
 from .base import SenseClusExp
-from wikiparse.utils.db import get_session
-from senseclust.utils import get_wiktionary
+from senseclust.utils import get_wiktionary, get_session
 from expcomb.utils import mk_nick
 
 
