@@ -22,7 +22,8 @@ def cos_affinities_none(layers):
         defb.append(True)
         dense_layers.append(layer)
     result = np.eye(len(layers))
-    result[defb] = cos_affinities(dense_layers)
+    aff = cos_affinities(dense_layers)
+    result[np.ix_(defb, defb)] = aff
     return result
 
 
