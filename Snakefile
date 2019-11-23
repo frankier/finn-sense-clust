@@ -12,7 +12,7 @@ ITERS = "100000"
 
 WORK = "work"
 WN_ONLY_EVAL = {
-    "all-words": ["synth-clus", "frame-synset-union2", "synset-rel.filtered", "joined-link.filtered", "joined-model.filtered"],
+    "all-words": ["synth-clus", "frame-synset-union2.filtered2", "synset-rel.filtered2", "joined-link.filtered2", "joined-model.filtered2"],
     "man-words": ["manclus.wn"],
 }
 WIKI_ONLY_EVAL = {

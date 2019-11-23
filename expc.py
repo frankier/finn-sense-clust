@@ -1,11 +1,12 @@
 import click
+from os.path import join as pjoin
 from expcomb.cmd import mk_expcomb
 from expcomb.table.utils import pick_str
-from expcomb.utils import TinyDBParam
+from expcomb.utils import TinyDBParam, mk_iden
 from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, mk_compare_resampled, simple_create_schedule, simple_compare_resampled
 from senseclust.methods.base import ExpPathInfo
 from senseclust.methods import EXPERIMENTS
-from senseclust.eval import eval as eval_func, gen_gold_groupings, pre_cnt_lines, eval_resampled
+from senseclust.eval import eval as eval_func, gen_gold_groupings, pre_cnt_lines, eval_resampled, UnguessedException
 from senseclust.evaltables import TABLES
 from senseclust.groupings import gen_groupings
 
@@ -103,8 +104,15 @@ def test(
 @click.argument("gold", type=click.Path())
 @click.option("--multi/--single")
 def eval(exp, db, corpus, guess_dir, gold, multi=False):
-    from expcomb.score import calc_exp_score, proc_score
-    measures = calc_exp_score(exp, corpus, gold, guess_dir, mk_eval(multi))
+    from expcomb.score import proc_score
+    iden = mk_iden(corpus, exp)
+    guess_path = pjoin(guess_dir, iden)
+    try:
+        measures = mk_eval(multi)(gold, guess_path)
+    except UnguessedException as exc:
+        exc.gold_fn = gold
+        exc.guess_fn = guess_path
+        raise
     proc_score(exp, db, measures, guess_dir, gold)
 
 

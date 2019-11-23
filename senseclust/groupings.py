@@ -1,4 +1,5 @@
 from .utils import split_line
+from more_itertools import peekable
 
 
 def gen_multi_groupings(inf):
@@ -86,3 +87,14 @@ def clus_key_clus(clus):
     for synset, clus_idx in clus.items():
         res.setdefault(clus_idx, []).append(synset)
     return res
+
+
+def skip_first(csvin, csvout=None):
+    csvin = peekable(csvin)
+    first_line = csvin.peek().strip()
+    if first_line in ("pb,wn", "manann,ref"):
+        next(csvin)
+        if csvout is not None:
+            csvout.write(first_line)
+            csvout.write("\n")
+    return csvin

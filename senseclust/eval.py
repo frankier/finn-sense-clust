@@ -1,5 +1,5 @@
 from collections import Counter
-from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join, synset_key_clus
+from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join, synset_key_clus, outer_join
 from senseclust.utils import self_xtab
 
 HEADERS = ("pb,wn", "manann,ref")
@@ -24,7 +24,11 @@ def calc_pr(tp, fp, fn):
 def eval_clus(gold_clus, test_clus, cnt):
     gold = synset_key_clus(gold_clus)
     test = synset_key_clus(test_clus)
-    pairs = [(gold[gss], test[gss]) for gss in gold if gss in test]
+    pairs = []
+    for gss in gold:
+        if gss not in test:
+            raise UnguessedInstanceException(gss)
+    pairs = [(gold[gss], test[gss])  ]
     for (g1, t1), (g2, t2) in self_xtab(pairs):
         if g1 == g2:
             if t1 == t2:
@@ -80,19 +84,62 @@ def gen_gold_groupings(gold, multi_group):
         return gen_groupings(gold)
 
 
+class UnguessedException(Exception):
+    def __init__(self):
+        self.gold_fn = None
+        self.guess_fn = None
+
+    def __str__(self):
+        msg = ""
+        if self.gold_fn:
+            msg += f" -- found in: {self.gold_fn}"
+        if self.guess_fn:
+            msg += f" -- missing from: {self.guess_fn}"
+        return msg
+
+
+class UnguessedLemmaException(UnguessedException):
+    def __init__(self, missing_lemma):
+        self.missing_lemma = missing_lemma
+        super().__init__()
+
+    def __str__(self):
+        return f"Test does not include missing lemmas {self.missing_lemma}" + super().__str__()
+
+
+class UnguessedInstanceException(UnguessedException):
+    def __init__(self, missing_clus):
+        self.missing_clus = missing_clus
+        self.missing_lemma = None
+        super().__init__()
+
+    def __str__(self):
+        return f"Test does not include missing instance {self.missing_lemma}.{self.missing_clus}" + super().__str__()
+
+
 def eval(gold, test, multi_group):
     lemmas = 0
     cnt = Counter(**ZERO_CONFUSION)
     line = next(gold)
     assert line.strip() in HEADERS
     gold_gen = gen_gold_groupings(gold, multi_group)
-    for lemma, gold_clus, test_clus in inner_join(gold_gen, gen_groupings(test)):
+    for lemma, gold_clus, test_clus in outer_join(gold_gen, gen_groupings(test)):
+        if gold_clus is None:
+            # right join
+            continue
+        if test_clus is None:
+            # right join must == inner join
+            raise UnguessedLemmaException(lemma)
         lemmas += 1
-        if multi_group:
-            for gc in gold_clus[0]:
-                eval_clus(gc, test_clus[0], cnt)
-        else:
-            eval_clus(gold_clus[0], test_clus[0], cnt)
+        try:
+            if multi_group:
+                for gc in gold_clus[0]:
+                    eval_clus(gc, test_clus[0], cnt)
+            else:
+                eval_clus(gold_clus[0], test_clus[0], cnt)
+        except UnguessedInstanceException as exc:
+            exc.missing_lemma = lemma
+            raise
 
     res = stats_dict(cnt)
     res["lemmas"] = lemmas

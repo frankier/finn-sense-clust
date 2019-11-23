@@ -1,10 +1,16 @@
+.SECONDARY:
+.EXPORT_ALL_VARIABLES:
+
+print-%:
+	@echo $*=$($*)
+
 SHELL := /bin/bash
 
 all: all-words all-eval
 
 all-words: words/man-words words/all-words words/really-all-words-split/.done
 
-all-eval: eval/frame-synset-union2.csv eval/synth-clus.csv eval/manclus.csv eval/manclus.wn.csv eval/manclus.wiki.csv eval/manclus.link.csv
+all-eval: eval/frame-synset-union2.filtered2.csv eval/synset-rel.filtered2.csv eval/joined-link.filtered2.csv eval/joined-model.filtered2.csv eval/synth-clus.csv eval/manclus.csv eval/manclus.wn.csv eval/manclus.wiki.csv eval/manclus.link.csv
 
 eval/:
 	mkdir eval
@@ -24,29 +30,26 @@ eval/joined-link.csv: data/Finnish_PropBank/gen_lemmas/pb-defs.tsv data/Predicat
 eval/joined-model.csv: data/Finnish_PropBank/gen_lemmas/pb-defs.tsv data/PredicateMatrix.v1.3/PredicateMatrix.v1.3.txt | eval/
 	poetry run python link.py join-synset eval/joined-model.csv
 
-eval/synset-rel.filtered.csv: eval/synset-rel.csv 
-	poetry run python link.py filter-repeats eval/synset-rel.csv eval/synset-rel.filtered.csv
+eval/%.filtered1.csv: eval/%.csv
+	poetry run python link.py filter-repeats $< $@
 
-eval/joined-link.filtered.csv: eval/joined-link.csv 
-	poetry run python link.py filter-repeats eval/joined-link.csv eval/joined-link.filtered.csv
+eval/%.filtered2.csv: eval/%.filtered1.csv
+	poetry run python link.py filter-clus --filter smap2 --wn fin --wn qf2 --wn qwf $< $@
 
-eval/joined-model.filtered.csv: eval/joined-model.csv 
-	poetry run python link.py filter-repeats eval/joined-model.csv eval/joined-model.filtered.csv
+eval/frame-synset-union1.csv: eval/synset-rel.filtered1.csv eval/joined-link.filtered1.csv
+	poetry run python link.py priority-union $^ $@
 
-eval/frame-synset-union1.csv: eval/synset-rel.filtered.csv eval/joined-link.filtered.csv 
-	poetry run python link.py priority-union eval/synset-rel.filtered.csv eval/joined-link.filtered.csv eval/frame-synset-union1.csv
-
-eval/frame-synset-union2.csv: eval/frame-synset-union1.csv eval/joined-model.filtered.csv 
-	poetry run python link.py priority-union eval/frame-synset-union1.csv eval/joined-model.filtered.csv eval/frame-synset-union2.csv
+eval/frame-synset-union2.csv: eval/frame-synset-union1.filtered1.csv eval/joined-model.filtered1.csv
+	poetry run python link.py priority-union $^ $@
 
 eval/synth-clus.csv: eval/frame-synset-union2.csv
 	poetry run python link.py synth-clus --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-clus.csv
 
-words/conc-words: eval/frame-synset-union2.csv | words/
-	poetry run python link.py get-words --pos v --wn fin --wn qf2 --wn qwf --filter smap2 eval/frame-synset-union2.csv > words/conc-words
+words/conc-words: eval/frame-synset-union2.filtered2.csv | words/
+	poetry run python link.py get-words --pos v $< > $@
 
 words/synth-words: eval/synth-clus.csv | words/
-	poetry run python link.py get-words --pos v --wn fin --wn qf2 --wn qwf --filter smap2 --multi-group eval/synth-clus.csv > words/synth-words
+	poetry run python link.py get-words --pos v --multi-group $< > $@
 
 words/all-words: words/conc-words words/synth-words
 	LC_ALL=C sort -u words/conc-words words/synth-words > words/all-words
@@ -74,7 +77,7 @@ eval/manclus.link.csv: eval/manclus.csv
 	poetry run python man_clus.py filter --filter link $< $@
 
 words/man-words: eval/manclus.csv | words/
-	poetry run python link.py get-words --pos n --filter none eval/manclus.csv > words/man-words
+	poetry run python link.py get-words --pos n $< > $@
 
 # Experiments ==> Moved to Snakefile
 

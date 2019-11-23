@@ -1,15 +1,11 @@
 from collections import Counter
 import csv
 import sys
-from finntk.wordnet.utils import fi2en_post, en2fi_post
-from finntk.wordnet.reader import fiwn
+from finntk.wordnet.utils import fi2en_post
 from nltk.corpus import wordnet
-import fileinput
 import click
-import csv
 import re
-from more_itertools import peekable
-from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join
+from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join, skip_first
 from senseclust.wordnet import get_lemma_names, WORDNETS
 from functools import reduce
 
@@ -82,21 +78,31 @@ def is_smap(wn, lemma, synset):
 
 @link.command()
 @csvin_arg
-@click.option('--filter', type=click.Choice(GROUPING_INCLUSION_CRITERIA))
 @click.option('--multi-group/--single-group')
 @click.option('--pos')
-@wns_arg
-def get_words(csvin, filter, multi_group, pos, wn):
+def get_words(csvin, multi_group, pos):
     import stiff.wordnet.fin
-    next(csvin)
+    csvin = skip_first(csvin)
     if multi_group:
         for lemma, multi_groupings in gen_multi_groupings(csvin):
-            if any((include_grouping(filter, wn, lemma, groupings) for groupings in multi_groupings)):
-                print(f"{lemma},{pos}")
+            print(f"{lemma},{pos}")
     else:
         for lemma, groupings in gen_groupings(csvin):
-            if include_grouping(filter, wn, lemma, groupings):
-                print(f"{lemma},{pos}")
+            print(f"{lemma},{pos}")
+
+
+@link.command()
+@csvin_arg
+@csvout_arg
+@click.option('--filter', type=click.Choice(GROUPING_INCLUSION_CRITERIA))
+@wns_arg
+def filter_clus(csvin, csvout, filter, wn):
+    import stiff.wordnet.fin
+    csvin = skip_first(csvin, csvout)
+    for lemma, groupings in gen_groupings(csvin):
+        if not include_grouping(filter, wn, lemma, groupings):
+            continue
+        write_grouping(lemma, groupings, csvout)
 
 
 def same_diff_of_clus(clus):
@@ -217,7 +223,7 @@ def dump(csvin, wn):
     Write out the lemmas in each synset from a CSVIN (frame, synset) relation.
     """
     import stiff.wordnet.fin
-    next(csvin)
+    csvin = skip_first(csvin)
     self_mapping = 0
     total = 0
     for line in csvin:
@@ -282,10 +288,7 @@ def stats(csvin, wn, multi=False):
     """
     import stiff.wordnet.fin
     cnt = Counter()
-    csvin = peekable(csvin)
-    first_line = csvin.peek().strip()
-    if first_line in ("pb,wn", "manann,ref"):
-        next(csvin)
+    csvin = skip_first(csvin)
     if first_line == "manann,ref":
         inclusion_criteria = ('ambg', 'none')
         has_wiktionary = True
@@ -361,10 +364,7 @@ def filter_grouping_repeats(grouping):
 @csvin_arg
 @csvout_arg
 def filter_repeats(csvin, csvout):
-    csvin = peekable(csvin)
-    if csvin.peek().strip() == "pb,wn":
-        next(csvin)
-        csvout.write("pb,wn\n")
+    csvin = skip_first(csvin, csvout)
     for lemma, grouping in gen_groupings(csvin):
         filter_grouping_repeats(grouping)
         write_grouping(lemma, grouping, csvout)

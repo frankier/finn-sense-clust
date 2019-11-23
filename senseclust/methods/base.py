@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from expcomb.models import Exp, ExpGroup as ExpGroupBase
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.eval import eval
+from senseclust.eval import eval, UnguessedException
 from click.utils import LazyFile
 from os.path import exists
 
@@ -54,7 +54,12 @@ class SenseClusExp(Exp):
                 raise
 
     def calc_score(self, gold, guess_path):
-        return eval(open(gold), open(guess_path), False)
+        try:
+            return eval(open(gold), open(guess_path), False)
+        except UnguessedException as exc:
+            exc.gold_fn = gold
+            exc.guess_fn = guess_path
+            raise
 
     def clus_lemma(self, *args, **kwargs):
         return self.clus_func(*args, **kwargs)

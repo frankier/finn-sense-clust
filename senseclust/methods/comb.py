@@ -1,7 +1,7 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities
+from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities_none
 from senseclust.methods.base import BothExpGroup
 from .bert import get_defns_layers
 from .label import get_sense_sets, mat_of_sets
@@ -10,21 +10,6 @@ from scipy.spatial.distance import pdist
 import numpy as np
 from itertools import islice
 from functools import partial
-
-
-def cos_affinities_none(layers):
-    defb = []
-    dense_layers = []
-    for idx, layer in enumerate(layers):
-        if layer is None:
-            defb.append(False)
-            continue
-        defb.append(True)
-        dense_layers.append(layer)
-    result = np.eye(len(layers))
-    aff = cos_affinities(dense_layers)
-    result[np.ix_(defb, defb)] = aff
-    return result
 
 
 def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_same=False, do_ety_diff=False):
@@ -74,7 +59,7 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
     if do_ety_same or do_ety_diff:
         ety_groups = ety(lemma_name, pos)
 
-    if do_ety_same:
+    if do_ety_same and len(ety_groups) > 1:
         # Set same ety links to 1
         for ety_idx, sense_ids in ety_groups.items():
             for s1_idx, s1 in enumerate(sense_ids):
@@ -83,7 +68,7 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
                     sid2 = defn_ids[s2]
                     affinities[sid1, sid2] = affinities[sid2, sid1] = 1
 
-    if do_ety_diff:
+    if do_ety_diff and len(ety_groups) > 1:
         # Set different ety links to 0
         for ety_groups_idx, (ety_idx, sense_ids) in enumerate(ety_groups.items()):
             for ety_groups_idx2, (ety_idx2, sense_ids2) in enumerate(islice(ety_groups.items(), ety_groups_idx)):

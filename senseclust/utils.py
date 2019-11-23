@@ -88,6 +88,22 @@ def cos_affinities(mat):
     return sim
 
 
+def cos_affinities_none(layers):
+    defb = []
+    dense_layers = []
+    for idx, layer in enumerate(layers):
+        if layer is None:
+            defb.append(False)
+            continue
+        defb.append(True)
+        dense_layers.append(layer)
+    result = np.eye(len(layers))
+    if len(dense_layers):
+        aff = cos_affinities(dense_layers)
+        result[np.ix_(defb, defb)] = aff
+    return result
+
+
 def get_wiktionary(session, lemma_name, pos):
     return session.execute(wiktionary_query(lemma_name, pos)).fetchall()
 
