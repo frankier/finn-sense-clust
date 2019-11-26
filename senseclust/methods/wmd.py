@@ -79,19 +79,19 @@ def wmd(wmd_pair, defns, return_centers=False):
 
 
 def wmd_graph(wmd_pair, lemma_name, pos, return_centers=False):
-    defns = get_defns(lemma_name, pos)
+    defns = get_defns(lemma_name, pos, lower=True)
     return wmd(wmd_pair, defns, return_centers=return_centers)
 
 
 class Wmd(SenseClusExp):
     returns_centers = True
 
-    def __init__(self, partial_match=False):
+    def __init__(self, partial_match=False, include_enss=False):
         self.clus_func = partial(wmd_graph, wmdistance_partial if partial_match else wmdistance)
         super().__init__(
             ("Wmd",),
-            mk_nick("wmd", partial_match and "partial" or None),
-            "Wmd" + ("Part" if partial_match else ""),
+            mk_nick("wmd", partial_match and "partial" or None, include_enss and "enss" or None),
+            "Wmd" + ("Part" if partial_match else "") + ("+Synset" if include_enss else ""),
             None,
-            {"partial_match": partial_match},
+            {"partial_match": partial_match, "include_enss": include_enss},
         )

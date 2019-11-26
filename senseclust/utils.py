@@ -2,7 +2,7 @@ from sklearn.cluster import affinity_propagation
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.spatial.distance import pdist, squareform
 import numpy as np
-from finntk.wordnet.utils import pre_id_to_post
+from finntk.wordnet.utils import pre_id_to_post, maybe_fi2en_ss
 from senseclust.wordnet import get_lemma_objs, WORDNETS
 from senseclust.queries import wiktionary_query
 from nltk.tokenize import word_tokenize
@@ -113,6 +113,7 @@ def get_wiktionary_defns(
     pos,
     skip_empty=True,
     tokenize=True,
+    lower=False,
 ):
     session = get_session()
     for row in get_wiktionary(session, lemma_name, pos):
@@ -122,7 +123,23 @@ def get_wiktionary_defns(
             continue
         if tokenize:
             tokens = word_tokenize(tokens)
+        if lower:
+            assert tokenize
+            tokens = [token.lower() for token in tokens]
         yield row["sense_id"], tokens
+
+
+def en_synset(lemma_objs):
+    lemma_dict = dict(lemma_objs)
+    if "qf2" in lemma_dict:
+        ss = maybe_fi2en_ss(lemma_dict["qf2"].synset())
+        if ss is not None:
+            return ss
+    if "fin" in lemma_dict:
+        return lemma_dict["fin"].synset()
+    if "qwf" in lemma_dict:
+        return lemma_dict["qwf"].synset()
+    assert False
 
 
 def get_wordnet_defns(
@@ -130,6 +147,7 @@ def get_wordnet_defns(
     pos,
     skip_empty=True,
     tokenize=True,
+    include_enss=False,
 ):
     for synset_id, lemma_objs in get_lemma_objs(lemma_name, WORDNETS, pos).items():
         assert len(lemma_objs) >= 1
@@ -139,6 +157,12 @@ def get_wordnet_defns(
             continue
         if tokenize:
             tokens = word_tokenize(tokens)
+        if include_enss:
+            assert tokenize
+            ss = en_synset(lemma_objs)
+            for lemma in ss.lemmas():
+                for bit in lemma.name().split("_"):
+                    tokens.append(bit)
         yield pre_id_to_post(synset_id), tokens
 
 
@@ -149,14 +173,16 @@ def get_defns(
     include_wordnet=True,
     skip_empty=True,
     tokenize=True,
+    lower=False,
+    include_enss=False,
 ):
     defns = {}
     # Add wiktionary senses
     if include_wiktionary:
-        defns.update(get_wiktionary_defns(lemma_name, pos, skip_empty, tokenize))
+        defns.update(get_wiktionary_defns(lemma_name, pos, skip_empty, tokenize, lower))
     # Add WordNet senses
     if include_wordnet:
-        defns.update(get_wordnet_defns(lemma_name, pos, skip_empty, tokenize))
+        defns.update(get_wordnet_defns(lemma_name, pos, skip_empty, tokenize, include_enss))
     return defns
 
 
