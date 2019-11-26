@@ -2,7 +2,7 @@ import os
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.utils import (
-    graph_clust_grouped, cos_affinities, unclusterable_default,
+    graph_clust_grouped, cos_affinities_none, unclusterable_default,
     get_wiktionary_defns, get_wordnet_defns
 )
 from senseclust.res import get_sent_trans
@@ -57,7 +57,7 @@ def get_defns_layers(lemma_name, pos, skip_empty=True):
 def bert_clus(keys, layers, return_centers=False):
     if len(keys) <= 1:
         return unclusterable_default(keys, return_centers=return_centers)
-    return graph_clust_grouped(cos_affinities(layers), keys, return_centers)
+    return graph_clust_grouped(cos_affinities_none(layers), keys, return_centers)
 
 
 def bert_graph(lemma_name, pos, return_centers=False):
