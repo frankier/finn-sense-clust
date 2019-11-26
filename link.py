@@ -94,15 +94,28 @@ def get_words(csvin, multi_group, pos):
 @link.command()
 @csvin_arg
 @csvout_arg
-@click.option('--filter', type=click.Choice(GROUPING_INCLUSION_CRITERIA))
 @wns_arg
-def filter_clus(csvin, csvout, filter, wn):
+def filter_clus(csvin, csvout, wn):
     import stiff.wordnet.fin
     csvin = skip_first(csvin, csvout)
     for lemma, groupings in gen_groupings(csvin):
-        if not include_grouping(filter, wn, lemma, groupings):
-            continue
-        write_grouping(lemma, groupings, csvout)
+        num_synsets = 0
+        empty_groups = []
+        for group_num, synsets in groupings.items():
+            new_synsets = []
+            for synset in synsets:
+                if not is_smap(wn, lemma, synset):
+                    continue
+                new_synsets.append(synset)
+                num_synsets += 1
+            if len(new_synsets):
+                groupings[group_num] = new_synsets
+            else:
+                empty_groups.append(group_num)
+        for group_num in empty_groups:
+            del groupings[group_num]
+        if num_synsets >= 2:
+            write_grouping(lemma, groupings, csvout)
 
 
 def same_diff_of_clus(clus):
@@ -289,6 +302,7 @@ def stats(csvin, wn, multi=False):
     import stiff.wordnet.fin
     cnt = Counter()
     csvin = skip_first(csvin)
+    # XXX: Broke this -- fix it
     if first_line == "manann,ref":
         inclusion_criteria = ('ambg', 'none')
         has_wiktionary = True

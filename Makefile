@@ -34,7 +34,7 @@ eval/%.filtered1.csv: eval/%.csv
 	poetry run python link.py filter-repeats $< $@
 
 eval/%.filtered2.csv: eval/%.filtered1.csv
-	poetry run python link.py filter-clus --filter smap2 --wn fin --wn qf2 --wn qwf $< $@
+	poetry run python link.py filter-clus --wn fin --wn qf2 --wn qwf $< $@
 
 eval/frame-synset-union1.csv: eval/synset-rel.filtered1.csv eval/joined-link.filtered1.csv
 	poetry run python link.py priority-union $^ $@
