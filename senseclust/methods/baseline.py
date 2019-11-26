@@ -7,7 +7,7 @@ def mk_baseline(mode="1"):
     def baseline(lemma_name, pos):
         defns = get_defns(lemma_name, pos)
         keys = list(defns.keys())
-        labels = [1] * len(keys) if mode == "1" else range(1, len(keys) + 1)
+        labels = [0] * len(keys) if mode == "1" else range(len(keys))
         return group_clust(keys, labels)
     return baseline
 
