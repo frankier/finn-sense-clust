@@ -71,10 +71,10 @@ ALL_FILTER = OrFilter(
 )
 
 PATH_MAP = {
-    "eval/frame-synset-union2.csv": "joined",
-    "eval/synset-rel.filtered.csv": "synset",
-    "eval/joined-link.filtered.csv": "link",
-    "eval/joined-model.filtered.csv": "model",
+    "eval/frame-synset-union2.filtered2.csv": "joined",
+    "eval/synset-rel.filtered2.csv": "synset",
+    "eval/joined-link.filtered2.csv": "link",
+    "eval/joined-model.filtered2.csv": "model",
     "eval/synth-clus.csv": "synth",
     "eval/manclus.csv": "man",
     "eval/manclus.wn.csv": "man-wn",
@@ -95,10 +95,10 @@ TABLES = [
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
-                        "eval/frame-synset-union2.csv",
-                        "eval/synset-rel.filtered.csv",
-                        "eval/joined-link.filtered.csv",
-                        "eval/joined-model.filtered.csv",
+                        "eval/frame-synset-union2.filtered2.csv",
+                        "eval/synset-rel.filtered2.csv",
+                        "eval/joined-link.filtered2.csv",
+                        "eval/joined-model.filtered2.csv",
                         "eval/manclus.wn.csv",
                     ]), PATH_MAP
                 ),
@@ -133,10 +133,10 @@ TABLES = [
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
-                        "eval/frame-synset-union2.csv",
-                        "eval/synset-rel.filtered.csv",
-                        "eval/joined-link.filtered.csv",
-                        "eval/joined-model.filtered.csv",
+                        "eval/frame-synset-union2.filtered2.csv",
+                        "eval/synset-rel.filtered2.csv",
+                        "eval/joined-link.filtered2.csv",
+                        "eval/joined-model.filtered2.csv",
                         "eval/manclus.csv",
                         "eval/manclus.wn.csv",
                         "eval/manclus.wiki.csv",
@@ -156,10 +156,10 @@ TABLES = [
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold", [
-                        "eval/frame-synset-union2.csv",
-                        "eval/synset-rel.filtered.csv",
-                        "eval/joined-link.filtered.csv",
-                        "eval/joined-model.filtered.csv",
+                        "eval/frame-synset-union2.filtered2.csv",
+                        "eval/synset-rel.filtered2.csv",
+                        "eval/joined-link.filtered2.csv",
+                        "eval/joined-model.filtered2.csv",
                         "eval/manclus.csv",
                         "eval/manclus.wn.csv",
                         "eval/manclus.wiki.csv",
