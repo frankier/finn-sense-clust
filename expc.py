@@ -1,5 +1,5 @@
 import click
-from os.path import join as pjoin
+from os.path import basename, join as pjoin
 from expcomb.cmd import mk_expcomb
 from expcomb.table.utils import pick_str
 from expcomb.utils import TinyDBParam, mk_iden
@@ -113,7 +113,8 @@ def eval(exp, db, corpus, guess_dir, gold, multi=False):
         exc.gold_fn = gold
         exc.guess_fn = guess_path
         raise
-    proc_score(exp, db, measures, guess_dir, gold)
+    gold_base = basename(gold)
+    proc_score(exp, db, measures, guess_dir, gold, gold_base=gold_base)
 
 
 if __name__ == "__main__":
