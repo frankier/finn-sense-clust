@@ -45,6 +45,8 @@ def wiktionary_batcher():
             yield ids, defns
             ids = []
             defns = []
+    if len(ids):
+        yield ids, defns
 
 
 @click.command()
