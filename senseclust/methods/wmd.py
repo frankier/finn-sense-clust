@@ -43,7 +43,7 @@ def mat_of_nbows(dictionary, nbows):
     return mat
 
 
-def wmd(wmd_pair, defns, return_centers=False):
+def wmd(wmd_pair, include_ss, defns, return_centers=False):
     keys = list(defns.keys())
     num_defns = len(defns)
     if num_defns == 1:
@@ -78,8 +78,8 @@ def wmd(wmd_pair, defns, return_centers=False):
     return graph_clust_grouped(affinities, keys, return_centers)
 
 
-def wmd_graph(wmd_pair, lemma_name, pos, return_centers=False):
-    defns = get_defns(lemma_name, pos, lower=True)
+def wmd_graph(wmd_pair, include_enss, lemma_name, pos, return_centers=False):
+    defns = get_defns(lemma_name, pos, lower=True, include_enss=include_enss)
     return wmd(wmd_pair, defns, return_centers=return_centers)
 
 
@@ -87,7 +87,7 @@ class Wmd(SenseClusExp):
     returns_centers = True
 
     def __init__(self, partial_match=False, include_enss=False):
-        self.clus_func = partial(wmd_graph, wmdistance_partial if partial_match else wmdistance)
+        self.clus_func = partial(wmd_graph, wmdistance_partial if partial_match else wmdistance, include_enss)
         super().__init__(
             ("Wmd",),
             mk_nick("wmd", partial_match and "partial" or None, include_enss and "enss" or None),

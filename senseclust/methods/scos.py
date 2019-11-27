@@ -27,8 +27,8 @@ def softcos(defns, return_centers=False):
     return graph_clust_grouped(affinities, keys, return_centers)
 
 
-def scos_graph(lemma_name, pos, return_centers=False):
-    defns = get_defns(lemma_name, pos, lower=True)
+def scos_graph(include_enss, lemma_name, pos, return_centers=False):
+    defns = get_defns(lemma_name, pos, lower=True, include_enss=include_enss)
     return softcos(defns, return_centers=return_centers)
 
 
@@ -36,7 +36,7 @@ class SoftCos(SenseClusExp):
     returns_centers = True
 
     def __init__(self, include_enss=False):
-        self.clus_func = partial(scos_graph)
+        self.clus_func = partial(scos_graph, include_enss)
         super().__init__(
             ("SoftCos",),
             mk_nick("scos", include_enss and "enss" or None),
