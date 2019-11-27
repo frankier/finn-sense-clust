@@ -71,7 +71,7 @@ class Bert(SenseClusExp):
     def __init__(self):
         self.clus_func = bert_graph
         super().__init__(
-            ("Bert",),
+            ("SentBert",),
             mk_nick("bert"),
             "Bert",
             None,

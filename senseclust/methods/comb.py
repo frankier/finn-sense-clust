@@ -108,7 +108,7 @@ class Comb(SenseClusExp):
         super().__init__(
             ("Comb",),
             mk_nick("comb", do_label and "label" or None, ety_nick),
-            "Bert" + (do_label and "+Label" or "") + ety_disp,
+            "SentBert" + (do_label and "+Label" or "") + ety_disp,
             None,
             {"do_label": do_label, "do_ety_same": do_ety_same, "do_ety_diff": do_ety_diff},
         )
