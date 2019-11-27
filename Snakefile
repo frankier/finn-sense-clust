@@ -1,5 +1,5 @@
 ## Eval
-from expcomb.filter import SimpleFilter
+from expcomb.filter import SimpleFilter, parse_filter
 from expc import SnakeMake
 
 def merge(r1, r2):
@@ -7,6 +7,7 @@ def merge(r1, r2):
         k: r1.get(k, []) + r2.get(k, []) for k in {*r1.keys(), *r2.keys()}
     }
 
+FILTER = config.setdefault("FILTER", "")
 SEED = "42"
 ITERS = "100000"
 
@@ -30,15 +31,16 @@ ALL_EVAL = merge(merge(WN_ONLY_EVAL, WIKI_ONLY_EVAL), BOTH_EVAL)
 MULTI_EVAL = {"synth-clus", "manclus.link"}
 
 def all_results():
+    filter = parse_filter(FILTER)
     def eval_paths(nick, eval_dict):
         for corpus, evals in eval_dict.items():
             for eval in evals:
                 yield f"{WORK}/results/{corpus}--{eval}--{nick}.db"
-    for nick in SnakeMake.get_nicks(SimpleFilter(supports_wordnet=True)):
+    for nick in SnakeMake.intersect_nicks(filter, supports_wordnet=True):
         yield from eval_paths(nick, WN_ONLY_EVAL)
-    for nick in SnakeMake.get_nicks(SimpleFilter(supports_wiktionary=True)):
+    for nick in SnakeMake.intersect_nicks(filter, supports_wiktionary=True):
         yield from eval_paths(nick, WIKI_ONLY_EVAL)
-    for nick in SnakeMake.get_nicks(SimpleFilter(supports_wordnet=True, supports_wiktionary=True)):
+    for nick in SnakeMake.intersect_nicks(filter, supports_wordnet=True, supports_wiktionary=True):
         yield from eval_paths(nick, BOTH_EVAL)
 
 
