@@ -8,6 +8,8 @@ def merge(r1, r2):
     }
 
 FILTER = config.setdefault("FILTER", "")
+EVAL = config.setdefault("EVAL", "eval")
+WORDS = config.setdefault("WORDS", "words")
 SEED = "42"
 ITERS = "100000"
 
@@ -48,29 +50,29 @@ rule all:
     input: list(all_results())
 
 rule test:
-    input: "words/{corpus}"
+    input: WORDS + "/{corpus}"
     output: WORK + "/guess/{corpus}.{nick}"
     wildcard_constraints:
         corpus=r"[^\.]+"
     shell:
-        "python expc.py --filter 'nick={wildcards.nick}' test words/{wildcards.corpus} {output}"
+        "python expc.py --filter 'nick={wildcards.nick}' test " + WORDS + "/{wildcards.corpus} {output}"
 
 rule eval:
     input: WORK + "/guess/{corpus}.{nick}"
     output: WORK + "/results/{corpus}--{eval}--{nick}.db"
     run:
         multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
-        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} words/{wildcards.corpus} " + WORK + "/guess eval/{wildcards.eval}.csv")
+        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} " + WORDS + "/{wildcards.corpus} " + WORK + "/guess " + EVAL + "/{wildcards.eval}.csv")
 
 # Final output
 
 rule run_gloss:
-    input: "words/really-all-words-split/{seg}"
+    input: WORDS + "/really-all-words-split/{seg}"
     output: WORK + "/output/{seg}.csv"
     shell:
         "python expc.py --filter 'nick=gloss' test --exemplars {input} {output}"
 
-SEGS = glob_wildcards("words/really-all-words-split/{seg}")[0]
+SEGS = glob_wildcards(WORDS + "/really-all-words-split/{seg}")[0]
 
 rule gloss_all:
     input: expand(WORK + "/output/{seg}.csv", seg=SEGS)
@@ -89,7 +91,7 @@ rule bootstrap:
     input: [WORK + f"/bootstrap/cld/{corpus}/{eval}.db" for corpus, evals in ALL_EVAL.items() for eval in evals]
 
 rule create_schedule:
-    input: "words/{corpus}"
+    input: WORDS + "/{corpus}"
     output: WORK + "/bootstrap/schedules/{corpus}.pkl"
     shell:
         "python expc.py sigtest create-schedule" +
@@ -99,7 +101,7 @@ rule create_schedule:
 
 rule resample:
     input:
-        eval="eval/{eval}.csv",
+        eval=EVAL + "/{eval}.csv",
         guess=WORK + "/guess/{corpus}.{nick}",
         result=WORK + "/results/{corpus}--{eval}--{nick}.db",
         schedule=WORK + "/bootstrap/schedules/{corpus}.pkl",
