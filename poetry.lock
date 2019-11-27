@@ -271,6 +271,7 @@ tinyrecord = "*"
 reference = "74e07fb4c36c25f82342df9d528713c7756e7cb0"
 type = "git"
 url = "https://github.com/frankier/expcomb.git"
+
 [[package]]
 category = "main"
 description = "Fast hierarchical clustering routines for R and Python."
@@ -728,6 +729,7 @@ version = "1.1.9.dev1"
 reference = "ca029040175eaba65719e301045dd2c9a821281e"
 type = "git"
 url = "https://github.com/frankier/pyahocorasick.git"
+
 [[package]]
 category = "main"
 description = "C parser in Python"
@@ -735,6 +737,17 @@ name = "pycparser"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 version = "2.19"
+
+[[package]]
+category = "main"
+description = "A Python wrapper for Ofir Pele and Michael Werman's implementation of the Earth Mover's Distance."
+name = "pyemd"
+optional = false
+python-versions = "*"
+version = "0.5.1"
+
+[package.dependencies]
+numpy = ">=1.9.0,<2.0.0"
 
 [[package]]
 category = "main"
@@ -1066,6 +1079,7 @@ streamz = "^0.3.0"
 reference = "baddb3942cadac15bcbb50a9be22f7c41e8f136e"
 type = "git"
 url = "https://github.com/frankier/stiff.git"
+
 [[package]]
 category = "main"
 description = "Streams"
@@ -1172,6 +1186,7 @@ numpy = ">=1.13"
 reference = "f3b8c6d7f7ff6278a7e61b4735d59c64d2f10f35"
 type = "git"
 url = "https://github.com/frankier/vecstorenn.git"
+
 [[package]]
 category = "main"
 description = ""
@@ -1201,6 +1216,7 @@ wordfreq = "^2.2"
 reference = "e8fed631ee564d5e1a584346644c03e57d559891"
 type = "git"
 url = "https://github.com/frankier/wikiparse.git"
+
 [[package]]
 category = "main"
 description = "wordfreq is a Python library for looking up the frequencies of words in many"
@@ -1246,7 +1262,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "0d48e277bb8de0241e7a0b62e75e76f10693e76e3fa40fd9af5832ea290faa36"
+content-hash = "430bc4e3b5289448e6aeceba5e66a68892fd97eaeb9d075e1f220c9b90ea0a92"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -1322,6 +1338,7 @@ portalocker = ["6f57aabb25ba176462dc7c63b86c42ad6a9b5bd3d679a9d776d0536bfb803d54
 psutil = ["094f899ac3ef72422b7e00411b4ed174e3c5a2e04c267db6643937ddba67a05b", "10b7f75cc8bd676cfc6fa40cd7d5c25b3f45a0e06d43becd7c2d2871cbb5e806", "1b1575240ca9a90b437e5a40db662acd87bbf181f6aa02f0204978737b913c6b", "21231ef1c1a89728e29b98a885b8e0a8e00d09018f6da5cdc1f43f988471a995", "28f771129bfee9fc6b63d83a15d857663bbdcae3828e1cb926e91320a9b5b5cd", "70387772f84fa5c3bb6a106915a2445e20ac8f9821c5914d7cbde148f4d7ff73", "b560f5cd86cf8df7bcd258a851ca1ad98f0d5b8b98748e877a0aec4e9032b465", "b74b43fecce384a57094a83d2778cdfc2e2d9a6afaadd1ebecb2e75e0d34e10d", "e85f727ffb21539849e6012f47b12f6dd4c44965e56591d8dec6e8bc9ab96f4a", "fd2e09bb593ad9bdd7429e779699d2d47c1268cbde4dda95fcd1bd17544a0217", "ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa"]
 pyahocorasick = []
 pycparser = ["a988718abfad80b6b157acce7bf130a30876d27603738ac39f140993246b25b3"]
+pyemd = ["15750113757ace54a03d2efef7bbc2c5a4782cba30555e7fd401bcafcfa0ecb2", "fc81c2116f8573e559dfbb8d73e03d9f73c22d0770559f406516984302e07e70"]
 pygtrie = ["6299cdedd2cbdfda0895c2dbc43efe8828e698c62b574f3ef7e14b3253f80e23"]
 pylatex = ["b854a889ea879199cdfaa319e314838c717c423eb5390f8bae64875742fb171b"]
 pymysql = ["3943fbbbc1e902f41daf7f9165519f140c4451c179380677e6a848587042561a", "d8c059dcd81dedb85a9f034d5e22dcb4442c0b201908bede99e306d65ea7c8e7"]

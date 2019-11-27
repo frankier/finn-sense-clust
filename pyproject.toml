@@ -23,6 +23,7 @@ expcomb = {git = "https://github.com/frankier/expcomb.git", commit = "74e07fb4c3
 snakemake = "^5.5.4"
 vecstorenn = {git = "https://github.com/frankier/vecstorenn.git"}
 sentence-transformers = "^0.2.3"
+pyemd = "^0.5.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
