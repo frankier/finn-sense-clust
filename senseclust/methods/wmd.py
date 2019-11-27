@@ -43,7 +43,7 @@ def mat_of_nbows(dictionary, nbows):
     return mat
 
 
-def wmd(wmd_pair, include_ss, defns, return_centers=False):
+def wmd(wmd_pair, defns, return_centers=False):
     keys = list(defns.keys())
     num_defns = len(defns)
     if num_defns == 1:
