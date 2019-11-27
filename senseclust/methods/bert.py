@@ -34,14 +34,14 @@ def get_defns_layers(lemma_name, pos, skip_empty=True):
     wn_defns = {}
     layers = []
     for k, v in get_wiktionary_defns(lemma_name, pos,
-                                     skip_empty=skip_empty, tokenize=False):
+                                     skip_empty=False, tokenize=False):
         wiki_defns[k] = v
         if pre_embed_wiki:
             layers.append(pre_embed_wiki.get_vec(lemma_name + SENSE_SEP + k))
     if not pre_embed_wiki and pre_embed_wn:
         layers.extend(encode_non_empty(wiki_defns.values()))
     for k, v in get_wordnet_defns(lemma_name, pos,
-                                  skip_empty=skip_empty, tokenize=False):
+                                  skip_empty=False, tokenize=False):
         wn_defns[k] = v
         if pre_embed_wn:
             layers.append(pre_embed_wn.get_vec(k))
