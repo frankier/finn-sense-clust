@@ -301,14 +301,15 @@ def stats(csvin, wn, multi=False):
     """
     import stiff.wordnet.fin
     cnt = Counter()
-    csvin = skip_first(csvin)
-    # XXX: Broke this -- fix it
+    first_line = next(csvin).strip()
     if first_line == "manann,ref":
         inclusion_criteria = ('ambg', 'none')
         has_wiktionary = True
-    else:
+    elif first_line == "pb,wn":
         inclusion_criteria = GROUPING_INCLUSION_CRITERIA
         has_wiktionary = False
+    else:
+        assert False
 
     if multi:
         for lemma, multi_groupings in gen_multi_groupings(csvin):
