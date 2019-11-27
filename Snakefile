@@ -10,10 +10,11 @@ def merge(r1, r2):
 FILTER = config.setdefault("FILTER", "")
 EVAL = config.setdefault("EVAL", "eval")
 WORDS = config.setdefault("WORDS", "words")
+WORK = config.setdefault("WORK", "work")
+
 SEED = "42"
 ITERS = "100000"
 
-WORK = "work"
 WN_ONLY_EVAL = {
     "all-words": ["synth-clus", "frame-synset-union2.filtered2", "synset-rel.filtered2", "joined-link.filtered2", "joined-model.filtered2"],
     "man-words": ["manclus.wn"],
