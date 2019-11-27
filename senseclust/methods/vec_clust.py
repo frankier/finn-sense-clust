@@ -1,12 +1,12 @@
 from finntk.wordnet.utils import pre_id_to_post
 from finntk.emb.autoextend import vecs, get_lemma_id
-from senseclust.utils import graph_clust, group_clust, cos_affinities_none
+from senseclust.utils import graph_clust_grouped, cos_affinities_none, unclusterable_default
 from senseclust.wordnet import get_lemma_objs, WORDNETS
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 
 
-def vec_clust_autoextend_graph(lemma_name, pos):
+def vec_clust_autoextend_graph(lemma_name, pos, return_centers=False):
     fiwn_space = vecs.get_vecs()
     labels = []
     mat = []
@@ -26,9 +26,10 @@ def vec_clust_autoextend_graph(lemma_name, pos):
             mat.append(None)
             continue
         mat.append(vec)
+    if not labels:
+        return unclusterable_default(labels, return_centers=return_centers)
     affinities = cos_affinities_none(mat)
-    clust_labels = graph_clust(affinities)
-    return group_clust(labels, clust_labels)
+    return graph_clust_grouped(affinities, labels, return_centers)
 
 
 class Vec(SenseClusExp):
