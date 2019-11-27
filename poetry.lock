@@ -268,7 +268,7 @@ tinydb = "*"
 tinyrecord = "*"
 
 [package.source]
-reference = "3aabcd75ac3c69ad0b501e6bf100c923d1ae1094"
+reference = "74e07fb4c36c25f82342df9d528713c7756e7cb0"
 type = "git"
 url = "https://github.com/frankier/expcomb.git"
 [[package]]
@@ -1198,7 +1198,7 @@ ujson = "*"
 wordfreq = "^2.2"
 
 [package.source]
-reference = "c05e2ba08c56ee3ea1a2c3767b742df4108444c6"
+reference = "e8fed631ee564d5e1a584346644c03e57d559891"
 type = "git"
 url = "https://github.com/frankier/wikiparse.git"
 [[package]]
@@ -1246,7 +1246,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "b159b6821fa3757de2de7c9287d8969b86ca29d5f629e3a4eea287127cdf5dcc"
+content-hash = "0d48e277bb8de0241e7a0b62e75e76f10693e76e3fa40fd9af5832ea290faa36"
 python-versions = "^3.7"
 
 [metadata.hashes]
