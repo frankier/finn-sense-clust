@@ -19,7 +19,7 @@ networkx = "*"
 wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
 stiff = {git = "https://github.com/frankier/stiff.git"}
 paramiko = "^2.4"
-expcomb = {git = "https://github.com/frankier/expcomb.git", commit = "fbfe110e2287ae6149a9231cce607b3ea87fabea"}
+expcomb = {git = "https://github.com/frankier/expcomb.git", commit = "3aabcd75ac3c69ad0b501e6bf100c923d1ae1094"}
 snakemake = "^5.5.4"
 vecstorenn = {git = "https://github.com/frankier/vecstorenn.git"}
 sentence-transformers = "^0.2.3"
