@@ -28,7 +28,7 @@ def eval_clus(gold_clus, test_clus, cnt):
     for gss in gold:
         if gss not in test:
             raise UnguessedInstanceException(gss)
-    pairs = [(gold[gss], test[gss])  ]
+        pairs.append((gold[gss], test[gss]))
     for (g1, t1), (g2, t2) in self_xtab(pairs):
         if g1 == g2:
             if t1 == t2:
