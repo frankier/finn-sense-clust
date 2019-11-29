@@ -31,7 +31,7 @@ def self_xtab(li):
             yield e1, e2
 
 
-def graph_clust(affinities, return_centers=False, min_preference=True):
+def graph_clust(affinities, return_centers=False, preference="zero"):
     def default():
         if return_centers:
             return list(range(n)), list(range(n))
@@ -51,9 +51,12 @@ def graph_clust(affinities, return_centers=False, min_preference=True):
                 return result, []
             else:
                 return result
-    if min_preference:
+    if preference == "zero":
+        preference = 0
+    elif preference == "min":
         preference = np.min(affinities)
     else:
+        assert preference == "med"
         preference = np.median(affinities)
     for damping in [0.5, 0.7, 0.9]:
         centers, labels = affinity_propagation(affinities, preference=preference, damping=damping)
