@@ -89,7 +89,7 @@ def split_line(line):
 
 def cos_affinities(mat):
     dists = pdist(mat, metric='cosine')
-    np.clip(dists, 0, out=dists)
+    np.clip(dists, 0, None, out=dists)
     sim = squareform(1 - dists)
     np.fill_diagonal(sim, 1)
     return sim
