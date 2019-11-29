@@ -175,7 +175,30 @@ TABLES = [
             UnlabelledMeasure("pr,f1"),
             fmt,
         ),
-        ALL_FILTER ,
+        ALL_FILTER,
+    ),
+    (
+        "everything_rand",
+        SumTableSpec(
+            SumDimGroups(two_levels=False),
+            DimGroups([
+                LookupGroupDisplay(
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synset-rel.filtered2.csv",
+                        "joined-link.filtered2.csv",
+                        "joined-model.filtered2.csv",
+                        "manclus.csv",
+                        "manclus.wn.csv",
+                        "manclus.wiki.csv",
+                        "manclus.link.csv",
+                    ]), PATH_MAP
+                ),
+            ]),
+            UnlabelledMeasure("o,rand"),
+            fmt,
+        ),
+        ALL_FILTER,
     ),
     (
         "everything_mat",
@@ -198,6 +221,6 @@ TABLES = [
             UnlabelledMeasure("cnt"),
             cnt_fmt,
         ),
-        ALL_FILTER ,
+        ALL_FILTER,
     ),
 ]
