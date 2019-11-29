@@ -52,9 +52,9 @@ def graph_clust(affinities, return_centers=False, min_preference=True):
             else:
                 return result
     if min_preference:
-        preference = numpy.min(affinities)
+        preference = np.min(affinities)
     else:
-        preference = numpy.median(affinities)
+        preference = np.median(affinities)
     for damping in [0.5, 0.7, 0.9]:
         centers, labels = affinity_propagation(affinities, damping=damping)
         if not np.any(np.isnan(labels)):
