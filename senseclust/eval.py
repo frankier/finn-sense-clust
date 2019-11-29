@@ -46,7 +46,7 @@ def rand(tp, tn, fp, fn):
     denom = (tp + tn + fp + fn)
     if denom == 0:
         return 0
-    return tp + tn / denom
+    return (tp + tn) / denom
 
 
 def macc(tp, tn, fp, fn):
