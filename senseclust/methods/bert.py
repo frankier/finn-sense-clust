@@ -73,7 +73,7 @@ class Bert(SenseClusExp):
         super().__init__(
             ("SentBert",),
             mk_nick("bert"),
-            "Bert",
+            "SentBert",
             None,
             {},
         )
