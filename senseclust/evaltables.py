@@ -3,6 +3,7 @@ from expcomb.table.spec import (
     CatValGroup,
     LookupGroupDisplay,
     UnlabelledMeasure,
+    MeasuresSplit,
     DimGroups,
     SumDimGroups,
 )
@@ -46,7 +47,7 @@ MEANS = LookupGroupDisplay(
 FILTER = OrFilter(
     SimpleFilter("SoftCos"),
     SimpleFilter("Wmd"),
-    SimpleFilter("Bert"),
+    SimpleFilter("SentBert"),
     SimpleFilter("Label"),
     SimpleFilter("SenseVec"),
     SimpleFilter("Comb"),
@@ -55,7 +56,7 @@ FILTER = OrFilter(
 WIKI_FILTER = OrFilter(
     SimpleFilter("SoftCos"),
     SimpleFilter("Wmd"),
-    SimpleFilter("Bert"),
+    SimpleFilter("SentBert"),
     SimpleFilter("Ety"),
     SimpleFilter("Comb"),
 )
@@ -63,7 +64,7 @@ WIKI_FILTER = OrFilter(
 ALL_FILTER = OrFilter(
     SimpleFilter("SoftCos"),
     SimpleFilter("Wmd"),
-    SimpleFilter("Bert"),
+    SimpleFilter("SentBert"),
     SimpleFilter("Label"),
     SimpleFilter("SenseVec"),
     SimpleFilter("Comb"),
@@ -71,20 +72,24 @@ ALL_FILTER = OrFilter(
 )
 
 PATH_MAP = {
-    "eval/frame-synset-union2.filtered2.csv": "joined",
-    "eval/synset-rel.filtered2.csv": "synset",
-    "eval/joined-link.filtered2.csv": "link",
-    "eval/joined-model.filtered2.csv": "model",
-    "eval/synth-clus.csv": "synth",
-    "eval/manclus.csv": "man",
-    "eval/manclus.wn.csv": "man-wn",
-    "eval/manclus.wiki.csv": "man-wiki",
-    "eval/manclus.link.csv": "man-link",
+    "frame-synset-union2.filtered2.csv": "joined",
+    "synset-rel.filtered2.csv": "synset",
+    "joined-link.filtered2.csv": "link",
+    "joined-model.filtered2.csv": "model",
+    "synth-clus.csv": "synth",
+    "manclus.csv": "man",
+    "manclus.wn.csv": "man-wn",
+    "manclus.wiki.csv": "man-wiki",
+    "manclus.link.csv": "man-link",
 }
 
 
 def fmt(x):
     return "{:.1f}".format(x * 100)
+
+
+def cnt_fmt(x):
+    return ",".join((str(x[k]) for k in ["tp", "fp", "fn", "tn"]))
 
 
 TABLES = [
@@ -94,12 +99,12 @@ TABLES = [
             SumDimGroups(two_levels=False),
             DimGroups([
                 LookupGroupDisplay(
-                    CatValGroup("gold", [
-                        "eval/frame-synset-union2.filtered2.csv",
-                        "eval/synset-rel.filtered2.csv",
-                        "eval/joined-link.filtered2.csv",
-                        "eval/joined-model.filtered2.csv",
-                        "eval/manclus.wn.csv",
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synset-rel.filtered2.csv",
+                        "joined-link.filtered2.csv",
+                        "joined-model.filtered2.csv",
+                        "manclus.wn.csv",
                     ]), PATH_MAP
                 ),
             ]),
@@ -114,10 +119,10 @@ TABLES = [
             SumDimGroups(two_levels=False),
             DimGroups([
                 LookupGroupDisplay(
-                    CatValGroup("gold", [
-                        "eval/manclus.csv",
-                        "eval/manclus.wiki.csv",
-                        "eval/manclus.link.csv",
+                    CatValGroup("gold_base", [
+                        "manclus.csv",
+                        "manclus.wiki.csv",
+                        "manclus.link.csv",
                     ]), PATH_MAP
                 ),
             ]),
@@ -132,15 +137,15 @@ TABLES = [
             SumDimGroups(two_levels=False),
             DimGroups([
                 LookupGroupDisplay(
-                    CatValGroup("gold", [
-                        "eval/frame-synset-union2.filtered2.csv",
-                        "eval/synset-rel.filtered2.csv",
-                        "eval/joined-link.filtered2.csv",
-                        "eval/joined-model.filtered2.csv",
-                        "eval/manclus.csv",
-                        "eval/manclus.wn.csv",
-                        "eval/manclus.wiki.csv",
-                        "eval/manclus.link.csv",
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synset-rel.filtered2.csv",
+                        "joined-link.filtered2.csv",
+                        "joined-model.filtered2.csv",
+                        "manclus.csv",
+                        "manclus.wn.csv",
+                        "manclus.wiki.csv",
+                        "manclus.link.csv",
                     ]), PATH_MAP
                 ),
             ]),
@@ -155,20 +160,43 @@ TABLES = [
             SumDimGroups(two_levels=False),
             DimGroups([
                 LookupGroupDisplay(
-                    CatValGroup("gold", [
-                        "eval/frame-synset-union2.filtered2.csv",
-                        "eval/synset-rel.filtered2.csv",
-                        "eval/joined-link.filtered2.csv",
-                        "eval/joined-model.filtered2.csv",
-                        "eval/manclus.csv",
-                        "eval/manclus.wn.csv",
-                        "eval/manclus.wiki.csv",
-                        "eval/manclus.link.csv",
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synset-rel.filtered2.csv",
+                        "joined-link.filtered2.csv",
+                        "joined-model.filtered2.csv",
+                        "manclus.csv",
+                        "manclus.wn.csv",
+                        "manclus.wiki.csv",
+                        "manclus.link.csv",
                     ]), PATH_MAP
                 ),
             ]),
             UnlabelledMeasure("pr,f1"),
             fmt,
+        ),
+        ALL_FILTER ,
+    ),
+    (
+        "everything_mat",
+        SumTableSpec(
+            SumDimGroups(two_levels=False),
+            DimGroups([
+                LookupGroupDisplay(
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synset-rel.filtered2.csv",
+                        "joined-link.filtered2.csv",
+                        "joined-model.filtered2.csv",
+                        "manclus.csv",
+                        "manclus.wn.csv",
+                        "manclus.wiki.csv",
+                        "manclus.link.csv",
+                    ]), PATH_MAP
+                ),
+            ]),
+            UnlabelledMeasure("cnt"),
+            cnt_fmt,
         ),
         ALL_FILTER ,
     ),
