@@ -43,12 +43,10 @@ def mat_of_nbows(dictionary, nbows):
     return mat
 
 
-def wmd(wmd_pair, defns, return_centers=False):
-    keys = list(defns.keys())
+def wmd_affinities(wmd_pair, defns):
     num_defns = len(defns)
     if num_defns == 1:
-        return unclusterable_default(keys, return_centers=return_centers)
-
+        return None
     kv = vecs.get_en()
     lengths = zeros(num_defns, dtype=int)
 
@@ -60,7 +58,7 @@ def wmd(wmd_pair, defns, return_centers=False):
     defns_filtered = gen()
     dictionary, bow_corpus = mk_dictionary_bow_corpus(defns_filtered)
     if len(dictionary) == 0:
-        return unclusterable_default(keys, return_centers=return_centers)
+        return None
     distance_matrix = mk_distance_matrix(kv, dictionary)
     mat = mat_of_nbows(dictionary, bow_corpus)
 
@@ -75,6 +73,14 @@ def wmd(wmd_pair, defns, return_centers=False):
                 continue
             affinities[i, j] = 1 - wmd_pair(i, j, mat, norm_mat, lengths, distance_matrix)
 
+    return affinities
+
+
+def wmd(wmd_pair, defns, return_centers=False):
+    keys = list(defns.keys())
+    affinities = wmd_affinities(wmd_pair, defns)
+    if affinities is None:
+        return unclusterable_default(keys, return_centers=return_centers)
     return graph_clust_grouped(affinities, keys, return_centers)
 
 
@@ -91,7 +97,7 @@ class Wmd(SenseClusExp):
         super().__init__(
             ("Wmd",),
             mk_nick("wmd", partial_match and "partial" or None, include_enss and "enss" or None),
-            "Wmd" + ("Part" if partial_match else "") + ("+Synset" if include_enss else ""),
+            "Wmd" + ("Part" if partial_match else "") + ("Syn" if include_enss else ""),
             None,
             {"partial_match": partial_match, "include_enss": include_enss},
         )

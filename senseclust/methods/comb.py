@@ -1,23 +1,25 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities_none
+from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities_none, get_defns
 from senseclust.methods.base import BothExpGroup
 from .bert import get_defns_layers
 from .label import get_sense_sets, mat_of_sets
 from .ety import ety
+from .wmd import wmd_affinities, wmdistance_partial, wmdistance
 from scipy.spatial.distance import pdist
 import numpy as np
 from itertools import islice
 from functools import partial
 
 
-def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_same=False, do_ety_diff=False):
+def comb_graph(lemma_name, pos, return_centers=False, do_bert=False, do_label=False, do_wmdsyn=False, do_wmdpartsyn=False, do_ety_same=False, do_ety_diff=False, do_ety_exemp=False):
     # Obtain and give ids to all defns which might be needed
     defns, layers = get_defns_layers(lemma_name, pos, skip_empty=False)
 
     keys = list(defns.keys())
-    if len(defns) <= 1:
+    num_defns = len(defns)
+    if num_defns <= 1:
         return unclusterable_default(keys, return_centers=return_centers)
 
     defn_ids = {}
@@ -25,7 +27,10 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
         defn_ids[defn_key] = idx
 
     # Start with *BERT*
-    affinities = cos_affinities_none(layers)
+    if do_bert:
+        affinities = cos_affinities_none(layers)
+    else:
+        affinities = np.eye((num_defns, num_defns))
 
     # Overwrite with *Label* when affinity is larger
     if do_label:
@@ -55,8 +60,13 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
                         j = i + 1
                         assert i < len(labels)
 
+    # Overwrite with WmdSyn or WmdPartSyn
+    if do_wmdsyn or do_wmdpartsyn:
+        wmd_defns = get_defns(lemma_name, pos, lower=True, include_enss=True)
+        np.maximum(affinities, wmd_affinities(wmdistance_partial if do_wmdpartsyn else wmdistance, wmd_defns), out=affinities)
+
     # Take Ety into account by setting links within the same ety to 1 and outside to 0
-    if do_ety_same or do_ety_diff:
+    if do_ety_same or do_ety_diff or do_ety_exemp:
         ety_groups = ety(lemma_name, pos)
 
     if do_ety_same and len(ety_groups) > 1:
@@ -78,49 +88,82 @@ def comb_graph(lemma_name, pos, return_centers=False, do_label=False, do_ety_sam
                         sid2 = defn_ids[s2]
                         affinities[sid1, sid2] = affinities[sid2, sid1] = 0
 
+    # Set up ety exemplars
+    preference = np.zeros(num_defns)
+    if do_ety_exemp and len(ety_groups) > 1:
+        med = np.median(affinities)
+        for ety_idx, sense_ids in ety_groups.items():
+            preference[defn_ids[sense_ids[0]]] = med
+
     # Cluster
-    return graph_clust_grouped(affinities, keys, return_centers)
+    return graph_clust_grouped(affinities, keys, return_centers, preference)
 
 
 class Comb(SenseClusExp):
     returns_centers = True
 
-    def __init__(self, do_label=False, do_ety_same=False, do_ety_diff=False):
+    def __init__(self, do_bert=False, do_label=False, do_wmdsyn=False, do_wmdpartsyn=False, do_ety=False, do_ety_exemp=False):
         self.clus_func = partial(
             comb_graph,
+            do_bert=do_bert,
             do_label=do_label,
-            do_ety_same=do_ety_same,
-            do_ety_diff=do_ety_diff
+            do_wmdsyn=do_wmdsyn,
+            do_wmdpartsyn=do_wmdpartsyn,
+            do_ety_diff=do_ety,
+            do_ety_exemp=do_ety_exemp,
         )
-        ety_both = do_ety_same and do_ety_diff
-        if ety_both:
-            ety_nick = "etyboth"
-            ety_disp = "+EtyBoth"
-        elif do_ety_same:
-            ety_nick = "etysame"
-            ety_disp = "+EtySame"
-        elif do_ety_diff:
-            ety_nick = "etydiff"
-            ety_disp = "+EtyDiff"
-        else:
-            ety_nick = None
-            ety_disp = ""
+        disp = ""
+        nick_bits = []
+
+        def add(opt, nick, d=None):
+            nonlocal disp, nick_bits
+            nick_bits.append(nick)
+            if not d:
+                d = nick.upper()
+            if disp:
+                disp += "+"
+            disp += d
+
+        add(do_bert, "bert", "SBert")
+        add(do_label, "lbl")
+        add(do_wmdsyn, "ws")
+        add(do_wmdpartsyn, "wps")
+        add(do_ety, "ety")
+        add(do_ety_exemp, "ex")
         super().__init__(
             ("Comb",),
-            mk_nick("comb", do_label and "label" or None, ety_nick),
-            "SentBert" + (do_label and "+Label" or "") + ety_disp,
+            mk_nick("comb", *nick_bits),
+            disp,
             None,
-            {"do_label": do_label, "do_ety_same": do_ety_same, "do_ety_diff": do_ety_diff},
+            {
+                "do_bert": do_bert,
+                "do_label": do_label,
+                "do_wmdsyn": do_wmdsyn,
+                "do_wmdpartsyn": do_wmdpartsyn,
+                "do_ety": do_ety,
+                "do_ety_exemp": do_ety_exemp
+            },
         )
 
 
 class CombGroup(BothExpGroup):
     def __init__(self):
         variations = []
-        for do_label in [False, True]:
-            for do_ety_diff in [False, True]:
-                for do_ety_same in [False, True]:
-                    if not do_label and not do_ety_diff and not do_ety_same:
+        for do_bert in [False, True]:
+            for do_wmdsyn in [False, True]:
+                for do_wmdpartsyn in [False, True]:
+                    if do_wmdsyn and do_wmdpartsyn:
+                        # ~(do_wmdsyn & do_wmdpartsyn)
                         continue
-                    variations.append(Comb(do_label, do_ety_same, do_ety_diff))
+                    for do_label in [False, True]:
+                        if not do_bert and not do_label and not do_wmdsyn and not do_wmdpartsyn:
+                            continue
+                        for do_ety in [False, True]:
+                            for do_ety_exemp in [False, True]:
+                                if do_ety_exemp and not do_ety:
+                                    # do_ety_exemp => do_ety
+                                    continue
+                                if (do_bert + do_label + do_wmdsyn + do_wmdpartsyn + do_ety + do_ety_exemp) == 1:
+                                    continue
+                                variations.append(Comb(do_bert, do_label, do_wmdsyn, do_wmdpartsyn, do_ety, do_ety_exemp))
         return super().__init__(variations)

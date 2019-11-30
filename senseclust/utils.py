@@ -55,8 +55,7 @@ def graph_clust(affinities, return_centers=False, preference="zero"):
         preference = 0
     elif preference == "min":
         preference = np.min(affinities)
-    else:
-        assert preference == "med"
+    elif preference == "med":
         preference = np.median(affinities)
     for damping in [0.5, 0.7, 0.9]:
         centers, labels = affinity_propagation(affinities, preference=preference, damping=damping)
@@ -72,12 +71,12 @@ def group_clust(labels, clust_labels):
     return group_by(((clust_num, labels[idx]) for idx, clust_num in enumerate(clust_labels)))
 
 
-def graph_clust_grouped(affinities, labels, return_centers=False):
+def graph_clust_grouped(affinities, labels, return_centers=False, preference="zero"):
     if return_centers:
-        clust_labels, centers = graph_clust(affinities, return_centers=True)
+        clust_labels, centers = graph_clust(affinities, return_centers=True, preference=preference)
         return group_clust(labels, clust_labels), [labels[c] for c in centers]
     else:
-        clust_labels = graph_clust(affinities)
+        clust_labels = graph_clust(affinities, preference=preference)
         return group_clust(labels, clust_labels)
 
 
