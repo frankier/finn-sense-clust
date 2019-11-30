@@ -62,7 +62,7 @@ def comb_graph(lemma_name, pos, return_centers=False, do_bert=False, do_label=Fa
 
     # Overwrite with WmdSyn or WmdPartSyn
     if do_wmdsyn or do_wmdpartsyn:
-        wmd_defns = get_defns(lemma_name, pos, lower=True, include_enss=True)
+        wmd_defns = get_defns(lemma_name, pos, lower=True, include_enss=True, skip_empty=False)
         np.maximum(affinities, wmd_affinities(wmdistance_partial if do_wmdpartsyn else wmdistance, wmd_defns), out=affinities)
 
     # Take Ety into account by setting links within the same ety to 1 and outside to 0
