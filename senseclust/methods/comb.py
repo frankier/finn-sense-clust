@@ -30,7 +30,7 @@ def comb_graph(lemma_name, pos, return_centers=False, do_bert=False, do_label=Fa
     if do_bert:
         affinities = cos_affinities_none(layers)
     else:
-        affinities = np.eye((num_defns, num_defns))
+        affinities = np.eye(num_defns)
 
     # Overwrite with *Label* when affinity is larger
     if do_label:
