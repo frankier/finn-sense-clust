@@ -51,12 +51,15 @@ def graph_clust(affinities, return_centers=False, preference="zero"):
                 return result, []
             else:
                 return result
-    if preference == "zero":
-        preference = 0
-    elif preference == "min":
-        preference = np.min(affinities)
-    elif preference == "med":
-        preference = np.median(affinities)
+    if isinstance(preference, str):
+        if preference == "zero":
+            preference = 0
+        elif preference == "min":
+            preference = np.min(affinities)
+        elif preference == "med":
+            preference = np.median(affinities)
+        else:
+            assert False
     for damping in [0.5, 0.7, 0.9]:
         centers, labels = affinity_propagation(affinities, preference=preference, damping=damping)
         if not np.any(np.isnan(labels)):
