@@ -117,12 +117,13 @@ class Comb(SenseClusExp):
 
         def add(opt, nick, d=None):
             nonlocal disp, nick_bits
-            nick_bits.append(nick)
-            if not d:
-                d = nick.upper()
-            if disp:
-                disp += "+"
-            disp += d
+            if opt:
+                nick_bits.append(nick)
+                if not d:
+                    d = nick.upper()
+                if disp:
+                    disp += "+"
+                disp += d
 
         add(do_bert, "bert", "SBert")
         add(do_label, "lbl")
