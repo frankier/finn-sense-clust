@@ -155,9 +155,9 @@ class CombGroup(BothExpGroup):
                     if do_wmdsyn and do_wmdpartsyn:
                         # ~(do_wmdsyn & do_wmdpartsyn)
                         continue
+                    if not do_bert and not do_wmdsyn and not do_wmdpartsyn:
+                        continue
                     for do_label in [False, True]:
-                        if not do_bert and not do_label and not do_wmdsyn and not do_wmdpartsyn:
-                            continue
                         for do_ety in [False, True]:
                             for do_ety_exemp in [False, True]:
                                 if do_ety_exemp and not do_ety:
