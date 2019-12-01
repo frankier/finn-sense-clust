@@ -120,15 +120,15 @@ class Comb(SenseClusExp):
             if opt:
                 nick_bits.append(nick)
                 if not d:
-                    d = nick.upper()
+                    d = nick.title()
                 if disp:
                     disp += "+"
                 disp += d
 
-        add(do_bert, "bert", "SBert")
-        add(do_label, "lbl")
+        add(do_bert, "bert", "Sb")
         add(do_wmdsyn, "ws")
         add(do_wmdpartsyn, "wps")
+        add(do_label, "lbl")
         add(do_ety, "ety")
         add(do_ety_exemp, "ex")
         super().__init__(
