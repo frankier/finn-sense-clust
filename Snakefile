@@ -90,7 +90,7 @@ BS_CORPUS_MAP = {
 
 def cmp_inputs(wildcards):
     filter = parse_filter(FILTER)
-    nicks = SnakeMake.get_nicks(filter)
+    nicks = SnakeMake.intersect_nicks(filter, supports_wordnet=True, supports_wiktionary=True)
     return expand(WORK + "/bootstrap/resamples/{nick}/" + wildcards.corpus + "/" + wildcards.eval + "/" + wildcards.measure + ".pkl", nick=nicks)
 
 
