@@ -1,16 +1,14 @@
 ## Eval
+from os.path import join as pjoin
 from expcomb.filter import SimpleFilter, parse_filter
 from expc import SnakeMake
-
-def merge(r1, r2):
-    return {
-        k: r1.get(k, []) + r2.get(k, []) for k in {*r1.keys(), *r2.keys()}
-    }
 
 FILTER = config.setdefault("FILTER", "")
 EVAL = config.setdefault("EVAL", "eval")
 WORDS = config.setdefault("WORDS", "words")
 WORK = config.setdefault("WORK", "work")
+GUESS = config.setdefault("GUESS", pjoin(WORK, "guess"))
+RESULTS = config.setdefault("RESULTS", pjoin(WORK, "results"))
 
 SEED = "42"
 ITERS = "100000"
@@ -30,7 +28,6 @@ BOTH_EVAL = {
         "manclus.link",
     ]
 }
-ALL_EVAL = merge(merge(WN_ONLY_EVAL, WIKI_ONLY_EVAL), BOTH_EVAL)
 MULTI_EVAL = {"synth-clus", "manclus.link"}
 
 def all_results():
@@ -38,7 +35,7 @@ def all_results():
     def eval_paths(nick, eval_dict):
         for corpus, evals in eval_dict.items():
             for eval in evals:
-                yield f"{WORK}/results/{corpus}--{eval}--{nick}.db"
+                yield f"{RESULTS}/{corpus}--{eval}--{nick}.db"
     for nick in SnakeMake.intersect_nicks(filter, supports_wordnet=True):
         yield from eval_paths(nick, WN_ONLY_EVAL)
     for nick in SnakeMake.intersect_nicks(filter, supports_wiktionary=True):
@@ -52,18 +49,18 @@ rule all:
 
 rule test:
     input: WORDS + "/{corpus}"
-    output: WORK + "/guess/{corpus}.{nick}"
+    output: GUESS + "/{corpus}.{nick}"
     wildcard_constraints:
         corpus=r"[^\.]+"
     shell:
         "python expc.py --filter 'nick={wildcards.nick}' test " + WORDS + "/{wildcards.corpus} {output}"
 
 rule eval:
-    input: WORK + "/guess/{corpus}.{nick}"
-    output: WORK + "/results/{corpus}--{eval}--{nick}.db"
+    input: GUESS + "/{corpus}.{nick}"
+    output: RESULTS + "/{corpus}--{eval}--{nick}.db"
     run:
         multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
-        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} " + WORDS + "/{wildcards.corpus} " + WORK + "/guess " + EVAL + "/{wildcards.eval}.csv")
+        shell("python expc.py --filter 'nick={wildcards.nick}' eval " + multi + " {output} " + WORDS + "/{wildcards.corpus} " + GUESS + " " + EVAL + "/{wildcards.eval}.csv")
 
 # Final output
 
@@ -79,17 +76,26 @@ rule gloss_all:
     input: expand(WORK + "/output/{seg}.csv", seg=SEGS)
 
 # Bootstrapping
+BOOTSTRAPS = [
+    ("conc-words", "frame-synset-union2.filtered2", "macc"),
+    ("synth-words", "synth-clus", "rand"),
+    ("man-words", "manclus", "macc"),
+]
+
+BS_CORPUS_MAP = {
+    "conc-words": "all-words",
+    "synth-words": "all-words",
+    "man-words": "man-words",
+}
 
 def cmp_inputs(wildcards):
-    if wildcards.corpus in WIKI_EXTRA_EVAL:
-        nicks = SnakeMake.get_nicks(SimpleFilter(supports_wiktionary=True))
-    else:
-        nicks = SnakeMake.get_nicks()
-    return expand(WORK + "/bootstrap/resamples/{nick}/" + wildcards.corpus + "/" + wildcards.eval + ".pkl", nick=nicks)
+    filter = parse_filter(FILTER)
+    nicks = SnakeMake.get_nicks(filter)
+    return expand(WORK + "/bootstrap/resamples/{nick}/" + wildcards.corpus + "/" + wildcards.eval + "/" + wildcards.measure + ".pkl", nick=nicks)
 
 
 rule bootstrap:
-    input: [WORK + f"/bootstrap/cld/{corpus}/{eval}.db" for corpus, evals in ALL_EVAL.items() for eval in evals]
+    input: [WORK + f"/bootstrap/cld/{corpus}/{eval}/{measure}.db" for corpus, eval, measure in BOOTSTRAPS]
 
 rule create_schedule:
     input: WORDS + "/{corpus}"
@@ -103,25 +109,25 @@ rule create_schedule:
 rule resample:
     input:
         eval=EVAL + "/{eval}.csv",
-        guess=WORK + "/guess/{corpus}.{nick}",
-        result=WORK + "/results/{corpus}--{eval}--{nick}.db",
+        guess=lambda wc: f"{GUESS}/{BS_CORPUS_MAP[wc.corpus]}.{wc.nick}",
+        result=lambda wc: f"{RESULTS}/{BS_CORPUS_MAP[wc.corpus]}--{wc.eval}--{wc.nick}.db",
         schedule=WORK + "/bootstrap/schedules/{corpus}.pkl",
-    output: WORK + "/bootstrap/resamples/{nick,[^/]+}/{corpus,[^/]+}/{eval,[^/]+}.pkl",
+    output: WORK + "/bootstrap/resamples/{nick,[^/]+}/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.pkl",
     run:
         multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
         shell(
             "python expc.py sigtest resample " + multi +
-	    " {output} {input.eval} {input.guess} {input.result} {input.schedule} o,macc"
+	    " {output} {input.eval} {input.guess} {input.result} {input.schedule} o,{output.measure}"
         )
 
 rule compare:
     input: cmp_inputs
-    output: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}.db"
+    output: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
     shell:
         "python expc.py sigtest compare-resampled {input} {output}"
 
 rule cld:
-    input: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}.db"
-    output: WORK + "/bootstrap/cld/{corpus,[^/]+}/{eval,[^/]+}.db"
+    input: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
+    output: WORK + "/bootstrap/cld/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
     shell:
         "python expc.py sigtest cld {input} {output}"
