@@ -13,7 +13,7 @@ EXPERIMENTS = [
     BothExpGroup([Baseline("1"), Baseline("n")]),
     WordnetOnlyExpGroup([Label()]),
     WordnetOnlyExpGroup([Vec()]),
-    BothExpGroup([SoftCos(False), SoftCos(False)]),
+    BothExpGroup([SoftCos(False), SoftCos(True)]),
     BothExpGroup([Bert()]),
     BothExpGroup([Wmd(False, False), Wmd(False, True), Wmd(True, False), Wmd(True, True)]),
     WiktionaryOnlyExpGroup([Ety()]),
