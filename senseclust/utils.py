@@ -157,6 +157,7 @@ def get_wordnet_defns(
     skip_empty=True,
     tokenize=True,
     include_enss=False,
+    lower=False,
 ):
     for synset_id, lemma_objs in get_lemma_objs(lemma_name, WORDNETS, pos).items():
         assert len(lemma_objs) >= 1
@@ -172,6 +173,9 @@ def get_wordnet_defns(
             for lemma in ss.lemmas():
                 for bit in lemma.name().split("_"):
                     tokens.append(bit)
+        if lower:
+            assert tokenize
+            tokens = [token.lower() for token in tokens]
         yield pre_id_to_post(synset_id), tokens
 
 
@@ -191,7 +195,7 @@ def get_defns(
         defns.update(get_wiktionary_defns(lemma_name, pos, skip_empty, tokenize, lower))
     # Add WordNet senses
     if include_wordnet:
-        defns.update(get_wordnet_defns(lemma_name, pos, skip_empty, tokenize, include_enss))
+        defns.update(get_wordnet_defns(lemma_name, pos, skip_empty, tokenize, include_enss, lower))
     return defns
 
 
