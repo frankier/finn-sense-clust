@@ -1,0 +1,12 @@
+Etymology1.Noun.1 # [[fury|Fury]], [[rage]].
+00553995-n # [qf2, fin] furor, furore, raivo, vimma, yleinen_suuttumus: a sudden outburst (as of protest) (hyp: disturbance.n.05; root: entity.n.01; lexname: noun.act)
+00758972-n # [qf2, qwf, fin] anger, ira, ire, raivo, suuttumus, viha, wrath: belligerence aroused by a real or supposed wrong (personified as one of the deadly sins) (hyp: mortal_sin.n.01; root: entity.n.01; lexname: noun.act)
+05037813-n # [qf2, fin] ankaruus, ferocity, fierceness, furiousness, fury, kiihkeys, kiihko, kiivaus, kovuus, raivo, raivokkuus, rajuus, vehemence, villiys, vimma, violence, voima, wildness: the property of being wild or turbulent (hyp: intensity.n.02; root: entity.n.01; lexname: noun.attribute)
+07516905-n # [qf2, fin] raivo, wrath: intense anger (usually on an epic scale) (hyp: fury.n.01; root: entity.n.01; lexname: noun.feeling)
+07516997-n # [qf2, qwf, fin] fury, kiihko, madness, rage, raivo, vimma: a feeling of intense anger (hyp: anger.n.01; root: entity.n.01; lexname: noun.feeling)
+07517417-n # [qf2, fin] enragement, infuriation, raivo, raivostuminen: a feeling of intense anger (hyp: anger.n.01; root: entity.n.01; lexname: noun.feeling)
+13980128-n # [qf2, fin] rage, raivo: violent state of the elements (hyp: violence.n.03; root: entity.n.01; lexname: noun.state)
+14036735-n # [qf2, fin] rage, raivo: a state of extreme anger (hyp: anger.n.02; root: entity.n.01; lexname: noun.state)
+14391876-n # [qf2, fin] craze, delirium, frenzy, fury, hurmio, hysteria, kiihko, raivo, vimma: state of violent mental agitation (hyp: mania.n.02; root: entity.n.01; lexname: noun.state)
+
+Etymology2.Noun.1 # {{lb|fi|anatomy|rare}} [[back|Back]] of the [[head]].

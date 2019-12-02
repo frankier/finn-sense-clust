@@ -1,0 +1,6 @@
+Etymology1.Noun.1 # [[pound]]
+13648184-n # [qf2, fin] lbf., pauna, pound: a nontechnical unit of force equal to the mass of 1 pound with an acceleration of free fall equal to 32 feet/sec/sec (hyp: force_unit.n.01; root: entity.n.01; lexname: noun.quantity)
+13717728-n # [qf2, fin] cattie, catty: any of various units of weight used in southeastern Asia (especially a Chinese measure equal to 500 grams) (hyp: weight_unit.n.02; root: entity.n.01; lexname: noun.quantity)
+13720096-n # [qf2, qwf, fin] lb, naula, pauna, pound: 16 ounces avoirdupois (hyp: avoirdupois_unit.n.01; root: entity.n.01; lexname: noun.quantity)
+
+Etymology2.Noun.1 # {{lb|fi|archaic}} [[bag]], [[purse]]

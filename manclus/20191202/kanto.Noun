@@ -1,0 +1,9 @@
+Etymology1.Noun.1 # [[stump]] {{gloss|remains of a tree}}
+09449657-n # [qf2, fin] kanto, stub: a short piece remaining on a trunk or stem where a branch is lost (hyp: plant_part.n.01; root: entity.n.01; lexname: noun.object)
+13111504-n # [qf2, qwf, fin] kanto, stump, tree_stump: the base part of a tree that remains standing after the tree has been felled (hyp: plant_part.n.01; root: entity.n.01; lexname: noun.plant)
+13111700-n # [qf2, fin] kanto, stool: (forestry) the stump of a tree that has been felled or headed for the production of saplings (hyp: stump.n.01; root: entity.n.01; lexname: noun.plant)
+
+Etymology2.Noun.1 # [[carrying]] {{gloss|act}}
+
+Etymology2.Noun.2 # [[collection]] {{gloss|activity of collecting, especially taxes}}; ''see also:'' {{m|fi|veronkanto}}
+01061526-n # [qf2, fin] exaction, kanto, periminen: act of demanding or levying by force or authority (hyp: demand.n.04; root: entity.n.01; lexname: noun.act)

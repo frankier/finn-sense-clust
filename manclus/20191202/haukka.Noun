@@ -1,0 +1,11 @@
+Etymology1.Noun.1 # [[hawk]]
+01605630-n # [qf2, qwf, fin] haukka, hawk: diurnal bird of prey typically having short rounded wings and a long tail (hyp: bird_of_prey.n.01; root: entity.n.01; lexname: noun.animal)
+01610955-n # [qf2, fin] falcon, haukka, muuttohaukka: diurnal birds of prey having long pointed powerful wings adapted for swift flight (hyp: hawk.n.01; root: entity.n.01; lexname: noun.animal)
+01611252-n # [qf2, fin] Falco, Falco-suku, genus_Falco, haukka: a genus of Falconidae (hyp: bird_genus.n.01; root: entity.n.01; lexname: noun.animal)
+01607962-n # [qwf] Buteo_buteo, buzzard: the common European short-winged hawk (hyp: hawk.n.01; root: entity.n.01; lexname: noun.animal)
+01608432-n # [qwf] kite: any of several small graceful hawks of the family Accipitridae having long pointed wings and feeding on insects and small animals (hyp: hawk.n.01; root: entity.n.01; lexname: noun.animal)
+01612122-n # [qwf] American_kestrel, Falco_sparverius, kestrel, sparrow_hawk: small North American falcon (hyp: falcon.n.01; root: entity.n.01; lexname: noun.animal)
+
+Etymology2.Noun.1 # [[bite]]
+
+10162644-n # [qf2, fin] haukka, hawk, sotakiihkoilija, war_hawk: an advocate of an aggressive policy on foreign relations (hyp: militarist.n.01; root: entity.n.01; lexname: noun.person)

@@ -1,0 +1,14 @@
+Etymology1.Noun.1 # [[shoemaker]] {{gloss|one who makes shoes}}
+Etymology1.Noun.2 # [[cobbler]] {{gloss|one who repairs shoes}}
+Etymology1.Noun.3 # [[cobbler's]] {{gloss|shoe repair shop}}
+09867069-n # [qf2, fin] boot_maker, bootmaker, suutari: a maker of boots (hyp: cobbler.n.01; root: entity.n.01; lexname: noun.person)
+09933098-n # [qf2, qwf, fin] cobbler, shoemaker, suutari: a person who makes or repairs shoes (hyp: maker.n.01; root: entity.n.01; lexname: noun.person)
+
+Etymology2.Noun.1 # A [[dud]] [[explosive]], an [[unexploded]] piece of [[ordnance]] or [[fireworks]]
+02868068-n # [qf2, fin] bombie, suutari: an unexploded bomblet (hyp: bomblet.n.01; root: entity.n.01; lexname: noun.artifact)
+07421749-n # [qf2, fin] dud, laukeamaton_räjähde, misfire, suutari: an explosion that fails to occur (hyp: breakdown.n.03; root: entity.n.01; lexname: noun.event)
+
+Etymology3.Noun.1 # {{lb|fi|fish}} [[tench]], ''Tinca tinca''
+01440764-n # [qf2, qwf, fin] Tinca_tinca, suutari, tench: freshwater dace-like game fish of Europe and western Asia noted for ability to survive outside water (hyp: cyprinid.n.01; root: entity.n.01; lexname: noun.animal)
+
+02169218-n # [qf2, fin] pine_sawyer, suutari: large beetle whose larvae bore holes in pine trees (hyp: sawyer.n.02; root: entity.n.01; lexname: noun.animal)

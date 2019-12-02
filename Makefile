@@ -64,8 +64,8 @@ words/really-all-words-split/.done: words/really-all-words
 
 # Manclus stuff
 
-eval/manclus.csv: manclus/*.Noun | eval/
-	poetry run python man_clus.py compile manclus/* eval/manclus.csv
+eval/manclus.csv: manclus/201904/*.Noun manclus/20191202/*.Noun | eval/
+	poetry run python man_clus.py compile manclus/201904/*.Noun manclus/20191202/*.Noun eval/manclus.csv
 
 eval/manclus.wn.csv: eval/manclus.csv
 	poetry run python man_clus.py filter --filter wn $< $@

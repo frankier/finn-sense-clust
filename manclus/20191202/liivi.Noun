@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # A [[vest]], [[waistcoat]] (sleeveless garment that buttons down the front, worn over a shirt, and often as part of a suit).
+Etymology1.Noun.2 # A vest (protective sleeveless garment worn over outer clothing).
+Etymology1.Noun.3 # In plural ('''''[[liivit]]'''''); [[bra]] {{gloss|short of [[rintaliivit]]}}. The plural is sometimes used as short of any type of vest.
+03595264-n # [qf2, fin] jerkin, liivi: a tight sleeveless and collarless jacket (often made of leather) worn by men in former times (hyp: jacket.n.01; root: entity.n.01; lexname: noun.artifact)
+04325804-n # [qf2, fin] liivi, miehusta, stomacher: garment consisting of a V-shaped panel of stiff material worn over the chest and stomach in the 16th century (hyp: garment.n.01; root: entity.n.01; lexname: noun.artifact)
+04531873-n # [qf2, qwf, fin] liivi, vest, waistcoat: a man's sleeveless garment worn underneath a coat (hyp: garment.n.01; root: entity.n.01; lexname: noun.artifact)
+02916936-n # [qwf] bulletproof_vest: a vest capable of resisting the impact of a bullet (hyp: body_armor.n.01, vest.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # The [[Livonian]] language.
+06957768-n # [qf2, qwf, fin] Livonian, liivi: the Finnic language spoken by the people of Livonia in Estonia and Latvia (hyp: baltic-finnic.n.01; root: entity.n.01; lexname: noun.communication)

@@ -1,0 +1,8 @@
+Etymology1.Noun.1 # [[hunt]], [[chase]]
+00945401-n # [qf2, fin] etsintä, hunt, hunting, jahti, metsästys, search: the activity of looking thoroughly in order to find something or someone (hyp: activity.n.01; root: entity.n.01; lexname: noun.act)
+05770257-n # [qf2, fin] hunt, jahti: an instance of searching for something (hyp: search.n.04; root: entity.n.01; lexname: noun.cognition)
+00319939-n # [qf2, qwf] chase, following, jahti, pursual, pursuit, takaa-ajo: the act of pursuing in an effort to overtake or capture (hyp: liikkuminen.n.03; root: entiteetti.n.01; lexname: noun.act)
+00452293-n # [qwf] hunt, hunting: the pursuit and killing or capture of wild animals regarded as a sport (hyp: blood_sport.n.01, outdoor_sport.n.01; root: entity.n.01; lexname: noun.act)
+
+Etymology2.Noun.1 # [[yacht]]
+04610013-n # [qf2, qwf, fin] huvialus, huvipursi, jahti, kilpa-alus, racing_yacht, yacht: an expensive vessel propelled by sail or power and used for cruising or racing (hyp: vessel.n.02; root: entity.n.01; lexname: noun.artifact)

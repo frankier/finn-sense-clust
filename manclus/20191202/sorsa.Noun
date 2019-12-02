@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # A [[duck]], a bird of the [[Anatidae]] family.
+01846331-n # [qf2, qwf, fin] ankka, duck, sorsa: small wild or domesticated web-footed broad-billed swimming bird usually having a depressed body and short legs (hyp: anseriform_bird.n.01; root: entity.n.01; lexname: noun.animal)
+01851895-n # [qf2] sorsa, villisorsa, wild_duck: an undomesticated duck (especially a mallard) (hyp: ankka.n.02; root: entiteetti.n.01; lexname: noun.animal)
+
+Etymology1.Noun.2 # {{lb|fi|poker}} A duck (''slang: playing card two'').
+03182795-n # [qwf] deuce, two: one of the four playing cards in a deck that have two spots (hyp: playing_card.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology1.Noun.3 # {{lb|fi|medical}} A [[bedpan]] (slang).
+
+Etymology2.Noun.1 # {{lb|fi|computing|slang}} A [[source code]]; often in plural ('''''sorsat''''').

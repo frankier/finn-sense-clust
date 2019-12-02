@@ -1,0 +1,14 @@
+Etymology1.Noun.1 # [[varnish]], [[lacquer]]
+Etymology1.Noun.2 # [[lac]] (scarlet resinous substance)
+14701143-n # [qf2, qwf, fin] lac, lakka: resinlike substance secreted by certain lac insects; used in e.g. varnishes and sealing wax (hyp: animal_product.n.01; root: entity.n.01; lexname: noun.substance)
+14928729-n # [qf2, qwf, fin] lacquer, lakka: a black resinous substance obtained from certain trees and used as a natural varnish (hyp: gum.n.03; root: entity.n.01; lexname: noun.substance)
+04521987-n # [qf2] lakka, lakkaus, varnish: a coating that provides a hard, lustrous, transparent finish to a surface (hyp: pinnoite.n.01; root: entiteetti.n.01; lexname: noun.artifact)
+03631811-n # [qf2, fin] lacquer, lakka: a hard glossy coating (hyp: coating.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology1.Noun.3 # {{lb|fi|slang}} [[gamma-butyrolactone]] ([[GBL]]), when used as recreational [[drug]]
+
+Etymology2.Noun.1 # [[cloudberry]]; [[bakeapple]] {{qualifier|Eastern Canada}}; [[knotberry]], [[knoutberry]] {{qualifier|archaic, England}}; [[aqpik]], [[low-bush salmonberry]] {{qualifier|Alaska}}; [[averin]], [[evron]] {{qualifier|Scotland}}; ''[[Rubus chamaemorus]]'' {{gloss|yellow berry}}
+12657294-n # [qf2, qwf, fin] Rubus_chamaemorus, bakeapple, baked-apple_berry, cloudberry, dwarf_mulberry, hilla, lakka, muurain, salmonberry, suomuurain, valokki: creeping raspberry of north temperate regions with yellow or orange berries (hyp: raspberry.n.01; root: entity.n.01; lexname: noun.plant)
+
+Etymology3.Noun.1 # [[dovecote]]
+03686363-n # [qf2, fin] kyyhkyslakka, lakka, loft, pigeon_loft: a raised shelter in which pigeons are kept (hyp: shelter.n.01; root: entity.n.01; lexname: noun.artifact)

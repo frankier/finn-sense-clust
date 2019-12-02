@@ -1,0 +1,7 @@
+Etymology1.Noun.1 # [[routine]]
+01026482-n # [qf2, qwf, fin] menettelytapa, modus_operandi, routine, rutiini: an unvarying or habitual method or procedure (hyp: procedure.n.01; root: entity.n.01; lexname: noun.act)
+
+Etymology2.Noun.1 # [[rutin]]
+
+06584536-n # [qf2, fin] rutiini, tracing_routine: a routine that provides a chronological record of the execution of a computer program (hyp: routine.n.03; root: entity.n.01; lexname: noun.communication)
+06582403-n # [qwf] function, procedure, routine, subprogram, subroutine: a set sequence of steps, part of larger computer program (hyp: software.n.01; root: entity.n.01; lexname: noun.communication)

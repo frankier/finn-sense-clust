@@ -1,0 +1,11 @@
+Etymology1.Noun.1 # [[fall]] {{gloss|act of moving down under the effect of gravity}}
+07362386-n # [qf2, fin] drop, fall, pudotus: a free and rapid descent by the force of gravity (hyp: descent.n.01, gravitation.n.02; root: entity.n.01; lexname: noun.event)
+
+05111835-n # [qf2, qwf, fin] dip, drop, fall, free_fall, lasku, pudotus, vapaa_pudotus: a sudden sharp decrease in some quantity (hyp: decrease.n.03; root: entity.n.01; lexname: noun.attribute)
+07355887-n # [qf2, qwf, fin] decrease, drop-off, lasku, lessening, pudotus, väheneminen: a change downward (hyp: change.n.01; root: entity.n.01; lexname: noun.event)
+13556509-n # [qf2, fin] drop-off, falling_off, falloff, hiljainen_kausi, lasku, pienentyminen, pudotus, romahdus, slack, slump, vähentyminen: a noticeable deterioration in performance or quality (hyp: deterioration.n.02; root: entity.n.01; lexname: noun.process)
+
+Etymology2.Noun.1 # act of [[dropping]] {{gloss|causing something to fall}}
+00327366-n # [qf2, fin] drop, pudotus: the act of dropping something (hyp: descent.n.03; root: entity.n.01; lexname: noun.act)
+
+Etymology2.Noun.2 # {{lb|fi|computing}} [[dropdown]]

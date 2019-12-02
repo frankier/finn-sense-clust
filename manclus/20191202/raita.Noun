@@ -1,0 +1,15 @@
+Etymology1.Noun.1 # [[stripe]]
+Etymology1.Noun.2 # [[band]]
+Etymology1.Noun.4 # {{lb|fi|obsolete}} [[trace]]
+Etymology1.Noun.5 # {{lb|fi|heraldry}} [[bendlet]]
+02784732-n # [qf2, fin] band, banding, nauha, panta, raita, stripe: an adornment consisting of a strip of a contrasting color or material (hyp: adornment.n.01; root: entity.n.01; lexname: noun.artifact)
+04680465-n # [qf2, fin] band, banding, juova, juovikkuus, juovitus, raidoitus, raita, stria, striation, viiru: a stripe or stripes of contrasting color (hyp: stripe.n.05; root: entity.n.01; lexname: noun.attribute)
+04683136-n # [qf2, qwf, fin] bar, juova, raita, streak, stripe, viiru: a narrow marking of a different color or texture from the background (hyp: marking.n.02; root: entity.n.01; lexname: noun.attribute)
+
+Etymology1.Noun.3 # [[track]]
+04464211-n # [qf2, qwf, fin] data_track, raita, track: (computer science) one of the circular magnetic paths on a magnetic disk that serve as a guide for writing and reading data (hyp: path.n.03; root: entity.n.01; lexname: noun.artifact)
+06612865-n # [qf2, fin] cut, otos, raita, track: a distinct selection of music from a recording or a compact disc (hyp: excerpt.n.01; root: entity.n.01; lexname: noun.communication)
+04464125-n # [qwf] track: a groove on a phonograph recording (hyp: groove.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # [[goat willow]], ''[[Salix caprea]]''
+12727518-n # [qf2, fin] Salix_caprea, florist's_willow, goat_willow, pussy_willow, raita: much-branched Old World willow having large catkins and relatively large broad leaves (hyp: sallow.n.01; root: entity.n.01; lexname: noun.plant)

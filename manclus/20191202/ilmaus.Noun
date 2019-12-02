@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # [[expression]] {{gloss|particular way of phrasing an idea}}
+Etymology1.Noun.2 # expression {{gloss|colloquialism or idiom}}
+06313651-n # [qf2, fin] construction, expression, grammatical_construction, ilmaus, lauserakenne: a group of words that form a constituent of a sentence and are considered as a single unit (hyp: constituent.n.04; root: entity.n.01; lexname: noun.communication)
+06723452-n # [qf2, fin] ilmaus, statement: a nonverbal message (hyp: message.n.02; root: entity.n.01; lexname: noun.communication)
+07109847-n # [qf2, fin] ilmaisu, ilmaus, utterance, vocalization, ääntely, ääntäminen: the use of uttered sounds for auditory communication (hyp: auditory_communication.n.01; root: entity.n.01; lexname: noun.communication)
+07139873-n # [qwf] expression, verbal_expression, verbalism: the communication (in speech or writing) of your beliefs or opinions (hyp: communication.n.01; root: entity.n.01; lexname: noun.communication)
+01228380-n # [qf2] ele, gesture, ilmaus: something done as an indication of intention (hyp: merkki.n.14; root: entiteetti.n.01; lexname: noun.act)
+07203126-n # [qf2, fin] affirmation, assertion, ilmaus, kannanotto, lausunto, statement, toteamus, vahvistus, vakuuttaminen, väite: the act of affirming or asserting or stating something (hyp: speech_act.n.01; root: entity.n.01; lexname: noun.communication)
+
+Etymology2.Noun.1 # [[bleeding]] {{gloss|act of removing air from a fluid system}}

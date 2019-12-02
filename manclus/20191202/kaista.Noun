@@ -1,0 +1,9 @@
+Etymology1.Noun.1 # [[lane]] (division of roadway)
+03640660-n # [qf2, qwf, fin] kaista, lane, rata: a well-defined track or path; for e.g. swimmers or lines of traffic (hyp: path.n.02; root: entity.n.01; lexname: noun.artifact)
+04466386-n # [qf2, fin] kaista, traffic_lane: a lane of a main road that is defined by painted lines (hyp: lane.n.02; root: entity.n.01; lexname: noun.artifact)
+
+Etymology1.Noun.2 # [[band]] (part of radio spectrum)
+06260518-n # [qf2] aallonpituusalue, aaltoalue, band, kaista, taajuusalue, taajuuskaista: a range of frequencies between two limits (hyp: valikoima.n.02; root: entiteetti.n.01; lexname: noun.communication)
+13579510-n # [qf2, qwf] bandwidth, kaista, kaistanleveys, siirtonopeus: a data transmission rate; the maximum amount of information (bits/second) that can be transmitted along a channel (hyp: informaation_mittaus.n.01; root: entiteetti.n.01; lexname: noun.quantity)
+
+Etymology2.Noun.1 # [[psycho]]

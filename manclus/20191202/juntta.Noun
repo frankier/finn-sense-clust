@@ -1,0 +1,8 @@
+Etymology1.Noun.1 # [[pile driver]], [[ram]]
+03936466-n # [qwf] pile_driver: a machine that drives piling into the ground (hyp: machine.n.01; root: entity.n.01; lexname: noun.artifact)
+04387706-n # [qf2, fin] juntta, sulloin, tamp, tamper, tamping_bar: a tool for tamping (e.g., for tamping tobacco into a pipe bowl or a charge into a drill hole etc.) (hyp: tool.n.01; root: entity.n.01; lexname: noun.artifact)
+04050410-n # [qf2, fin] juntta, ram: a tool for driving or forcing something by impact (hyp: tool.n.01; root: entity.n.01; lexname: noun.artifact)
+03901229-n # [qf2, fin] juntta, paving_machine, pavior, paviour: a machine for laying pavement (hyp: machine.n.01; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # [[junta]]
+08241964-n # [qf2, fin] junta, juntta, military_junta, sotilasjuntta: a group of military officers who rule a country after seizing power (hyp: clique.n.01; root: entity.n.01; lexname: noun.group)

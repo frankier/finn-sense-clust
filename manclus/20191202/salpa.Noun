@@ -1,0 +1,10 @@
+Etymology1.Noun.1 # [[bolt]] (sliding pin or bar in a lock)
+Etymology1.Noun.2 # [[bar]] (horizontal pole used to lock a door or a gate)
+Etymology1.Noun.3 # [[hasp]], [[clasp]] (metal strap fastened by a padlock or a pin)
+02982599-n # [qf2, fin] catch, haka, salpa, säppi: a fastener that fastens or locks a door or window (hyp: fastener.n.02; root: entity.n.01; lexname: noun.artifact)
+03644858-n # [qf2, qwf, fin] latch, salpa, säppi: catch for fastening a door or gate; a bar that can be lowered or slid into a groove (hyp: catch.n.07; root: entity.n.01; lexname: noun.artifact)
+04330669-n # [qf2, fin] salpa, stove_bolt: a small machine bolt (hyp: bolt.n.06; root: entity.n.01; lexname: noun.artifact)
+03497352-n # [qf2] hasp, salpa, säppi: a fastener for a door or lid; a hinged metal plate is fitted over a staple and is locked with a pin or padlock (hyp: haka.n.06; root: entiteetti.n.01; lexname: noun.artifact)
+02865931-n # [qwf] bolt, deadbolt: the part of a lock that is engaged or withdrawn with a key (hyp: bar.n.03; root: entity.n.01; lexname: noun.artifact)
+
+Etymology2.Noun.1 # [[salp]]
