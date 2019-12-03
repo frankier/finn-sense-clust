@@ -1,3 +1,4 @@
+from sklearn.exceptions import ConvergenceWarning
 from sklearn.cluster import affinity_propagation
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.spatial.distance import pdist, squareform
@@ -8,6 +9,7 @@ from senseclust.queries import wiktionary_query
 from nltk.tokenize import word_tokenize
 import sys
 import re
+import warnings
 
 
 SYNSET_RE = re.compile(r"[0-9]{8}-[anv]")
@@ -60,13 +62,23 @@ def graph_clust(affinities, return_centers=False, preference="zero"):
             preference = np.median(affinities)
         else:
             assert False
-    for damping in [0.5, 0.7, 0.9]:
-        centers, labels = affinity_propagation(affinities, preference=preference, damping=damping)
-        if not np.any(np.isnan(labels)):
-            if return_centers:
-                return labels, centers
-            else:
-                return labels
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=ConvergenceWarning)
+        for damping in [0.5, 0.7, 0.9]:
+            centers, labels = affinity_propagation(
+                affinities,
+                preference=preference,
+                damping=damping
+            )
+            if not np.any(np.isnan(labels)):
+                if return_centers:
+                    return labels, centers
+                else:
+                    return labels
+    warnings.warn(
+        "Affinity propagation did not converge, returning default.",
+        ConvergenceWarning
+    )
     return default()
 
 
