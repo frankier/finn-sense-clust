@@ -1,7 +1,9 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import unclusterable_default, graph_clust_grouped, cos_affinities_none, get_defns
+from senseclust.utils import (
+    unclusterable_default, graph_clust_grouped, cos_affinities_none, get_defns
+)
 from senseclust.methods.base import BothExpGroup
 from .bert import get_defns_layers
 from .label import get_sense_sets, mat_of_sets
@@ -13,7 +15,47 @@ from itertools import islice
 from functools import partial
 
 
-def comb_graph(lemma_name, pos, return_centers=False, do_bert=False, do_label=False, do_wmdsyn=False, do_wmdpartsyn=False, do_ety_same=False, do_ety_diff=False, do_ety_exemp=False):
+def enum_tri_mat(tri_mat, size):
+    i = 0
+    j = 1
+    for elem in tri_mat:
+        yield i, j, elem
+        j += 1
+        if j >= size:
+            i += 1
+            j = i + 1
+            assert i < size
+
+
+def add_label(lemma_name, pos, defn_ids, affinities):
+    try:
+        labels, lemma_sets = get_sense_sets(lemma_name, pos)
+    except NoSuchLemmaException:
+        return
+    mat = mat_of_sets(lemma_sets)
+    sims = 1 - pdist(mat.todense(), metric='russellrao')
+    if not len(sims):
+        return
+    max_sim = np.amax(sims)
+    if max_sim <= 0:
+        return
+    sims = sims / max_sim
+
+    def adjust_idx(idx):
+        return defn_ids[labels[idx]]
+
+    for i, j, sim in enum_tri_mat(sims, len(labels)):
+        ai = adjust_idx(i)
+        aj = adjust_idx(j)
+        if sim > affinities[ai, aj]:
+            affinities[ai, aj] = affinities[aj, ai] = sim
+
+
+def comb_graph(
+    lemma_name, pos, return_centers=False, do_bert=False, do_label=False,
+    do_wmdsyn=False, do_wmdpartsyn=False, do_ety_same=False,
+    do_ety_diff=False, do_ety_exemp=False
+):
     # Obtain and give ids to all defns which might be needed
     defns, layers = get_defns_layers(lemma_name, pos, skip_empty=False)
 
@@ -34,36 +76,21 @@ def comb_graph(lemma_name, pos, return_centers=False, do_bert=False, do_label=Fa
 
     # Overwrite with *Label* when affinity is larger
     if do_label:
-        try:
-            labels, lemma_sets = get_sense_sets(lemma_name, pos)
-        except NoSuchLemmaException:
-            pass
-        else:
-            mat = mat_of_sets(lemma_sets)
-            sims = 1 - pdist(mat.todense(), metric='russellrao')
-            if len(sims):
-                sims = sims / np.amax(sims)
-
-                def adjust_idx(idx):
-                    return defn_ids[labels[idx]]
-
-                i = 0
-                j = 1
-                for sim in sims:
-                    ai = adjust_idx(i)
-                    aj = adjust_idx(j)
-                    if sim > affinities[ai, aj]:
-                        affinities[ai, aj] = affinities[aj, ai] = sim
-                    j += 1
-                    if j >= len(labels):
-                        i += 1
-                        j = i + 1
-                        assert i < len(labels)
+        add_label(lemma_name, pos, defn_ids, affinities)
 
     # Overwrite with WmdSyn or WmdPartSyn
     if do_wmdsyn or do_wmdpartsyn:
-        wmd_defns = get_defns(lemma_name, pos, lower=True, include_enss=True, skip_empty=False)
-        np.maximum(affinities, wmd_affinities(wmdistance_partial if do_wmdpartsyn else wmdistance, wmd_defns), out=affinities)
+        wmd_defns = get_defns(
+            lemma_name, pos, lower=True, include_enss=True, skip_empty=False
+        )
+        np.maximum(
+            affinities,
+            wmd_affinities(
+                wmdistance_partial if do_wmdpartsyn else wmdistance,
+                wmd_defns
+            ),
+            out=affinities
+        )
 
     # Take Ety into account by setting links within the same ety to 1 and outside to 0
     if do_ety_same or do_ety_diff or do_ety_exemp:
