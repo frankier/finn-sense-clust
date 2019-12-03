@@ -63,7 +63,8 @@ def wmd_affinities(wmd_pair, defns):
     mat = mat_of_nbows(dictionary, bow_corpus)
 
     # div by 0 is okay since we guard against using these values later
-    with errstate(divide='ignore'):
+    # invalid is needed as well as divide because of 0 / 0
+    with errstate(divide='ignore', invalid='ignore'):
         norm_mat = mat / lengths[:, None]
 
     affinities = identity(num_defns)
