@@ -271,6 +271,7 @@ tinyrecord = "*"
 reference = "5c40c385566d5eab4c7d488a86f357ec57b69353"
 type = "git"
 url = "https://github.com/frankier/expcomb.git"
+
 [[package]]
 category = "main"
 description = "Fast hierarchical clustering routines for R and Python."
@@ -728,6 +729,7 @@ version = "1.1.9.dev1"
 reference = "ca029040175eaba65719e301045dd2c9a821281e"
 type = "git"
 url = "https://github.com/frankier/pyahocorasick.git"
+
 [[package]]
 category = "main"
 description = "C parser in Python"
@@ -969,17 +971,6 @@ version = "1.13.0"
 
 [[package]]
 category = "main"
-description = "A set of python modules for machine learning and data mining"
-name = "sklearn"
-optional = false
-python-versions = "*"
-version = "0.0"
-
-[package.dependencies]
-scikit-learn = "*"
-
-[[package]]
-category = "main"
 description = "Utils for streaming large files (S3, HDFS, gzip, bz2...)"
 name = "smart-open"
 optional = false
@@ -1077,6 +1068,7 @@ streamz = "^0.3.0"
 reference = "baddb3942cadac15bcbb50a9be22f7c41e8f136e"
 type = "git"
 url = "https://github.com/frankier/stiff.git"
+
 [[package]]
 category = "main"
 description = "Streams"
@@ -1183,6 +1175,7 @@ numpy = ">=1.13"
 reference = "f3b8c6d7f7ff6278a7e61b4735d59c64d2f10f35"
 type = "git"
 url = "https://github.com/frankier/vecstorenn.git"
+
 [[package]]
 category = "main"
 description = ""
@@ -1212,6 +1205,7 @@ wordfreq = "^2.2"
 reference = "e8fed631ee564d5e1a584346644c03e57d559891"
 type = "git"
 url = "https://github.com/frankier/wikiparse.git"
+
 [[package]]
 category = "main"
 description = "wordfreq is a Python library for looking up the frequencies of words in many"
@@ -1257,7 +1251,7 @@ version = "0.6.0"
 more-itertools = "*"
 
 [metadata]
-content-hash = "fe2ea5c27351b988f30031979525c8fab39e2c420f3600ddcf91617ccb26f99b"
+content-hash = "9c4a06b6a85579c075c3199724f6963334914a7af4f0d5abbbb76d541f1348a5"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -1355,7 +1349,6 @@ selenium = ["2d7131d7bc5a5b99a2d9b04aaf2612c411b03b8ca1b1ee8d3de5845a9be2cb3c", 
 sentence-transformers = ["86030a9e2c20a9fe2121c60de5a0f5d9a65316fdd0d3deffe219937da508d593"]
 sentencepiece = ["0014d39669289f7925c55e050932a907fa2199b1404385ddb4a69608f75e5b17", "07a544533bbefec3dda5ef15cd00e9b4b9abb3ed0c82eb4b4c57d5f5fd01180b", "1234b461c7706466368624d4a17661984f310708a61c6915174f9b49214ce001", "2055e1e089f08d25f822ede20d004df64d02789b290d115c20aae86d349afed4", "268bb70d89e6c808086844a96a2f086f3b05a66fc6d3e25e2c50691cb3fd14b1", "4240117d7af47b596b8bbea2a8a09ce9f25ac234027030541f188490ad4f367b", "49973f229728d858f9a97ad5c6f54c897b7dc10eddbd19f350f9870320540728", "4daf9930f5e8882e09b6b1052614ab02e7db40ca83032160d49e7956e447d1f4", "791ea9c0a5425f6dd2be6ea353ada94f53ca0964d96b5bf60d2a8e0b1abdfb5f", "7eac4a9e4c51f6297b451ce670fce104e6f0e74049e304416bdde6e66c2708a6", "8174139eca911fdbeab0fcf5eb5f96341959ccda9d403da7695261f20ec909f5", "845748caaebc2fc3b3292537b98d4c5a31e5f15285f7d061ce1f6c795fe2884e", "877a130c1787e2f210e5d7e317e8606ebdc212a1508101ff1bc155aa2ff51f20", "9d206332f6d03fd3e9be40dbe4c04538d0c4d732c5e6314058c1cec3868ef213", "ac049046d3a970aa9cb48a707a4d9cc8e1fcc060eeab7fcb7d03086b40dff70c", "c1b4a5a93b95dd2ac03f3c099654e418800c1ff8fd7d1691f42bdbe8719ae4d3", "ceb495ea00bf04ac9ee1a16a78a8d29efbac9e4ae4744bb1c11d8911fe7eb2e9", "d194cf7431dd87798963ff998380f1c02ff0f9e380cc922a07926b69e21c4e2b", "df2a04cffe27f1394008e55e75239804c907d9358214ff9d6252b1c3cfa7f4ab", "f664c90a0637f5e0ed87cefb337aeb976fa44f3c59cb0aecbb78ac0688184378", "fdbf04c50f131c36867bde2ae6ff48e1fd5216e43c8087fff1f762b7bf9d229a", "fde644520c9c21ab1ee3e2a93be65ca751c971ccc166f0fce20db7f5da324029"]
 six = ["1f1b7d42e254082a9db6279deae68afb421ceba6158efa6131de7b3003ee93fd", "30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66"]
-sklearn = ["e23001573aa194b834122d2b9562459bf5ae494a2d59ca6b8aa22c85a44c0e31"]
 smart-open = ["e64c2b5e62a452fa7fc4d21aecbada826ca21097bbe117841f8f4fc53dbab676"]
 smmap2 = ["0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde", "29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"]
 snakemake = ["60c1d11d3a63397b6d91ef394639cb454d9965217747b60fafb5573a498838e4"]
