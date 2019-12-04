@@ -3,9 +3,10 @@ from expcomb.table.spec import (
     CatValGroup,
     LookupGroupDisplay,
     UnlabelledMeasure,
-    MeasuresSplit,
     DimGroups,
     SumDimGroups,
+    SortedColsSpec,
+    SelectingMeasure,
 )
 from expcomb.filter import SimpleFilter, OrFilter
 
@@ -69,6 +70,13 @@ ALL_FILTER = OrFilter(
     SimpleFilter("SenseVec"),
     SimpleFilter("Comb"),
     SimpleFilter("Ety"),
+)
+
+BOTH_FILTER = OrFilter(
+    SimpleFilter("SoftCos"),
+    SimpleFilter("Wmd"),
+    SimpleFilter("SentBert"),
+    SimpleFilter("Comb"),
 )
 
 PATH_MAP = {
@@ -225,5 +233,30 @@ TABLES = [
             cnt_fmt,
         ),
         ALL_FILTER,
+    ),
+    (
+        "over_table",
+        SortedColsSpec(
+            SumDimGroups(two_levels=False),
+            DimGroups([
+                LookupGroupDisplay(
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synth-clus.csv",
+                        "manclus.csv",
+                    ]), PATH_MAP
+                ),
+            ]),
+            SelectingMeasure(
+                (SimpleFilter(gold_base="synth-clus.csv"), UnlabelledMeasure("o,rand")),
+                UnlabelledMeasure("o,macc"),
+            ),
+            fmt,
+            lambda col: col.sort(
+                reverse=True,
+                key=lambda tpl: float(tpl[0])
+            ),
+        ),
+        BOTH_FILTER,
     ),
 ]
