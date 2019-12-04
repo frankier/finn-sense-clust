@@ -17,7 +17,8 @@ def gen_multi_groupings(inf):
         cur_maps[-1].setdefault(frame_no, []).append(lemma_id)
         prev_lemma = lemma
         prev_clus_no = clus_no
-    yield prev_lemma, cur_maps
+    if prev_lemma is not None:
+        yield prev_lemma, cur_maps
 
 
 def gen_groupings(inf):
