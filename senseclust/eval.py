@@ -1,6 +1,6 @@
 from collections import Counter
 from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join, synset_key_clus, outer_join
-from senseclust.utils import self_xtab
+from senseclust.utils import self_xtab, split_line
 
 HEADERS = ("pb,wn", "manann,ref")
 ZERO_CONFUSION = dict(tp=0, tn=0, fp=0, fn=0)
@@ -21,6 +21,19 @@ def calc_pr(tp, fp, fn):
     return (p, r, hmean(p, r))
 
 
+def tab_one(g1, g2, t1, t2, cnt, incr):
+    if g1 == g2:
+        if t1 == t2:
+            cnt['tp'] += incr
+        else:
+            cnt['fn'] += incr
+    else:
+        if t1 == t2:
+            cnt['fp'] += incr
+        else:
+            cnt['tn'] += incr
+
+
 def eval_clus(gold_clus, test_clus, cnt):
     gold = synset_key_clus(gold_clus)
     test = synset_key_clus(test_clus)
@@ -30,16 +43,7 @@ def eval_clus(gold_clus, test_clus, cnt):
             raise UnguessedInstanceException(gss)
         pairs.append((gold[gss], test[gss]))
     for (g1, t1), (g2, t2) in self_xtab(pairs):
-        if g1 == g2:
-            if t1 == t2:
-                cnt['tp'] += 1
-            else:
-                cnt['fn'] += 1
-        else:
-            if t1 == t2:
-                cnt['fp'] += 1
-            else:
-                cnt['tn'] += 1
+        tab_one(g1, g2, t1, t2, cnt, 1)
 
 
 def rand(tp, tn, fp, fn):
@@ -146,7 +150,7 @@ def eval(gold, test, multi_group):
     return res
 
 
-def pre_cnt_lines(gold, test, multi_group):
+def pre_cnt_lemmas(gold, test, multi_group):
     line = next(gold)
     assert line.strip() in HEADERS
     lemma_line_map = {}
@@ -165,6 +169,61 @@ def pre_cnt_lines(gold, test, multi_group):
         else:
             eval_clus(gold_clus[0], test_clus[0], cnt)
         cnts[lemma_line_map[lemma]] = cnt
+    return cnts
+
+
+def index_gold_instances(gold, multi_group):
+    index_map = {}
+    rev_map = []
+    idx = 0
+
+    def add(key):
+        nonlocal idx
+        if key not in index_map:
+            index_map[key] = idx
+            rev_map.append(key)
+            idx += 1
+    for line in gold:
+        if multi_group:
+            frame_id, lemma_id = line.strip().split(",", 1)
+            lemma, clus_no, frame_no = frame_id.split(".", 2)
+        else:
+            lemma, frame_no, lemma_id = split_line(line)
+        add((lemma, lemma_id))
+    return index_map, rev_map, idx
+
+
+def add_cluster_partial_cnts(lemma, gc, tc, cnts, index_map):
+    gold = synset_key_clus(gc)
+    test = synset_key_clus(tc)
+    corres = []
+    for gss in gold:
+        if gss not in test:
+            raise UnguessedInstanceException(gss)
+        corres.append((gss, gold[gss], test[gss]))
+    for ss1, g1, t1 in corres:
+        cnt = cnts.setdefault(index_map[(lemma, ss1)], Counter(**ZERO_CONFUSION))
+        for ss2, g2, t2 in corres:
+            if ss2 == ss1:
+                continue
+            tab_one(g1, g2, t1, t2, cnt, 0.5)
+
+
+def pre_cnt_assignments(gold, test, multi_group):
+    line = next(gold)
+    assert line.strip() in HEADERS
+    index_map, rev_map, num_gold_instances = index_gold_instances(gold, multi_group)
+    gold.seek(0)
+    line = next(gold)
+    assert line.strip() in HEADERS
+    gold_gen = gen_gold_groupings(gold, multi_group)
+    cnts = {}
+    for lemma, gold_clus, test_clus in inner_join(gold_gen, gen_groupings(test)):
+        if multi_group:
+            for gc in gold_clus[0]:
+                add_cluster_partial_cnts(lemma, gc, test_clus[0], cnts, index_map)
+        else:
+            add_cluster_partial_cnts(lemma, gold_clus[0], test_clus[0], cnts, index_map)
     return cnts
 
 

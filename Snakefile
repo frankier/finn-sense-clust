@@ -98,20 +98,21 @@ rule bootstrap:
     input: [WORK + f"/bootstrap/cld/{corpus}/{eval}/{measure}.db" for corpus, eval, measure in BOOTSTRAPS]
 
 rule create_schedule:
-    input: WORDS + "/{corpus}"
-    output: WORK + "/bootstrap/schedules/{corpus}.pkl"
-    shell:
-        "python expc.py sigtest create-schedule" +
-        " --seed " + SEED +
-        " --iters " + ITERS +
-        " {input} {output}"
+    input: EVAL + "/{eval}.csv"
+    output: WORK + "/bootstrap/schedules/{eval}.pkl"
+    run:
+        multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"
+        shell(
+            "python expc.py sigtest create-schedule " + multi +
+            " --seed " + SEED + " --iters " + ITERS + " {input} {output}"
+        )
 
 rule resample:
     input:
         eval=EVAL + "/{eval}.csv",
         guess=lambda wc: f"{GUESS}/{BS_CORPUS_MAP[wc.corpus]}.{wc.nick}",
         result=lambda wc: f"{RESULTS}/{BS_CORPUS_MAP[wc.corpus]}--{wc.eval}--{wc.nick}.db",
-        schedule=WORK + "/bootstrap/schedules/{corpus}.pkl",
+        schedule=WORK + "/bootstrap/schedules/{eval}.pkl",
     output: WORK + "/bootstrap/resamples/{nick,[^/]+}/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.pkl",
     run:
         multi = "--multi" if wildcards.eval in MULTI_EVAL else "--single"

@@ -1,12 +1,13 @@
 import click
+import pickle
 from os.path import basename, join as pjoin
 from expcomb.cmd import mk_expcomb
 from expcomb.table.utils import pick_str
 from expcomb.utils import TinyDBParam, mk_iden
-from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, mk_compare_resampled, simple_create_schedule, simple_compare_resampled
+from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, simple_compare_resampled, bootstrap
 from senseclust.methods.base import ExpPathInfo
 from senseclust.methods import EXPERIMENTS
-from senseclust.eval import eval as eval_func, gen_gold_groupings, pre_cnt_lines, eval_resampled, UnguessedException
+from senseclust.eval import eval as eval_func, gen_gold_groupings, pre_cnt_assignments, eval_resampled, UnguessedException
 from senseclust.evaltables import TABLES
 from senseclust.groupings import gen_groupings
 
@@ -41,9 +42,17 @@ class SenseClustBootstrapper(Bootstrapper):
             result = pick_str(result, self.measure)
         return result
 
+    def create_schedule(self, gold, bootstrap_iters=1000, seed=None):
+        from senseclust.eval import index_gold_instances, HEADERS
+        with open(gold) as gold_fp:
+            line = next(gold_fp)
+            assert line.strip() in HEADERS
+            _, _, length = index_gold_instances(gold_fp, self.multi)
+        return self.create_schedule_from_size(length, bootstrap_iters, seed)
+
     def create_score_dist(self, gold, guess, schedule):
         dist = []
-        cnt_map = pre_cnt_lines(open(gold), open(guess), self.multi)
+        cnt_map = pre_cnt_assignments(open(gold), open(guess), self.multi)
         for resample in schedule:
             result = eval_resampled(resample, cnt_map)
             if self.measure is not None:
@@ -65,8 +74,18 @@ def resample(outf, gold, guess, result, schedule, measure=None, multi=False):
 
 
 simple_compare_resampled()
-single_bootstrapper = SenseClustBootstrapper(False)
-simple_create_schedule(single_bootstrapper)
+
+
+@bootstrap.command("create-schedule")
+@click.argument("gold", type=click.Path())
+@click.argument("dumpf", type=click.File("ab"))
+@click.option("--iters", type=int, default=1000)
+@click.option("--seed", type=int, default=None)
+@click.option("--multi/--single")
+def create_schedule(gold, dumpf, iters, seed, multi=False):
+    schedule = SenseClustBootstrapper(multi).create_schedule(gold, bootstrap_iters=iters, seed=seed)
+    for resample in schedule:
+        pickle.dump(resample, dumpf)
 
 
 def mk_eval(multi):
