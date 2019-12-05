@@ -4,7 +4,7 @@ from os.path import basename, join as pjoin
 from expcomb.cmd import mk_expcomb
 from expcomb.table.utils import pick_str
 from expcomb.utils import TinyDBParam, mk_iden
-from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, simple_compare_resampled, bootstrap
+from expcomb.sigtest.bootstrap import Bootstrapper, mk_resample, simple_compare_resampled, bootstrap, read_schedule
 from senseclust.methods.base import ExpPathInfo
 from senseclust.methods import EXPERIMENTS
 from senseclust.eval import eval as eval_func, gen_gold_groupings, pre_cnt_assignments, eval_resampled, UnguessedException
@@ -70,7 +70,7 @@ class SenseClustBootstrapper(Bootstrapper):
 @click.argument("measure", required=False)
 @click.option("--multi/--single")
 def resample(outf, gold, guess, result, schedule, measure=None, multi=False):
-    return SenseClustBootstrapper(multi, measure), outf, gold, guess, result, schedule, None
+    return SenseClustBootstrapper(multi, measure), outf, gold, guess, result, read_schedule(schedule), None
 
 
 simple_compare_resampled()
