@@ -8,11 +8,11 @@ Install::
 
 Make the evaluation materials::
 
-    $ DATABASE_URL=sqlite:///path/to/db.db make
+    $ DATABASE_URL=sqlite:///path/to/db.db poetry run make
 
 Run the experiments::
 
-    $ DATABASE_URL=sqlite:///path/to/db.db snakemake
+    $ DATABASE_URL=sqlite:///path/to/db.db poetry run snakemake
 
 Print the tables::
 
