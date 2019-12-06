@@ -76,11 +76,27 @@ rule gloss_all:
     input: expand(WORK + "/output/{seg}.csv", seg=SEGS)
 
 # Bootstrapping
-BOOTSTRAPS = [
-    ("conc-words", "frame-synset-union2.filtered2", "macc"),
-    ("synth-words", "synth-clus", "rand"),
-    ("man-words", "manclus", "macc"),
-]
+BOOTSTRAPS = (
+    [
+        ("conc-words", gold, "macc"),
+        for gold in [
+            "frame-synset-union2.filtered2",
+            "synset-rel.filtered2",
+            "joined-link.filtered2",
+            "joined-model.filtered2"
+        ]
+    ] +
+    [("synth-words", "synth-clus", "rand")] + 
+    [
+        ("man-words", gold, "macc"),
+        for gold in [
+            "manclus",
+            "manclus.wn",
+            "manclus.wiki",
+            "manclus.link",
+        ]
+    ]
+)
 
 BS_CORPUS_MAP = {
     "conc-words": "all-words",
@@ -95,7 +111,7 @@ def cmp_inputs(wildcards):
 
 
 rule bootstrap:
-    input: [WORK + f"/bootstrap/cld/{corpus}/{eval}/{measure}.db" for corpus, eval, measure in BOOTSTRAPS]
+    input: [WORK + f"/bootstrap/nsd/{corpus}/{eval}/{measure}.db" for corpus, eval, measure in BOOTSTRAPS]
 
 rule create_schedule:
     input: EVAL + "/{eval}.csv"
@@ -127,8 +143,8 @@ rule compare:
     shell:
         "python expc.py sigtest compare-resampled {input} {output}"
 
-rule cld:
+rule nsd_from_best:
     input: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
-    output: WORK + "/bootstrap/cld/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
+    output: WORK + "/bootstrap/nsd/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
     shell:
-        "python expc.py sigtest cld {input} {output}"
+        "python scripts/expc.py sigtest nsd-from-best {input} {output}"
