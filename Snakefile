@@ -78,7 +78,7 @@ rule gloss_all:
 # Bootstrapping
 BOOTSTRAPS = (
     [
-        ("conc-words", gold, "macc"),
+        ("conc-words", gold, "macc")
         for gold in [
             "frame-synset-union2.filtered2",
             "synset-rel.filtered2",
@@ -88,7 +88,7 @@ BOOTSTRAPS = (
     ] +
     [("synth-words", "synth-clus", "rand")] + 
     [
-        ("man-words", gold, "macc"),
+        ("man-words", gold, "macc")
         for gold in [
             "manclus",
             "manclus.wn",
