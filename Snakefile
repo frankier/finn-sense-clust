@@ -147,4 +147,4 @@ rule nsd_from_best:
     input: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
     output: WORK + "/bootstrap/nsd/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
     shell:
-        "python scripts/expc.py sigtest nsd-from-best {input} {output}"
+        "python expc.py sigtest nsd-from-best {input} {output}"
