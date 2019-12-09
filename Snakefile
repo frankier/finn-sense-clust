@@ -68,7 +68,7 @@ rule run_gloss:
     input: WORDS + "/really-all-words-split/{seg}"
     output: WORK + "/output/{seg}.csv"
     shell:
-        "python expc.py --filter 'nick=gloss' test --exemplars {input} {output}"
+        "python expc.py --filter 'nick=comb.bert.ety.ex' test --exemplars {input} {output}"
 
 SEGS = glob_wildcards(WORDS + "/really-all-words-split/{seg}")[0]
 
