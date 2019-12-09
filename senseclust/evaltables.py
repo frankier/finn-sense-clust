@@ -1,3 +1,5 @@
+from itertools import groupby
+
 from expcomb.table.spec import (
     SumTableSpec,
     CatValGroup,
@@ -7,6 +9,7 @@ from expcomb.table.spec import (
     SumDimGroups,
     SortedColsSpec,
     SelectingMeasure,
+    box_highlight,
 )
 from expcomb.filter import SimpleFilter, OrFilter
 
@@ -100,11 +103,24 @@ def cnt_fmt(x):
     return ",".join((str(x[k]) for k in ["tp", "fp", "fn", "tn"]))
 
 
+def real_ultimate_over_sorted_groups(docs):
+    def key_doc(doc):
+        res = []
+        if doc["path"] == ["Comb"]:
+            res.extend([True, not doc["opts"]["do_bert"], doc["opts"]["do_wmdsyn"], doc["opts"]["do_wmdpartsyn"], doc["opts"]["do_label"], doc["opts"]["do_ety"], doc["opts"]["do_ety_exemp"]])
+        else:
+            res.append(False)
+        res.append(doc["disp"])
+        return res
+
+    return ((k[-1], v) for k, v in groupby(sorted(docs, key=key_doc), key=key_doc))
+
+
 TABLES = [
     (
         "wordnet_table",
         SumTableSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -124,7 +140,7 @@ TABLES = [
     (
         "wiktionary_table",
         SumTableSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -142,7 +158,7 @@ TABLES = [
     (
         "everything_table",
         SumTableSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -165,7 +181,7 @@ TABLES = [
     (
         "everything_f1",
         SumTableSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -189,7 +205,7 @@ TABLES = [
     (
         "everything_rand",
         SumTableSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -213,7 +229,7 @@ TABLES = [
     (
         "everything_mat",
         SumTableSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -237,7 +253,7 @@ TABLES = [
     (
         "over_table",
         SortedColsSpec(
-            SumDimGroups(two_levels=False),
+            SumDimGroups(),
             DimGroups([
                 LookupGroupDisplay(
                     CatValGroup("gold_base", [
@@ -258,5 +274,33 @@ TABLES = [
             ),
         ),
         BOTH_FILTER,
+    ),
+    (
+        "real_ultimate_over",
+        SumTableSpec(
+            SumDimGroups(real_ultimate_over_sorted_groups),
+            DimGroups([
+                LookupGroupDisplay(
+                    CatValGroup("gold_base", [
+                        "frame-synset-union2.filtered2.csv",
+                        "synset-rel.filtered2.csv",
+                        "joined-link.filtered2.csv",
+                        "joined-model.filtered2.csv",
+                        "synth-clus.csv",
+                        "manclus.csv",
+                        "manclus.wn.csv",
+                        "manclus.wiki.csv",
+                        "manclus.link.csv",
+                    ]), PATH_MAP
+                ),
+            ]),
+            SelectingMeasure(
+                (SimpleFilter(gold_base="synth-clus.csv"), UnlabelledMeasure("o,rand")),
+                UnlabelledMeasure("o,macc"),
+            ),
+            fmt,
+            box_highlight,
+        ),
+        ALL_FILTER,
     ),
 ]

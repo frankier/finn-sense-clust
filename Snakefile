@@ -146,5 +146,10 @@ rule compare:
 rule nsd_from_best:
     input: WORK + "/bootstrap/cmp/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
     output: WORK + "/bootstrap/nsd/{corpus,[^/]+}/{eval,[^/]+}/{measure,[^/]+}.db"
-    shell:
-        "python expc.py sigtest nsd-from-best {input} {output}"
+    run:
+        excl = "--exclude-best" if wildcards.measure == "rand" else "--include-best"
+        shell(
+            "python expc.py sigtest nsd-from-best --delta 0.001 " +
+            excl +
+            " {input} {output}"
+        )
