@@ -64,15 +64,15 @@ rule eval:
 
 # Final output
 
-rule run_gloss:
+rule run_best:
     input: WORDS + "/really-all-words-split/{seg}"
     output: WORK + "/output/{seg}.csv"
     shell:
         "python expc.py --filter 'nick=comb.bert.ety.ex' test --exemplars {input} {output}"
 
-SEGS = glob_wildcards(WORDS + "/really-all-words-split/{seg}")[0]
+SEGS = [seg for seg in glob_wildcards(WORDS + "/really-all-words-split/{seg}")[0] if seg != ".done"]
 
-rule gloss_all:
+rule best_all:
     input: expand(WORK + "/output/{seg}.csv", seg=SEGS)
 
 # Bootstrapping
