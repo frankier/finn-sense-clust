@@ -16,7 +16,7 @@ def mk_distance_matrix(vecs, dictionary):
     distance_matrix = zeros((vocab_len, vocab_len), dtype=double)
     for i, t1 in dictionary.items():
         for j, t2 in islice(dictionary.items(), i):
-            # Compute Euclidean distance between word vectors.
+            # Compute cosine distance between word vectors.
             distance_matrix[i, j] = distance_matrix[j, i] = cosine(vecs[t1], vecs[t2])
     return distance_matrix
 
