@@ -1,7 +1,7 @@
 from sqlalchemy.sql import select
 from senseclust.tables import freqs
 from wikiparse.tables import headword, word_sense
-from .consts import POS_MAP
+from finntk.data.wordnet_pos import POS_MAP
 
 joined = (
     headword.join(

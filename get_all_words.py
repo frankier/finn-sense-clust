@@ -5,7 +5,7 @@ from wikiparse.tables import headword, word_sense
 from wikiparse.utils.db import get_session
 from senseclust.wordnet import get_lemma_objs
 from senseclust.queries import joined
-from senseclust.consts import POS_MAP
+from finntk.data.wordnet_pos import POS_MAP
 
 
 def norm(lemma):

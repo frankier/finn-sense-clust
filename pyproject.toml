@@ -12,13 +12,13 @@ numpy = "*"
 scipy = "*"
 matplotlib = "*"
 click = ">=7"
-finntk = ">=0.0.62"
+finntk = ">=0.0.66"
 fastcluster = "*"
 networkx = "*"
 wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
 stiff = {git = "https://github.com/frankier/stiff.git"}
 paramiko = "^2.4"
-expcomb = {git = "https://github.com/frankier/expcomb.git", commit = "01a6acb25f6a3f585f8826e8bbea45e9ed7ba9bd"}
+expcomb = {git = "https://github.com/frankier/expcomb.git", rev = "4722095b8757fd8717ee033d327b2447a0e27051"}
 snakemake = "^5.5.4"
 vecstorenn = {git = "https://github.com/frankier/vecstorenn.git"}
 sentence-transformers = "^0.2.3"
