@@ -12,7 +12,7 @@ import re
 import warnings
 
 
-SYNSET_RE = re.compile(r"[0-9]{8}-[anv]")
+SYNSET_RE = re.compile(r"[0-9]{8}-[anvrs]")
 
 
 def group_by(it):
