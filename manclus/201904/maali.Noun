@@ -5,12 +5,12 @@ Etymology2.Noun.1 # [[target]]
 08660934-n # [qf2, fin] kohdealue, maali, maalialue, pilkka, target, target_area: the location of the target that is to be hit (hyp: topographic_point.n.01; root: entity.n.01; lexname: noun.location)
 04394261-n # [qf2, fin] butt, maali, maalitaulu, pilkka, target: sports equipment consisting of an object set up for a marksman or archer to aim at (hyp: sports_equipment.n.01; root: entity.n.01; lexname: noun.artifact)
 07262108-n # [qf2, fin, qwf] maali, maalitaulu, mark, pilkka, target: a reference point to shoot at (hyp: reference_point.n.01; root: entity.n.01; lexname: noun.communication)
+03442756-n # [qf2, fin, qwf] goal, maali: game equipment consisting of the place toward which players of a game try to advance a ball or puck in order to score points (hyp: game_equipment.n.01; root: entity.n.01; lexname: noun.artifact)
 
 Etymology2.Noun.2 # {{lb|fi|American football}} [[touchdown]]
 00186634-n # [qf2, fin] maali, piste, score: the act of scoring in a game or sport (hyp: success.n.02; root: entity.n.01; lexname: noun.act)
 00187337-n # [qf2, fin, qwf] goal, maali: a successful attempt at scoring (hyp: score.n.10; root: entity.n.01; lexname: noun.act)
 00188766-n # [qf2, fin] maali, touchdown: a score in American football; being in possession of the ball across the opponents' goal line (hyp: score.n.10; root: entity.n.01; lexname: noun.act)
-03442756-n # [qf2, fin, qwf] goal, maali: game equipment consisting of the place toward which players of a game try to advance a ball or puck in order to score points (hyp: game_equipment.n.01; root: entity.n.01; lexname: noun.artifact)
 
 Etymology2.Noun.3 # {{lb|fi|sports}} [[finish line]], [[finish]]
 07353376-n # [qf2, fin] finish, loppu, maali: designated event that concludes a contest (especially a race) (hyp: happening.n.01; root: entity.n.01; lexname: noun.event)

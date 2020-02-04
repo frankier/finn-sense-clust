@@ -1,10 +1,11 @@
 Etymology1.Noun.1 # [[cauldron]] {{gloss|large bowl-shaped pot}}
 Etymology1.Noun.2 # [[pot]]; typically one made of thick material such as cast iron or pottery for slow cooking; compare {{m|fi|kattila}}
 02978753-n # [qf2, fin] casserole, pata, vuoka: large deep dish in which food can be cooked and served (hyp: dish.n.01; root: entity.n.01; lexname: noun.artifact)
-03612965-n # [qf2, fin] kettle, kettledrum, pata, patarumpu, timpani, tympani, tympanum: a large hemispherical brass or copper percussion instrument with a drumhead that can be tuned by adjusting the tension on it (hyp: percussion_instrument.n.01; root: entity.n.01; lexname: noun.artifact)
 03722827-n # [qf2, fin] marmite, pata: a large pot especially one with legs used e.g. for cooking soup (hyp: pot.n.01; root: entity.n.01; lexname: noun.artifact)
 03990474-n # [qf2, qwf, fin] kattila, pata, pot: metal or earthenware cooking vessel that is usually round and deep; often has a handle and lid (hyp: cooking_utensil.n.01, vessel.n.03; root: entity.n.01; lexname: noun.artifact)
 02939185-n # [qf2, qwf] caldron, cauldron, kattila, pata: a very large pot that is used for boiling (hyp: pata.n.05; root: entiteetti.n.01; lexname: noun.artifact)
+
+03612965-n # [qf2, fin] kettle, kettledrum, pata, patarumpu, timpani, tympani, tympanum: a large hemispherical brass or copper percussion instrument with a drumhead that can be tuned by adjusting the tension on it (hyp: percussion_instrument.n.01; root: entity.n.01; lexname: noun.artifact)
 
 Etymology1.Noun.3 # [[pataruoka]]: [[stew]], [[hot pot]], [[chowder]] {{gloss|dish prepared in such vessel}}
 07589458-n # [qf2, fin] bigos, muhennos, pata: a Polish stew of cabbage and meat (hyp: stew.n.02; root: entity.n.01; lexname: noun.food)
