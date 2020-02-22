@@ -13,7 +13,7 @@ from functools import reduce
 GROUPING_INCLUSION_CRITERIA = ('smap-ambg', 'smap2', 'smap', 'ambg', 'none')
 PRED_MAT = 'data/PredicateMatrix.v1.3/PredicateMatrix.v1.3.txt'
 PROPBANK_DEFNS = 'data/Finnish_PropBank/gen_lemmas/pb-defs.tsv'
-MODEL_RE = re.compile(r".*\(tags: model:([^, \)]+)\).*")
+MODEL_RE = re.compile(r".*\(tags:[^\)]*model:([^, \)]+)\).*")
 
 csvin_arg = click.argument("csvin", type=click.File('r'))
 csvout_arg = click.argument("csvout", type=click.File('w'))
