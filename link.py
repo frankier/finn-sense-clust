@@ -98,6 +98,8 @@ def get_words(csvin, multi_group, pos):
 def filter_clus(csvin, csvout, wn):
     import stiff.wordnet.fin
     csvin = skip_first(csvin, csvout)
+    dropped_non_smap = 0
+    dropped_lemmas = 0
     for lemma, groupings in gen_groupings(csvin):
         num_synsets = 0
         empty_groups = []
@@ -105,6 +107,7 @@ def filter_clus(csvin, csvout, wn):
             new_synsets = []
             for synset in synsets:
                 if not is_smap(wn, lemma, synset):
+                    dropped_non_smap += 1
                     continue
                 new_synsets.append(synset)
                 num_synsets += 1
@@ -116,6 +119,9 @@ def filter_clus(csvin, csvout, wn):
             del groupings[group_num]
         if num_synsets >= 2:
             write_grouping(lemma, groupings, csvout)
+        else:
+            dropped_lemmas += 1
+    print(f"Dropped non-smap: {dropped_non_smap}; Dropped lemmas: {dropped_lemmas}", file=sys.stderr)
 
 
 def same_diff_of_clus(clus):
@@ -372,17 +378,20 @@ def filter_grouping_repeats(grouping):
         for filtered_synset in filtered_synsets:
             if filtered_synset in synsets:
                 synsets.remove(filtered_synset)
-    return grouping
+    return grouping, filtered_synsets
 
 
 @link.command(short_help="Remove synsets which are repeated in multiple clusters")
 @csvin_arg
 @csvout_arg
 def filter_repeats(csvin, csvout):
+    num_filtered = 0
     csvin = skip_first(csvin, csvout)
     for lemma, grouping in gen_groupings(csvin):
-        filter_grouping_repeats(grouping)
+        grouped, filtered = filter_grouping_repeats(grouping)
+        num_filtered += len(filtered)
         write_grouping(lemma, grouping, csvout)
+    print(f"Filtered: {num_filtered}", file=sys.stderr)
 
 
 @link.command(short_help="Join FinnPropBank with PredicateMatrix to get (frame, synset) rel")
