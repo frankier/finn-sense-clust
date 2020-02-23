@@ -4,7 +4,7 @@ from finntk.wordnet.utils import fi2en_post
 from nltk.corpus import wordnet
 import click
 import re
-from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join, skip_first, filter_grouping_repeats
+from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join, skip_first, filter_grouping_repeats, same_diff_of_clus
 from senseclust.wordnet import get_lemma_names
 from senseclust.utils.cmd import csvin_arg, csvout_arg, pb_defns_arg, wns_arg, predmat_arg, get_writer, get_reader, get_eng_pb_wn_map, lemma_id_to_synset_id
 
