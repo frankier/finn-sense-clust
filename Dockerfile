@@ -6,12 +6,13 @@ ENV LANG=C.UTF-8
 # Apt-get requirements
 RUN apt-get update && apt-get install -y \
     # Python/Poetry
-        python3 python3.7 python3-pip curl wget \
+        python3 python3-venv python3.7 python3-pip curl wget \
     # Python build requirements
         python3-dev python3.7-dev build-essential libffi-dev
 
 # Poetry
-RUN set -ex && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
+RUN curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py -o get-poetry.py
+RUN python3 get-poetry.py --version 1.0.0
 RUN ~/.poetry/bin/poetry config virtualenvs.create false
 
 # Fixup Python
