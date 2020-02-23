@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 # Poetry
 RUN set -ex && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python3
-RUN ~/.poetry/bin/poetry config settings.virtualenvs.create false
+RUN ~/.poetry/bin/poetry config virtualenvs.create false
 
 # Fixup Python
 RUN ln -sf /usr/bin/python3.7 /usr/bin/python
