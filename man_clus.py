@@ -12,7 +12,7 @@ from wikiparse.utils.db import get_session, insert
 import wordfreq
 from senseclust.tables import metadata, freqs
 from senseclust.groupings import gen_groupings
-from senseclust.utils import split_line, is_wn_ref
+from senseclust.utils.clust import split_line, is_wn_ref
 from os.path import basename
 import itertools
 from nltk.tokenize import word_tokenize

@@ -1,4 +1,4 @@
-from senseclust.utils import group_clust, get_defns
+from senseclust.utils.clust import group_clust, get_defns
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 

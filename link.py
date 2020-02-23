@@ -1,52 +1,16 @@
 from collections import Counter
-import csv
 import sys
 from finntk.wordnet.utils import fi2en_post
 from nltk.corpus import wordnet
 import click
 import re
-from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join, skip_first
-from senseclust.wordnet import get_lemma_names, WORDNETS
-from functools import reduce
+from senseclust.groupings import gen_groupings, gen_multi_groupings, write_grouping, clus_key_clus, synset_key_clus, outer_join, skip_first, filter_grouping_repeats
+from senseclust.wordnet import get_lemma_names
+from senseclust.utils.cmd import csvin_arg, csvout_arg, pb_defns_arg, wns_arg, predmat_arg, get_writer, get_reader, get_eng_pb_wn_map, lemma_id_to_synset_id
 
 
 GROUPING_INCLUSION_CRITERIA = ('smap-ambg', 'smap2', 'smap', 'ambg', 'none')
-PRED_MAT = 'data/PredicateMatrix.v1.3/PredicateMatrix.v1.3.txt'
-PROPBANK_DEFNS = 'data/Finnish_PropBank/gen_lemmas/pb-defs.tsv'
 MODEL_RE = re.compile(r".*\(tags:[^\)]*model:([^, \)]+)\).*")
-
-csvin_arg = click.argument("csvin", type=click.File('r'))
-csvout_arg = click.argument("csvout", type=click.File('w'))
-pb_defns_arg = click.option('--pb-defns', default=PROPBANK_DEFNS,
-                            help='Path to Finnish PropBank pb-defs.tsv file',
-                            type=click.File('r'))
-wns_arg = click.option('--wn', type=click.Choice(WORDNETS),
-                       default=['fin'], multiple=True,
-                       help='Which WordNet (multiple allowed) to use: OMW FiWN, '
-                       'FiWN2 or OMW FiWN wikitionary based extensions')
-
-
-def get_writer(csvout):
-    csvout = csv.writer(csvout)
-    csvout.writerow(['pb', 'wn'])
-    return csvout
-
-
-def get_reader(propbank):
-    return csv.DictReader(propbank, delimiter='\t')
-
-
-def get_eng_pb_wn_map(matrix, reject_non_english):
-    mapping = {}
-    matrix = get_reader(matrix)
-    for row in matrix:
-        if reject_non_english and row['1_ID_LANG'] != 'id:eng':
-            continue
-        if row['11_WN_SENSE'] != 'wn:NULL':
-            pb = row['16_PB_ROLESET'].split(':', 1)[1]
-            wn = row['11_WN_SENSE'].split(':', 1)[1]
-            mapping.setdefault(pb, set()).add(wn)
-    return mapping
 
 
 @click.group()
@@ -122,116 +86,6 @@ def filter_clus(csvin, csvout, wn):
         else:
             dropped_lemmas += 1
     print(f"Dropped non-smap: {dropped_non_smap}; Dropped lemmas: {dropped_lemmas}", file=sys.stderr)
-
-
-def same_diff_of_clus(clus):
-    from senseclust.utils import self_xtab
-    syns_clus = list(synset_key_clus(clus).items())
-    for (s1, c1), (s2, c2) in self_xtab(syns_clus):
-        if c1 == c2:
-            yield s1, s2, 1
-        else:
-            yield s1, s2, -1
-
-
-def graph_of_clus(clus):
-    import networkx as nx
-    graph = nx.Graph()
-    for s1, s2, weight in same_diff_of_clus(clus):
-        graph.add_edge(s1, s2, weight=weight)
-    return graph
-
-
-def clus_of_graph(graph):
-    partition = {}
-    for edge in graph.edges:
-        if graph.edges[edge]['weight'] != 1:
-            continue
-        (l, r) = edge
-        if l in partition and r in partition:
-            if partition[l] is partition[r]:
-                continue
-            # Merge sets
-            partition[l].update(partition[r])
-            for elem in partition[r]:
-                partition[elem] = partition[l]
-        elif l in partition or r in partition:
-            # Add singleton to set
-            if r in partition:
-                (l, r) = (r, l)
-            partition[l].add(r)
-            partition[r] = partition[l]
-        else:
-            # Add new two element set
-            partition[l] = partition[r] = {l, r}
-    unique_partition = {id(s): s for s in partition.values()}
-    return {"{:0>2}".format(idx + 1): v for idx, v in enumerate(unique_partition.values())}
-
-
-def grouping_len(grouping):
-    return len([val for li in grouping.values() for val in li])
-
-
-@link.command()
-@csvin_arg
-@csvout_arg
-@wns_arg
-def synth_clus(csvin, csvout, wn):
-    csvout.write("pb,wn\n")
-    import networkx as nx
-    from networkx.algorithms.clique import find_cliques
-    from networkx.algorithms.operators.binary import compose
-    import stiff.wordnet.fin
-    from senseclust.utils import self_xtab
-    conc_clus = {}
-    next(csvin)
-    for lemma, groupings in gen_groupings(csvin):
-        conc_clus[lemma] = groupings
-    all_synth_clus = {}
-    csvin.seek(0)
-    next(csvin)
-    for lemma, groupings in gen_groupings(csvin):
-        synth_clus = {}
-        for group_num, synsets in groupings.items():
-            for synset in synsets:
-                for synth_lemma in get_lemma_names(synset, wn):
-                    synth_clus.setdefault(synth_lemma, {}).setdefault(group_num, set()).add(synset)
-        for lemma, grouping in synth_clus.items():
-            filter_grouping_repeats(grouping)
-            if grouping_len(grouping) <= 1:
-                continue
-            all_synth_clus.setdefault(lemma, []).append(grouping)
-    for lemma, clusts in sorted(all_synth_clus.items()):
-        # Build inc/excl graph
-        graph_clusts = []
-        for clus in clusts:
-            if grouping_len(clus) == 1:
-                continue
-            graph_clusts.append(graph_of_clus(clus))
-        # Collect all contradictions
-        contradictions = nx.Graph()
-        for gc1, gc2 in self_xtab(graph_clusts):
-            for e1 in gc1.edges:
-                if e1 not in gc2.edges:
-                    continue
-                if gc1.edges[e1]['weight'] == gc2.edges[e1]['weight']:
-                    continue
-                contradictions.add_edge(*e1)
-        # Merge graphs
-        merged = reduce(compose, graph_clusts)
-        if contradictions.edges:
-            print(f"Contradiction in clustering for {lemma}", file=sys.stderr)
-            print(contradictions.edges, file=sys.stderr)
-            merged.remove_edges_from(contradictions.edges)
-        # Subtract conc_clus
-        if lemma in conc_clus:
-            conc_graph = graph_of_clus(conc_clus[lemma])
-            merged.remove_edges_from([e for e in merged.edges if e in conc_graph.edges])
-        # Convert back to groupings
-        for group_idx, clique in enumerate(find_cliques(merged)):
-            grouping = clus_of_graph(merged.subgraph(clique))
-            group_lemma = "{}.{:0>2}".format(lemma, group_idx + 1)
-            write_grouping(group_lemma, grouping, csvout)
 
 
 @link.command(short_help="Write out lemmas in synset")
@@ -366,21 +220,6 @@ def extract_synset_rel(pb_defns, csvout):
     print(f"Found: {found}; Not found: {not_found}", file=sys.stderr)
 
 
-def filter_grouping_repeats(grouping):
-    seen_synsets = set()
-    filtered_synsets = set()
-    for group_num, synsets in grouping.items():
-        for synset in synsets:
-            if synset in seen_synsets:
-                filtered_synsets.add(synset)
-            seen_synsets.add(synset)
-    for synsets in grouping.values():
-        for filtered_synset in filtered_synsets:
-            if filtered_synset in synsets:
-                synsets.remove(filtered_synset)
-    return grouping, filtered_synsets
-
-
 @link.command(short_help="Remove synsets which are repeated in multiple clusters")
 @csvin_arg
 @csvout_arg
@@ -395,9 +234,7 @@ def filter_repeats(csvin, csvout):
 
 
 @link.command(short_help="Join FinnPropBank with PredicateMatrix to get (frame, synset) rel")
-@click.option('--pred-matrix', default=PRED_MAT,
-              help='Path to PredicateMatrix.v?.?.txt TSV file',
-              type=click.File('r'))
+@predmat_arg
 @pb_defns_arg
 @click.option('--reject-non-english/--accept-non-english', default=False,
               help='Accept or reject non-English based mappings')
@@ -431,9 +268,8 @@ def join_synset(pred_matrix, pb_defns, csvout, reject_non_english, use_model, sy
         if pb is not None and pb in mapping:
             for wn in mapping[pb]:
                 if synset:
-                    csvout.writerow((pb_finn, wordnet.ss2of(wordnet.lemma_from_key(wn + "::").synset())))
-                else:
-                    csvout.writerow((pb_finn, wn))
+                    wn = lemma_id_to_synset_id(wn)
+                csvout.writerow((pb_finn, wn))
 
 
 @link.command(short_help="Perform a priority union on (frame, synset) rels")

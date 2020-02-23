@@ -1,7 +1,7 @@
 import os
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
-from senseclust.utils import (
+from senseclust.utils.clust import (
     graph_clust_grouped, cos_affinities_none, unclusterable_default,
     get_wiktionary_defns, get_wordnet_defns
 )

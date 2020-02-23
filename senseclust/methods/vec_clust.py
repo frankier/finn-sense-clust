@@ -1,6 +1,6 @@
 from finntk.wordnet.utils import pre_id_to_post
 from finntk.emb.autoextend import vecs, get_lemma_id
-from senseclust.utils import graph_clust_grouped, cos_affinities_none, unclusterable_default
+from senseclust.utils.clust import graph_clust_grouped, cos_affinities_none, unclusterable_default
 from senseclust.wordnet import get_lemma_objs, WORDNETS
 from .base import SenseClusExp
 from expcomb.utils import mk_nick

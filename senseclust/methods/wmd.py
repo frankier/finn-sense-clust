@@ -1,5 +1,5 @@
 from finntk.emb.fasttext import vecs
-from senseclust.utils import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
+from senseclust.utils.clust import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from numpy import int, double, zeros, identity, errstate

@@ -2,7 +2,7 @@ from gensim.similarities import SoftCosineSimilarity
 from gensim.models.keyedvectors import SparseTermSimilarityMatrix, WordEmbeddingSimilarityIndex
 from finntk.emb.fasttext import vecs
 import numpy as np
-from senseclust.utils import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
+from senseclust.utils.clust import graph_clust_grouped, get_defns, unclusterable_default, mk_dictionary_bow_corpus
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from functools import partial

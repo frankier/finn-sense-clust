@@ -1,5 +1,5 @@
 from .base import SenseClusExp
-from senseclust.utils import get_wiktionary, get_session
+from senseclust.utils.clust import get_wiktionary, get_session
 from expcomb.utils import mk_nick
 
 

@@ -1,6 +1,6 @@
 from collections import Counter
 from senseclust.groupings import gen_groupings, gen_multi_groupings, inner_join, synset_key_clus, outer_join
-from senseclust.utils import self_xtab, split_line
+from senseclust.utils.clust import self_xtab, split_line
 
 HEADERS = ("pb,wn", "manann,ref")
 ZERO_CONFUSION = dict(tp=0, tn=0, fp=0, fn=0)

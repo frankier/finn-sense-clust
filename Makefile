@@ -10,7 +10,7 @@ all: all-words all-eval
 
 all-words: words/man-words words/all-words words/really-all-words-split/.done
 
-all-eval: eval/frame-synset-union2.filtered2.csv eval/synset-rel.filtered2.csv eval/joined-link.filtered2.csv eval/joined-model.filtered2.csv eval/synth-clus.csv eval/manclus.csv eval/manclus.wn.csv eval/manclus.wiki.csv eval/manclus.link.csv
+all-eval: eval/frame-synset-union2.filtered2.csv eval/synset-rel.filtered2.csv eval/joined-link.filtered2.csv eval/joined-model.filtered2.csv eval/synth-from-conc.csv eval/synth-from-predmat.csv eval/manclus.csv eval/manclus.wn.csv eval/manclus.wiki.csv eval/manclus.link.csv
 
 eval/:
 	mkdir eval
@@ -42,13 +42,16 @@ eval/frame-synset-union1.csv: eval/synset-rel.filtered1.csv eval/joined-link.fil
 eval/frame-synset-union2.csv: eval/frame-synset-union1.filtered1.csv eval/joined-model.filtered1.csv
 	python link.py priority-union $^ $@
 
-eval/synth-clus.csv: eval/frame-synset-union2.csv
-	python link.py synth-clus --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-clus.csv
+eval/synth-from-conc.csv: eval/frame-synset-union2.csv
+	python synth.py from-conc --contradictions path --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-from-conc.csv
+
+eval/synth-from-predmat.csv: eval/frame-synset-union2.csv
+	python synth.py from-predmat --contradictions path --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-from-predmat.csv
 
 words/conc-words: eval/frame-synset-union2.filtered2.csv | words/
 	python link.py get-words --pos v $< > $@
 
-words/synth-words: eval/synth-clus.csv | words/
+words/synth-words: eval/synth-from-predmat.csv | words/
 	python link.py get-words --pos v --multi-group $< > $@
 
 words/all-words: words/conc-words words/synth-words

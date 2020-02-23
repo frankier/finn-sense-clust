@@ -1,7 +1,7 @@
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import (
+from senseclust.utils.clust import (
     unclusterable_default, graph_clust_grouped, cos_affinities_none, get_defns
 )
 from senseclust.methods.base import BothExpGroup

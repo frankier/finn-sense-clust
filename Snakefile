@@ -14,7 +14,7 @@ SEED = "42"
 ITERS = "100000"
 
 WN_ONLY_EVAL = {
-    "all-words": ["synth-clus", "frame-synset-union2.filtered2", "synset-rel.filtered2", "joined-link.filtered2", "joined-model.filtered2"],
+    "all-words": ["synth-from-predmat", "frame-synset-union2.filtered2", "synset-rel.filtered2", "joined-link.filtered2", "joined-model.filtered2"],
     "man-words": ["manclus.wn"],
 }
 WIKI_ONLY_EVAL = {
@@ -28,7 +28,7 @@ BOTH_EVAL = {
         "manclus.link",
     ]
 }
-MULTI_EVAL = {"synth-clus", "manclus.link"}
+MULTI_EVAL = {"synth-from-predmat", "manclus.link"}
 
 def all_results():
     filter = parse_filter(FILTER)
@@ -86,7 +86,7 @@ BOOTSTRAPS = (
             "joined-model.filtered2"
         ]
     ] +
-    [("synth-words", "synth-clus", "rand")] + 
+    [("synth-words", "synth-from-predmat", "rand")] +
     [
         ("man-words", gold, "macc")
         for gold in [

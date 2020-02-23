@@ -2,7 +2,7 @@ from finntk.wordnet.utils import maybe_fi2en_ss, pre_id_to_post
 from nltk.corpus import wordnet
 from scipy.spatial.distance import pdist, squareform
 from senseclust.exceptions import NoSuchLemmaException
-from senseclust.utils import graph_clust_grouped, mat_of_sets
+from senseclust.utils.clust import graph_clust_grouped, mat_of_sets
 from senseclust.wordnet import get_lemma_objs, WORDNETS
 from .base import SenseClusExp
 from expcomb.utils import mk_nick
