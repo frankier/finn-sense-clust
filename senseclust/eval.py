@@ -53,6 +53,13 @@ def rand(tp, tn, fp, fn):
     return (tp + tn) / denom
 
 
+def adj_rand(tp, tn, fp, fn):
+    denom = (tn + fp) * (fp + tp) + (tn + fn) * (fn + tp)
+    if denom == 0:
+        return 0
+    return 2 * (tn * tp - fp * fn) / denom
+
+
 def macc(tp, tn, fp, fn):
     denom = (tp + fp) * (tp + fn) * (tn + fp) * (tn + fn)
     if denom == 0:
@@ -72,9 +79,11 @@ def stats_dict(cnt):
         "tnr": tnr,
     }
     rand_val = rand(**cnt)
+    adj_rand_val = adj_rand(**cnt)
     macc_val = macc(**cnt)
     res["o"] = {
         "rand": rand_val,
+        "arand": adj_rand_val,
         "macc": macc_val,
         "hacc": hmean(r, tnr)
     }

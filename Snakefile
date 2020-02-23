@@ -78,23 +78,28 @@ rule best_all:
 # Bootstrapping
 BOOTSTRAPS = (
     [
-        ("conc-words", gold, "macc")
+        ("conc-words", gold, measure)
         for gold in [
             "frame-synset-union2.filtered2",
             "synset-rel.filtered2",
             "joined-link.filtered2",
             "joined-model.filtered2"
         ]
+        for measure in ["macc", "arand"]
     ] +
-    [("synth-words", "synth-from-predmat", "rand")] +
     [
-        ("man-words", gold, "macc")
+        ("synth-words", "synth-from-predmat", measure)
+        for measure in ["macc", "arand"]
+    ] +
+    [
+        ("man-words", gold, measure)
         for gold in [
             "manclus",
             "manclus.wn",
             "manclus.wiki",
             "manclus.link",
         ]
+        for measure in ["macc", "arand"]
     ]
 )
 
