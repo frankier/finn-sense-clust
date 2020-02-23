@@ -16,7 +16,7 @@ finntk = ">=0.0.66"
 fastcluster = "*"
 networkx = "*"
 wikiparse = {git = "https://github.com/frankier/wikiparse.git"}
-stiff = {git = "https://github.com/frankier/stiff.git"}
+stiff = {git = "https://github.com/frankier/stiff.git", rev = "79e3ff6f5b365cfc960934ad25c1494d1da065c5"}
 paramiko = "^2.4"
 expcomb = {git = "https://github.com/frankier/expcomb.git", rev = "4722095b8757fd8717ee033d327b2447a0e27051"}
 snakemake = "^5.5.4"
