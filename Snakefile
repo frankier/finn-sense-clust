@@ -89,7 +89,7 @@ BOOTSTRAPS = (
     ] +
     [
         ("synth-words", "synth-from-predmat", measure)
-        for measure in ["macc", "arand"]
+        for measure in ["macc", "arand", "rand"]
     ] +
     [
         ("man-words", gold, measure)
