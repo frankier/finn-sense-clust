@@ -8,7 +8,7 @@ SHELL := /bin/bash
 
 all: all-words all-eval
 
-all-words: words/man-words words/all-words words/really-all-words-split/.done
+all-words: words/man-words words/all-words-auto words/really-all-words-split/.done
 
 all-eval: eval/frame-synset-union2.filtered2.csv eval/synset-rel.filtered2.csv eval/joined-link.filtered2.csv eval/joined-model.filtered2.csv eval/synth-from-conc.csv eval/synth-from-predmat.csv eval/manclus.csv eval/manclus.wn.csv eval/manclus.wiki.csv eval/manclus.link.csv
 
@@ -48,14 +48,11 @@ eval/synth-from-conc.csv: eval/frame-synset-union2.csv
 eval/synth-from-predmat.csv: eval/frame-synset-union2.csv
 	python synth.py from-predmat --contradictions path --wn fin --wn qf2 --wn qwf eval/frame-synset-union2.csv eval/synth-from-predmat.csv
 
-words/conc-words: eval/frame-synset-union2.filtered2.csv | words/
+words/%.awords: eval/%.csv | words/
 	python link.py get-words --pos v $< > $@
 
-words/synth-words: eval/synth-from-predmat.csv | words/
-	python link.py get-words --pos v --multi-group $< > $@
-
-words/all-words: words/conc-words words/synth-words
-	LC_ALL=C sort -u words/conc-words words/synth-words > words/all-words
+words/all-words-auto: words/frame-synset-union2.filtered2.awords words/synset-rel.filtered2.awords words/joined-link.filtered2.awords words/joined-model.filtered2.awords words/synth-from-predmat.awords
+	LC_ALL=C sort -u $^ > $@
 
 words/really-all-words:
 	python get_all_words.py | sort -u - > words/really-all-words

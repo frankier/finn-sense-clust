@@ -42,17 +42,18 @@ def is_smap(wn, lemma, synset):
 
 @link.command()
 @csvin_arg
-@click.option('--multi-group/--single-group')
 @click.option('--pos')
-def get_words(csvin, multi_group, pos):
-    import stiff.wordnet.fin
+def get_words(csvin, pos):
+    import stiff.wordnet.fin  # noqa
+    prev_lemma = None
     csvin = skip_first(csvin)
-    if multi_group:
-        for lemma, multi_groupings in gen_multi_groupings(csvin):
-            print(f"{lemma},{pos}")
-    else:
-        for lemma, groupings in gen_groupings(csvin):
-            print(f"{lemma},{pos}")
+    for line in csvin:
+        lemma = line.strip().split(",", 1)[0].split(".")[0]
+        if prev_lemma is not None and lemma != prev_lemma:
+            print(prev_lemma)
+        prev_lemma = lemma
+    if prev_lemma is not None:
+        print(prev_lemma)
 
 
 @link.command()

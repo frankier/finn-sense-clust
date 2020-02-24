@@ -14,7 +14,7 @@ SEED = "42"
 ITERS = "100000"
 
 WN_ONLY_EVAL = {
-    "all-words": ["synth-from-predmat", "frame-synset-union2.filtered2", "synset-rel.filtered2", "joined-link.filtered2", "joined-model.filtered2"],
+    "all-words-auto": ["synth-from-predmat", "frame-synset-union2.filtered2", "synset-rel.filtered2", "joined-link.filtered2", "joined-model.filtered2"],
     "man-words": ["manclus.wn"],
 }
 WIKI_ONLY_EVAL = {
@@ -78,7 +78,7 @@ rule best_all:
 # Bootstrapping
 BOOTSTRAPS = (
     [
-        ("conc-words", gold, measure)
+        ("frame-synset-union2.filtered2.awords", gold, measure)
         for gold in [
             "frame-synset-union2.filtered2",
             "synset-rel.filtered2",
@@ -88,7 +88,7 @@ BOOTSTRAPS = (
         for measure in ["macc", "arand"]
     ] +
     [
-        ("synth-words", "synth-from-predmat", measure)
+        ("synth-from-predmat.awords", "synth-from-predmat", measure)
         for measure in ["macc", "arand", "rand"]
     ] +
     [
@@ -104,8 +104,8 @@ BOOTSTRAPS = (
 )
 
 BS_CORPUS_MAP = {
-    "conc-words": "all-words",
-    "synth-words": "all-words",
+    "frame-synset-union2.filtered2.awords": "all-words-auto",
+    "synth-from-predmat.awords": "all-words-auto",
     "man-words": "man-words",
 }
 
