@@ -50,10 +50,10 @@ def get_words(csvin, pos):
     for line in csvin:
         lemma = line.strip().split(",", 1)[0].split(".")[0]
         if prev_lemma is not None and lemma != prev_lemma:
-            print(prev_lemma)
+            print(f"{prev_lemma},{pos}")
         prev_lemma = lemma
     if prev_lemma is not None:
-        print(prev_lemma)
+        print(f"{prev_lemma},{pos}")
 
 
 @link.command()
