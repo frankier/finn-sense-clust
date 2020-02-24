@@ -155,7 +155,7 @@ def predmat_frames(pred_matrix):
     result = {}
     for pb, wn in get_eng_pb_wn_pairs(pred_matrix, False):
         lemma, frame_no = pb.rsplit(".", 1)
-        result.setdefault(lemma, {}).setdefault(frame_no, []).append(lemma_id_to_synset_id(wn))
+        result.setdefault(lemma, {}).setdefault(frame_no, set()).add(lemma_id_to_synset_id(wn))
     return result.items()
 
 
