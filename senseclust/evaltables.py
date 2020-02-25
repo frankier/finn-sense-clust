@@ -116,6 +116,13 @@ def real_ultimate_over_sorted_groups(docs):
     return ((k[-1], v) for k, v in groupby(sorted(docs, key=key_doc), key=key_doc))
 
 
+def safe_float(tpl):
+    try:
+        return float(tpl[0])
+    except ValueError:
+        return float("-inf")
+
+
 TABLES = [
     (
         "wordnet_table",
@@ -270,7 +277,7 @@ TABLES = [
             fmt,
             lambda col: col.sort(
                 reverse=True,
-                key=lambda tpl: float(tpl[0])
+                key=safe_float,
             ),
         ),
         BOTH_FILTER,
