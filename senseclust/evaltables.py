@@ -139,7 +139,7 @@ TABLES = [
                     ]), PATH_MAP
                 ),
             ]),
-            UnlabelledMeasure("o,macc"),
+            UnlabelledMeasure("o,arand"),
             fmt,
         ),
         FILTER,
@@ -157,7 +157,7 @@ TABLES = [
                     ]), PATH_MAP
                 ),
             ]),
-            UnlabelledMeasure("o,macc"),
+            UnlabelledMeasure("o,arand"),
             fmt,
         ),
         WIKI_FILTER,
@@ -180,7 +180,7 @@ TABLES = [
                     ]), PATH_MAP
                 ),
             ]),
-            UnlabelledMeasure("o,macc"),
+            UnlabelledMeasure("o,arand"),
             fmt,
         ),
         ALL_FILTER,
@@ -272,7 +272,7 @@ TABLES = [
             ]),
             SelectingMeasure(
                 (SimpleFilter(gold_base="synth-from-predmat.csv"), UnlabelledMeasure("o,rand")),
-                UnlabelledMeasure("o,macc"),
+                UnlabelledMeasure("o,arand"),
             ),
             fmt,
             lambda col: col.sort(
@@ -303,7 +303,7 @@ TABLES = [
             ]),
             SelectingMeasure(
                 (SimpleFilter(gold_base="synth-from-predmat.csv"), UnlabelledMeasure("o,rand")),
-                UnlabelledMeasure("o,macc"),
+                UnlabelledMeasure("o,arand"),
             ),
             fmt,
             box_highlight,
